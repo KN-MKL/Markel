@@ -74,237 +74,282 @@ const Sidebar = ({ activeRecord, setActiveRecord, recordData }) => {
     );
 };
 
-const FormSection = ({ title, children, icon, isCollapsible = true, defaultOpen = true }) => {
-    const [isOpen, setIsOpen] = useState(defaultOpen);
-    
-    const HeaderContent = () => (
-         <div className="flex w-full items-center justify-between p-4 text-[#3C3C3C] hover:text-black">
-            <div className="flex items-center gap-2">
-                <div className="rounded bg-[#ECECEC] p-2">{icon}</div>
-                <h3 className="text-base font-medium">{title}</h3>
-            </div>
-            {isCollapsible && <Icon iconName={isOpen ? "chevronUp" : "chevronDown"} className="h-5 w-5" />}
-        </div>
-    );
+// --- Accordion Component ---
+const Accordion = ({ title, children }) => {
+    const [isExpanded, setIsExpanded] = useState(true);
 
     return (
-        <div className="flex flex-col items-start self-stretch rounded-lg border border-solid border-[#D9D9D6] bg-white">
-            {isCollapsible ? (
-                 <button onClick={() => setIsOpen(!isOpen)} className="w-full">
-                    <HeaderContent />
-                 </button>
-            ) : (
-                <HeaderContent />
-            )}
-            {isOpen && <div className="w-full p-4 pt-0">{children}</div>}
-        </div>
-    );
-};
-
-const FormField = ({ id, label, value, onChange, options }) => {
-    const [isFocused, setIsFocused] = useState(false);
-    const [isOpen, setIsOpen] = useState(false);
-    const wrapperRef = useRef(null);
-    const hasValue = value && value.length > 0;
-    const isSelect = Array.isArray(options);
-
-    const handleSelect = (option) => {
-        onChange({ target: { id, value: option } });
-        setIsOpen(false);
-    };
-
-    useEffect(() => {
-        const handleClickOutside = (event) => {
-            if (wrapperRef.current && !wrapperRef.current.contains(event.target)) {
-                setIsOpen(false);
-                setIsFocused(false);
-            }
-        };
-        document.addEventListener("mousedown", handleClickOutside);
-        return () => {
-            document.removeEventListener("mousedown", handleClickOutside);
-        };
-    }, [wrapperRef]);
-    
-    const handleFocus = () => {
-        setIsFocused(true);
-        if (isSelect) {
-            setIsOpen(true);
-        }
-    };
-
-    const handleBlur = () => {
-        if (!isOpen) {
-            setIsFocused(false);
-        }
-    };
-
-    const containerOnClick = isSelect ? () => {
-        if (!isOpen) {
-          setIsFocused(true);
-          setIsOpen(true);
-        }
-    } : undefined;
-
-    return (
-        <div ref={wrapperRef} className="relative h-14 flex-1 min-w-[200px]" onClick={containerOnClick}>
-            <div className={`absolute inset-0 rounded-md transition-all duration-200 pointer-events-none ${isFocused || isOpen ? 'border-2 border-[#3C3C3C]' : 'border border-[#ADACA7]'}`}></div>
-            <label 
-                htmlFor={id} 
-                className={`absolute left-3 transition-all duration-200 pointer-events-none ${isFocused || hasValue || isOpen ? '-top-2 text-xs bg-white px-1 text-[#3C3C3C]' : 'top-1/2 -translate-y-1/2 text-base text-[#5C5A59]'}`}
+        <div className="w-full bg-white rounded-lg border-t border-l border-r border-gray-200 flex flex-col">
+            <button 
+                onClick={() => setIsExpanded(!isExpanded)}
+                className="flex items-start justify-between self-stretch w-full p-4 text-left"
             >
-                {label}
-            </label>
-            <input
-                id={id}
-                type="text"
-                value={value || ''}
-                onChange={isSelect ? undefined : onChange}
-                readOnly={isSelect}
-                onFocus={handleFocus}
-                onBlur={handleBlur}
-                className={`w-full h-full px-4 bg-transparent text-[#3C3C3C] text-base tracking-wide outline-none ${isSelect ? 'cursor-pointer' : ''}`}
-            />
-            {isSelect && (
-                <div className="absolute right-0 top-0 h-full flex items-center px-4 pointer-events-none">
-                    <Icon iconName={isOpen ? "chevronUp" : "chevronDown"} className="h-5 w-5 text-[#3C3C3C]" />
+                <div className="inline-flex items-center gap-2">
+                    <div className="p-2 bg-gray-200 rounded">
+                        <OmraLogo />
+                    </div>
+                    <div className="text-base font-medium text-center text-zinc-800">{title}</div>
                 </div>
-            )}
-            {isSelect && isOpen && (
-                <ul className="absolute z-10 w-full mt-1 bg-white border border-solid border-[#ADACA7] rounded-md shadow-lg max-h-60 overflow-auto">
-                    {options.map((option, index) => (
-                        <li key={index} onClick={() => handleSelect(option)} className="px-4 py-2 text-base text-[#3C3C3C] cursor-pointer hover:bg-gray-100">
-                            {option}
-                        </li>
-                    ))}
-                </ul>
-            )}
+                <div className="flex items-center justify-center w-12 h-12 rounded-full hover:bg-gray-100">
+                    <ChevronDownIcon isExpanded={isExpanded} />
+                </div>
+            </button>
+            {isExpanded && children}
         </div>
     );
 };
 
-const CheckboxItem = ({ label, isChecked, onToggle }) => (
-    <button onClick={onToggle} className="flex w-[230px] items-center justify-between rounded-lg border border-solid border-[#D9D9D6] bg-[#FEFEFD] p-3 hover:bg-gray-50">
-        <span className="text-sm text-[#5C5A59]">{label}</span>
-        <Icon iconName={isChecked ? "checkboxChecked" : "checkboxUnchecked"} />
-    </button>
+// --- SVG & Icon Components ---
+const OmraLogo = () => (<div className="relative w-6 h-6 overflow-hidden"><div className="absolute w-[20.13px] h-[11.07px] left-[2px] top-[11.07px] border-[1.33px] border-zinc-800" /><div className="absolute w-[7.47px] h-[7.47px] left-[8.27px] top-[2px] border-[1.33px] border-orange-600" /></div>);
+const ChevronDownIcon = ({ isExpanded }) => (<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" className={`transition-transform duration-300 ${isExpanded ? 'rotate-180' : ''}`}><path d="M6 9L12 15L18 9" stroke="black" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/></svg>);
+
+// --- Form Components ---
+const MandatoryBindDataForm = () => (
+    <div className="w-full p-4 bg-gray-100 rounded-b-lg border-t border-gray-200">
+        <div className="p-4 bg-white rounded-lg border border-gray-200">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                <M3TextField dropdown label="Operating Territory" id="op-territory" />
+                <M3TextField dropdown label="Territorial Scope" id="terr-scope" />
+                <M3TextField dropdown label="Reassured Op Territory" id="reassured-op-territory" />
+                <M3TextField dropdown label="RI Code" id="ri-code" />
+                <M3TextField dropdown label="Tower Code" id="tower-code" />
+                <M3TextField label="GWP 100%" id="gwp-100-bind" />
+                <M3TextField label="Limit" id="limit-bind" />
+                <M3TextField label="Estimated signing" id="estimated-signing-bind" />
+                <M3TextField dropdown label="Customer type" id="customer-type" />
+                <M3TextField dropdown label="Product" id="product" />
+                <M3TextField dropdown label="Cyber coverage" id="cyber-coverage" />
+                <M3TextField dropdown label="Exclusion type" id="exclusion-type" />
+                <M3TextField label="Other (free text box)" id="other-free-text" />
+            </div>
+        </div>
+    </div>
+);
+
+const CATManagementForm = () => (
+    <div className="w-full p-4 bg-gray-100 rounded-b-lg border-t border-gray-200 flex flex-col gap-4">
+        <div className="p-4 bg-white rounded-lg border border-gray-200">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <M3TextField dropdown label="Aggregated Risk Data" id="agg-risk-data" />
+                <M3TextField label="NAIC" id="naic" />
+            </div>
+        </div>
+        <div className="p-4 bg-white rounded-lg border border-gray-200">
+            <h3 className="text-sm font-medium text-gray-700 tracking-tight mb-4">Writebacks</h3>
+            <div className="p-4 bg-gray-100 rounded-lg flex flex-wrap gap-4">
+                <WritebackCheckbox label="PV" id="pv" />
+                <WritebackCheckbox label="S&T" id="st" />
+                <WritebackCheckbox label="NBCR" id="nbcr" />
+                <WritebackCheckbox label="SRCC" id="srcc" />
+                <WritebackCheckbox label="War" id="war" />
+            </div>
+        </div>
+    </div>
+);
+
+const RiskInformationForm = () => (
+    <div className="w-full p-4 bg-gray-100 rounded-b-lg border-t border-gray-200 flex flex-col gap-4">
+        <div className="p-4 bg-white rounded-lg border border-gray-200">
+             <h3 className="text-sm font-medium text-gray-700 tracking-tight mb-6">Risk information</h3>
+             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                <M3TextField dropdown label="Detained period" id="detained-period" />
+                <M3TextField dropdown label="Blocking and trapping period" id="blocking-trapping" />
+                <M3TextField dropdown label="JWC Areas" id="jwc-areas" />
+                <M3TextField dropdown label="RUB" id="rub" />
+                <M3TextField dropdown label="ERN" id="ern" />
+                <M3TextField dropdown label="ERN Comment" id="ern-comment" />
+                <M3TextField dropdown label="Offshore Terrorism..." id="offshore-terrorism" />
+                <M3TextField dropdown label="Offshore Terrorism..." id="offshore-terrorism-clause" />
+                <M3TextField dropdown label="Cancellation Notice..." id="cancellation-notice" />
+                <M3TextField dropdown label="Cancellation Notice..." id="cancellation-email" />
+             </div>
+        </div>
+    </div>
+);
+
+const MandatoryChecklistForm = () => (
+     <div className="w-full p-4 bg-gray-100 rounded-b-lg border-t border-gray-200 flex flex-col gap-4">
+        <div className="p-4 bg-white rounded-lg border border-gray-200">
+             <h3 className="text-sm font-medium text-gray-700 tracking-tight mb-6">Mandatory Checklist Verification</h3>
+             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                <M3TextField dropdown label="Aggs" id="aggs" />
+                <M3TextField dropdown label="Brexit Agg" id="brexit-agg" />
+                <M3TextField dropdown label="Claims Authority" id="claims-authority" />
+                <M3TextField dropdown label="Claims Control" id="claims-control" />
+                <M3TextField dropdown label="CL370" id="cl370" />
+                <M3TextField dropdown label="Co OpRI" id="co-opri" />
+                <M3TextField dropdown label="Demo Spreadsheet" id="demo-spreadsheet" />
+                <M3TextField dropdown label="E-Placing Platform" id="e-placing" />
+                <M3TextField dropdown label="ESG" id="esg" />
+                <M3TextField dropdown label="ESG Reason" id="esg-reason" />
+                <M3TextField dropdown label="Expiring Decs Sent..." id="expiring-decs" />
+                <M3TextField dropdown label="FAC Ri" id="fac-ri" />
+                <M3TextField dropdown label="Flood Check" id="flood-check" />
+                <M3TextField dropdown label="Hull War Wording" id="hull-war" />
+                <M3TextField dropdown label="LMA3333" id="lma3333" />
+                <M3TextField dropdown label="Law & Jurisdiction..." id="law-jurisdiction" />
+                <M3TextField dropdown label="Sanctions Clause" id="sanctions-clause" />
+                <M3TextField dropdown label="Premium Payment" id="premium-payment" />
+                <M3TextField dropdown label="Primary Slip Wording..." id="primary-slip" />
+                <M3TextField dropdown label="Proposal Form and..." id="proposal-form" />
+                <M3TextField dropdown label="RI Treaty" id="ri-treaty" />
+                <M3TextField dropdown label="Subscription Claims..." id="subscription-claims" />
+                <M3TextField dropdown label="US Collab Form" id="us-collab" />
+                <M3TextField dropdown label="War and Terrorism..." id="war-terrorism" />
+                <M3TextField dropdown label="Warranties" id="warranties" />
+                <M3TextField dropdown label="Wording Changed" id="wording-changed" />
+             </div>
+        </div>
+    </div>
+);
+
+const NotesForUSTForm = () => (
+    <div className="w-full p-4 bg-gray-100 rounded-b-lg border-t border-gray-200">
+        <div className="p-4 bg-white rounded-lg border border-gray-200">
+            <M3TextField multiline id="ust-notes" label="Notes for UST" bgClass="bg-white" />
+        </div>
+    </div>
+);
+
+// --- Reusable UI Components ---
+const M3TextField = ({ label, id, multiline = false, dropdown = false, containerClassName = "", bgClass = "bg-white", disabled = false, options = [] }) => { 
+    const [isFocused, setIsFocused] = useState(false); 
+    const [value, setValue] = useState(''); 
+    const [isOpen, setIsOpen] = useState(false); 
+    const isFloating = isFocused || value !== ''; 
+    const heightClass = multiline ? 'h-24' : 'h-14'; 
+    const initialLabelPositionClass = multiline ? 'top-4' : 'top-1/2 -translate-y-1/2'; 
+    const commonLabelClass = `absolute left-3 transition-all duration-200 ease-in-out pointer-events-none ${isFloating ? `-top-2 text-xs ${disabled ? 'bg-gray-100' : bgClass} px-1 text-zinc-800` : `${initialLabelPositionClass} text-base text-zinc-500`}`; 
+    const commonWrapperClass = `relative w-full h-full rounded-md transition-colors duration-200 ${disabled ? 'bg-gray-100' : ''} ${isFocused ? 'outline outline-2 outline-zinc-800' : 'border border-gray-400'}`; 
+    
+    if (dropdown) { 
+        return (
+            <div className={`relative self-stretch ${heightClass} ${containerClassName}`}>
+                <button onClick={() => !disabled && setIsOpen(!isOpen)} onBlur={() => setIsOpen(false)} className={`w-full h-full text-left ${commonWrapperClass}`}>
+                    <label htmlFor={id} className={commonLabelClass}>{label}</label>
+                    <span className="w-full h-full px-4 text-base text-zinc-800 flex items-center">{value}</span>
+                    <div className="absolute top-1/2 right-4 -translate-y-1/2 pointer-events-none">
+                        <ChevronDownIcon isExpanded={isOpen} />
+                    </div>
+                </button>
+                {isOpen && (
+                    <ul className="absolute z-20 w-full mt-1 bg-white border border-gray-300 rounded-md shadow-lg">
+                        {options.map(opt => 
+                            <li key={opt} onMouseDown={() => { setValue(opt); setIsOpen(false); }} className="px-4 py-2 text-base hover:bg-gray-100 cursor-pointer flex items-center justify-between">
+                                {opt} {value === opt && <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M20 6L9 17L4 12" stroke="#3C3C3C" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/></svg>}
+                            </li>
+                        )}
+                    </ul>
+                )}
+            </div>
+        ); 
+    } 
+    
+    const InputComponent = multiline ? 'textarea' : 'input'; 
+    return (
+        <div className={`relative self-stretch ${heightClass} ${containerClassName}`}>
+            <div className={commonWrapperClass}>
+                <label htmlFor={id} className={commonLabelClass}>{label}</label>
+                <InputComponent 
+                    id={id} 
+                    onFocus={() => setIsFocused(true)} 
+                    onBlur={() => setIsFocused(false)} 
+                    onChange={(e) => setValue(e.target.value)} 
+                    value={value} 
+                    disabled={disabled} 
+                    className={`w-full h-full px-4 text-base bg-transparent resize-none focus:outline-none text-zinc-800 ${multiline ? 'pt-4' : ''} ${disabled ? 'text-gray-500' : ''}`}
+                />
+            </div>
+        </div>
+    );
+};
+
+const WritebackCheckbox = ({ label, id }) => { 
+    const [checked, setChecked] = useState(false); 
+    return (
+        <div className="flex-1 min-w-[120px] p-4 bg-white rounded-lg border border-gray-200 flex items-center justify-between">
+            <label htmlFor={id} className="text-sm text-gray-700">{label}</label>
+            <button onClick={() => setChecked(!checked)}>
+                <div className={`w-5 h-5 rounded-sm border-2 flex items-center justify-center ${checked ? 'bg-zinc-800 border-zinc-800' : 'border-gray-400'}`}>
+                    {checked && <svg width="12" height="9" viewBox="0 0 12 9" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M1 4.5L4.33333 8L11 1" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/></svg>}
+                </div>
+            </button>
+        </div>
+    ); 
+};
+
+// Placeholder components for the remaining forms
+const SubmissionDataForm = () => (
+    <div className="w-full p-4 bg-gray-100 rounded-b-lg border-t border-gray-200">
+        <div className="p-4 bg-white rounded-lg border border-gray-200">
+            <h3 className="text-sm font-medium text-gray-700 tracking-tight mb-4">Submission Data</h3>
+            <p className="text-gray-600">Submission data form content will be implemented here.</p>
+        </div>
+    </div>
+);
+
+const PricingDataForm = () => (
+    <div className="w-full p-4 bg-gray-100 rounded-b-lg border-t border-gray-200">
+        <div className="p-4 bg-white rounded-lg border border-gray-200">
+            <h3 className="text-sm font-medium text-gray-700 tracking-tight mb-4">Pricing Data</h3>
+            <p className="text-gray-600">Pricing data form content will be implemented here.</p>
+        </div>
+    </div>
+);
+
+const OMRAForm = () => (
+    <div className="w-full p-4 bg-gray-100 rounded-b-lg border-t border-gray-200">
+        <div className="p-4 bg-white rounded-lg border border-gray-200">
+            <h3 className="text-sm font-medium text-gray-700 tracking-tight mb-4">OMRA</h3>
+            <p className="text-gray-600">OMRA form content will be implemented here.</p>
+        </div>
+    </div>
 );
 
 const MainContent = ({ record }) => {
-    const [formData, setFormData] = useState({});
-    const [checkboxes, setCheckboxes] = useState({});
-    
-    useEffect(() => {
-        setFormData({
-            customerType: 'XYZ goes here'
-        });
-        setCheckboxes({});
-    }, [record]);
-
-    const handleInputChange = (e) => {
-        const { id, value } = e.target;
-        setFormData(prev => ({ ...prev, [id]: value }));
-    };
-
-    const handleCheckboxToggle = (label) => {
-        setCheckboxes(prev => ({...prev, [label]: !prev[label]}));
-    };
-    
     if (!record) {
         return <div className="flex-1 p-4">Please select a record.</div>;
     }
 
-    const dummyOptions = ['Option 1', 'Option 2', 'Option 3'];
-
     return (
-    <main className="flex-1 self-stretch overflow-y-auto p-4 pr-2">
-        <div className="flex flex-col gap-4">
-            <h2 className="px-2 text-xl text-[#3C3C3C]">Binding Details for {record.ref}</h2>
-            <FormSection title="Mandatory Bind Data" icon={<Icon iconName="building" />}>
-                <div className="flex flex-col gap-6">
-                    <div className="flex flex-wrap gap-6">
-                        <FormField id="opTerritory" label="Operating Territory" value={formData.opTerritory || ''} onChange={handleInputChange} options={dummyOptions} />
-                        <FormField id="territorialScope" label="Territorial Scope" value={formData.territorialScope || ''} onChange={handleInputChange} options={dummyOptions} />
-                        <FormField id="reassuredOpTerritory" label="Reassured Op Territory" value={formData.reassuredOpTerritory || ''} onChange={handleInputChange} options={dummyOptions} />
-                        <FormField id="riCode" label="RI Code" value={formData.riCode || ''} onChange={handleInputChange} options={dummyOptions} />
-                    </div>
-                     <div className="flex flex-wrap gap-6">
-                        <FormField id="towerCode" label="Tower Code" value={formData.towerCode || ''} onChange={handleInputChange} options={dummyOptions} />
-                        <FormField id="gwp" label="GWP 100%" value={formData.gwp || ''} onChange={handleInputChange} options={dummyOptions} />
-                        <FormField id="limit" label="Limit" value={formData.limit || ''} onChange={handleInputChange} options={dummyOptions} />
-                        <FormField id="estimatedSigning" label="Estimated signing" value={formData.estimatedSigning || ''} onChange={handleInputChange} options={dummyOptions} />
-                    </div>
-                    <div className="flex flex-wrap gap-6">
-                        <FormField id="customerType" label="Customer type" value={formData.customerType || ''} onChange={handleInputChange} options={dummyOptions} />
-                        <FormField id="product" label="Product" value={formData.product || ''} onChange={handleInputChange} options={dummyOptions} />
-                        <FormField id="cyberCoverage" label="Cyber coverage" value={formData.cyberCoverage || ''} onChange={handleInputChange} options={dummyOptions} />
-                        <FormField id="exclusionType" label="Exclusion type" value={formData.exclusionType || ''} onChange={handleInputChange} options={dummyOptions} />
-                    </div>
-                     <div className="flex flex-wrap gap-6">
-                        <FormField id="other" label="Other (free text box)" value={formData.other || ''} onChange={handleInputChange} />
-                    </div>
-                </div>
-            </FormSection>
-
-            <FormSection title="CAT Management" icon={<Icon iconName="building" />}>
-                <div className="flex flex-col gap-4">
-                    <div className="text-sm font-medium text-[#5C5A59]">Writebacks</div>
-                    <div className="flex flex-wrap gap-4 rounded-lg border border-solid border-[#D9D9D6] bg-[#F0F0F0] p-4">
-                        {['PV', 'S&T', 'NBCR', 'SRCC', 'War'].map(label => (
-                            <CheckboxItem key={label} label={label} isChecked={!!checkboxes[label]} onToggle={() => handleCheckboxToggle(label)} />
-                        ))}
-                    </div>
-                </div>
-            </FormSection>
-            
-            <FormSection title="Risk Information" icon={<Icon iconName="building" />}>
-                 <div className="flex flex-col gap-6">
-                    <div className="flex flex-wrap gap-6">
-                        <FormField id="detainedPeriod" label="Detained period" value={formData.detainedPeriod || ''} onChange={handleInputChange} options={dummyOptions} />
-                        <FormField id="blockingTrapping" label="Blocking and trapping period" value={formData.blockingTrapping || ''} onChange={handleInputChange} options={dummyOptions} />
-                        <FormField id="jwcAreas" label="JWC Areas" value={formData.jwcAreas || ''} onChange={handleInputChange} options={dummyOptions} />
-                        <FormField id="rub" label="RUB" value={formData.rub || ''} onChange={handleInputChange} options={dummyOptions} />
-                    </div>
-                     <div className="flex flex-wrap gap-6">
-                        <FormField id="ern" label="ERN" value={formData.ern || ''} onChange={handleInputChange} options={dummyOptions} />
-                        <FormField id="ernComment" label="ERN Comment" value={formData.ernComment || ''} onChange={handleInputChange} />
-                        <FormField id="offshoreTerrorism" label="Offshore Terrorism Buy Back" value={formData.offshoreTerrorism || ''} onChange={handleInputChange} options={dummyOptions} />
-                        <FormField id="offshoreTerrorismClause" label="Offshore Terrorism Buy Back Clause" value={formData.offshoreTerrorismClause || ''} onChange={handleInputChange} options={dummyOptions} />
-                    </div>
-                </div>
-            </FormSection>
-
-            <FormSection title="Mandatory Checklist Verification" icon={<Icon iconName="building" />}>
-                 <div className="flex flex-col gap-6">
-                    <div className="flex flex-wrap gap-6">
-                        <FormField id="aggs" label="Aggs" value={formData.aggs || ''} onChange={handleInputChange} options={dummyOptions} />
-                        <FormField id="brexitAgg" label="Brexit Agg" value={formData.brexitAgg || ''} onChange={handleInputChange} options={dummyOptions} />
-                        <FormField id="claimsAuthority" label="Claims Authority" value={formData.claimsAuthority || ''} onChange={handleInputChange} options={dummyOptions} />
-                        <FormField id="claimsControl" label="Claims Control" value={formData.claimsControl || ''} onChange={handleInputChange} options={dummyOptions} />
-                    </div>
-                     <div className="flex flex-wrap gap-6">
-                        <FormField id="cl370" label="CL370" value={formData.cl370 || ''} onChange={handleInputChange} options={dummyOptions} />
-                        <FormField id="coOpRI" label="Co OpRI" value={formData.coOpRI || ''} onChange={handleInputChange} options={dummyOptions} />
-                        <FormField id="demoSpreadsheet" label="Demo Spreadsheet" value={formData.demoSpreadsheet || ''} onChange={handleInputChange} options={dummyOptions} />
-                        <FormField id="eplacingPlatform" label="E-Placing Platform" value={formData.eplacingPlatform || ''} onChange={handleInputChange} options={dummyOptions} />
-                    </div>
-                    <div className="flex flex-wrap gap-6">
-                        <FormField id="esg" label="ESG" value={formData.esg || ''} onChange={handleInputChange} options={dummyOptions} />
-                        <FormField id="esgReason" label="ESG Reason" value={formData.esgReason || ''} onChange={handleInputChange} />
-                        <FormField id="expiringDecs" label="Expiring Decs Sentto UST" value={formData.expiringDecs || ''} onChange={handleInputChange} options={dummyOptions} />
-                        <FormField id="facRi" label="FAC Ri" value={formData.facRi || ''} onChange={handleInputChange} options={dummyOptions} />
-                    </div>
-                     <div className="flex flex-wrap gap-6">
-                        <FormField id="floodCheck" label="Flood Check" value={formData.floodCheck || ''} onChange={handleInputChange} options={dummyOptions} />
-                        <FormField id="hullWarWording" label="Hull War Wording" value={formData.hullWarWording || ''} onChange={handleInputChange} options={dummyOptions} />
-                        <FormField id="lma3333" label="LMA3333" value={formData.lma3333 || ''} onChange={handleInputChange} options={dummyOptions} />
-                        <FormField id="lawJurisdiction" label="Law & Jurisdiction Clause" value={formData.lawJurisdiction || ''} onChange={handleInputChange} options={dummyOptions} />
-                    </div>
-                </div>
-            </FormSection>
-        </div>
-    </main>
-    )
+        <main className="flex-1 self-stretch overflow-y-auto p-4 pr-2">
+            <div className="flex flex-col gap-4">
+                <h2 className="px-2 text-xl text-[#3C3C3C]">Binding Details for {record.ref}</h2>
+                
+                <Accordion title="Mandatory Bind Data">
+                    <MandatoryBindDataForm />
+                </Accordion>
+                
+                <Accordion title="CAT Management">
+                    <CATManagementForm />
+                </Accordion>
+                
+                <Accordion title="Risk information">
+                    <RiskInformationForm />
+                </Accordion>
+                
+                <Accordion title="Mandatory Checklist Verification">
+                    <MandatoryChecklistForm />
+                </Accordion>
+                
+                <Accordion title="Notes for UST">
+                    <NotesForUSTForm />
+                </Accordion>
+                
+                <Accordion title="Submission data">
+                    <SubmissionDataForm />
+                </Accordion>
+                
+                <Accordion title="Pricing data">
+                    <PricingDataForm />
+                </Accordion>
+                
+                <Accordion title="OMRA">
+                    <OMRAForm />
+                </Accordion>
+            </div>
+        </main>
+    );
 };
 
 const Footer = () => (

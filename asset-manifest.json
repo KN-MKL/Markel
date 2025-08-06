@@ -1,0 +1,13 @@
+{
+  "files": {
+    "main.css": "/Markel/static/css/main.80e19ef2.css",
+    "main.js": "/Markel/static/js/main.65a9eaad.js",
+    "index.html": "/Markel/index.html",
+    "main.80e19ef2.css.map": "/Markel/static/css/main.80e19ef2.css.map",
+    "main.65a9eaad.js.map": "/Markel/static/js/main.65a9eaad.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.80e19ef2.css",
+    "static/js/main.65a9eaad.js"
+  ]
+}

@@ -262,7 +262,7 @@ const M3TextField = ({ label, id, multiline = false, dropdown = false, container
         return (
             <div className={`relative self-stretch ${heightClass} ${containerClassName} z-10`} style={{ position: 'relative', zIndex: isOpen ? 9999 : 10 }}>
                 <button onClick={() => !disabled && setIsOpen(!isOpen)} onBlur={() => setTimeout(() => setIsOpen(false), 150)} className={`w-full h-full text-left ${commonWrapperClass}`}>
-                    <label htmlFor={id} className={`${commonLabelClass} truncate`}>{label}</label>
+                    <label htmlFor={id} className={commonLabelClass}>{label}</label>
                     <span className="w-full h-full px-4 text-base text-zinc-800 flex items-center truncate">{value}</span>
                     <div className="absolute top-1/2 right-4 -translate-y-1/2 pointer-events-none">
                         <ChevronDownIcon isExpanded={isOpen} />
@@ -285,7 +285,7 @@ const M3TextField = ({ label, id, multiline = false, dropdown = false, container
     return (
         <div className={`relative self-stretch ${heightClass} ${containerClassName}`}>
             <div className={commonWrapperClass}>
-                <label htmlFor={id} className={`${commonLabelClass} truncate`}>{label}</label>
+                <label htmlFor={id} className={commonLabelClass}>{label}</label>
                 <InputComponent 
                     id={id} 
                     onFocus={() => setIsFocused(true)} 
@@ -306,9 +306,23 @@ const WritebackCheckbox = ({ label, id }) => {
         <div className="flex-1 min-w-[120px] p-4 bg-white rounded-lg border border-gray-200 flex items-center justify-between">
             <label htmlFor={id} className="text-sm text-gray-700 truncate flex-1 min-w-0">{label}</label>
             <button onClick={() => setChecked(!checked)} className="flex-shrink-0 ml-2">
-                <div className={`w-5 h-5 rounded-sm border-2 flex items-center justify-center ${checked ? 'bg-zinc-800 border-zinc-800' : 'border-gray-400'}`}>
-                    {checked && <svg width="12" height="9" viewBox="0 0 12 9" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M1 4.5L4.33333 8L11 1" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/></svg>}
-                </div>
+                {checked ? (
+                    <div data-state="Enabled" data-type="Selected" style={{width: '100%', height: '100%', justifyContent: 'center', alignItems: 'center', display: 'inline-flex'}}>
+                        <div style={{padding: 11, borderRadius: 100, justifyContent: 'center', alignItems: 'center', display: 'flex'}}>
+                            <div style={{width: 18, height: 18, borderRadius: 2, background: '#3C3C3C', position: 'relative'}}>
+                                <svg width="12" height="9" viewBox="0 0 12 9" fill="none" xmlns="http://www.w3.org/2000/svg" style={{position: 'absolute', left: 3, top: 4.5}}>
+                                    <path d="M1 4.5L4.33333 8L11 1" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                                </svg>
+                            </div>
+                        </div>
+                    </div>
+                ) : (
+                    <div data-state="Enabled" data-type="Unselected" style={{width: '100%', height: '100%', justifyContent: 'center', alignItems: 'center', display: 'inline-flex'}}>
+                        <div style={{padding: 11, borderRadius: 100, justifyContent: 'center', alignItems: 'center', display: 'flex'}}>
+                            <div style={{width: 18, height: 18, borderRadius: 2, border: '2px #807F7B solid'}} />
+                        </div>
+                    </div>
+                )}
             </button>
         </div>
     ); 
@@ -377,8 +391,24 @@ const CheckboxWithNA = ({ label, id }) => {
 };
 
 const CheckboxIcon = ({ checked }) => (
-    <div className={`w-6 h-6 flex items-center justify-center rounded-sm transition-colors ${checked ? 'bg-zinc-800' : 'border-2 border-zinc-800'}`}>
-        {checked && <svg width="12" height="9" viewBox="0 0 12 9" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M1 4.5L4.33333 8L11 1" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/></svg>}
+    <div className="w-6 h-6 flex items-center justify-center">
+        {checked ? (
+            <div data-state="Enabled" data-type="Selected" style={{width: '100%', height: '100%', justifyContent: 'center', alignItems: 'center', display: 'inline-flex'}}>
+                <div style={{padding: 11, borderRadius: 100, justifyContent: 'center', alignItems: 'center', display: 'flex'}}>
+                    <div style={{width: 18, height: 18, borderRadius: 2, background: '#3C3C3C', position: 'relative'}}>
+                        <svg width="12" height="9" viewBox="0 0 12 9" fill="none" xmlns="http://www.w3.org/2000/svg" style={{position: 'absolute', left: 3, top: 4.5}}>
+                            <path d="M1 4.5L4.33333 8L11 1" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                        </svg>
+                    </div>
+                </div>
+            </div>
+        ) : (
+            <div data-state="Enabled" data-type="Unselected" style={{width: '100%', height: '100%', justifyContent: 'center', alignItems: 'center', display: 'inline-flex'}}>
+                <div style={{padding: 11, borderRadius: 100, justifyContent: 'center', alignItems: 'center', display: 'flex'}}>
+                    <div style={{width: 18, height: 18, borderRadius: 2, border: '2px #807F7B solid'}} />
+                </div>
+            </div>
+        )}
     </div>
 );
 
@@ -519,6 +549,9 @@ const SubmissionDataForm = () => (
 const PricingDataForm = () => {
     const [basis, setBasis] = useState('Whole');
     const [deductionType, setDeductionType] = useState('#');
+    const [rateChangeChecked, setRateChangeChecked] = useState(false);
+    const [techRatioChecked, setTechRatioChecked] = useState(false);
+    const [rateAdequacyChecked, setRateAdequacyChecked] = useState(false);
 
     const currencyOptions = ['USD', 'EUR', 'GBP', 'JPY'];
     const levelOptions = ['Level 1', 'Level 2', 'Level 3'];
@@ -543,17 +576,17 @@ const PricingDataForm = () => {
                 <div className="p-4 bg-white rounded-lg border border-gray-200 flex flex-col gap-6">
                     <h3 className="text-sm font-medium text-gray-700 tracking-tight">Premium</h3>
                     <M3TextField dropdown id="currency" label="Currency" options={currencyOptions} />
-                    <div className="flex gap-4"><FilledField label="CCY" /><M3TextField id="gwp-100" label="GWP 100%" /></div>
-                    <div className="flex gap-4"><FilledField label="CCY" /><M3TextField id="gwp-mkl" label="GWP MKL Share" /></div>
-                    <div className="flex gap-4"><FilledField label="CCY" /><M3TextField id="net-100" label="Net 100%" /></div>
-                    <div className="flex gap-4"><FilledField label="CCY" /><M3TextField id="net-mkl" label="Net MKL Share" /></div>
+                    <div className="flex gap-4"><FilledField label="CCY" /><M3TextField id="gwp-100" label="GWP 100%" containerClassName="flex-1" /></div>
+                    <div className="flex gap-4"><FilledField label="CCY" /><M3TextField id="gwp-mkl" label="GWP MKL Share" containerClassName="flex-1" /></div>
+                    <div className="flex gap-4"><FilledField label="CCY" /><M3TextField id="net-100" label="Net 100%" containerClassName="flex-1" /></div>
+                    <div className="flex gap-4"><FilledField label="CCY" /><M3TextField id="net-mkl" label="Net MKL Share" containerClassName="flex-1" /></div>
                 </div>
                 <div className="p-4 bg-white rounded-lg border border-gray-200 flex flex-col gap-6">
                     <h3 className="text-sm font-medium text-gray-700 tracking-tight">Limits</h3>
                     <M3TextField dropdown id="limit-currency" label="Limit Currency" options={currencyOptions} />
-                    <div className="flex gap-4"><FilledField label="CCY" /><M3TextField id="limit" label="Limit" /></div>
-                    <div className="flex gap-4"><FilledField label="CCY" /><M3TextField id="excess" label="Excess" /></div>
-                    <div className="flex gap-4"><FilledField label="CCY" /><M3TextField id="deductible" label="Deductible" /></div>
+                    <div className="flex gap-4"><FilledField label="CCY" /><M3TextField id="limit" label="Limit" containerClassName="flex-1" /></div>
+                    <div className="flex gap-4"><FilledField label="CCY" /><M3TextField id="excess" label="Excess" containerClassName="flex-1" /></div>
+                    <div className="flex gap-4"><FilledField label="CCY" /><M3TextField id="deductible" label="Deductible" containerClassName="flex-1" /></div>
                     <M3TextField id="exposure" label="Exposure" />
                 </div>
             </div>
@@ -564,15 +597,20 @@ const PricingDataForm = () => {
                          <h3 className="text-sm font-medium text-gray-700 tracking-tight">Deductions</h3>
                          <ToggleButton options={['%', '#']} selected={deductionType} setSelected={setDeductionType} dark />
                      </div>
-                    <div className="flex flex-wrap gap-4">
-                        <M3TextField dropdown label="Brokerage" id="brokerage" options={brokerageOptions} containerClassName="w-full" />
+                    <div className="flex gap-4">
+                        <M3TextField dropdown label="Brokerage" id="brokerage" options={brokerageOptions} containerClassName="flex-1" />
                         <M3TextField label="(%)" id="brokerage-percent" containerClassName="w-20" />
                         <M3TextField dropdown label="Level" id="brokerage-level" options={levelOptions} containerClassName="flex-1" />
                     </div>
-                     <div className="flex flex-wrap gap-4">
-                        <M3TextField dropdown label="Insurer Premium Tax" id="ipt" options={taxOptions} containerClassName="w-full" />
+                     <div className="flex gap-4">
+                        <M3TextField dropdown label="Insurer Premium Tax" id="ipt" options={taxOptions} containerClassName="flex-1" />
                         <M3TextField label="(%)" id="ipt-percent" containerClassName="w-20" />
                         <M3TextField dropdown label="Level" id="ipt-level" options={levelOptions} containerClassName="flex-1" />
+                    </div>
+                    <div className="flex gap-4">
+                        <M3TextField dropdown label="Deduction Type" id="deduction-type" options={['Custom Deduction 1', 'Custom Deduction 2', 'Custom Deduction 3']} containerClassName="flex-1" />
+                        <M3TextField label="(%)" id="deduction-percent" containerClassName="w-20" />
+                        <M3TextField dropdown label="Level" id="deduction-level" options={levelOptions} containerClassName="flex-1" />
                     </div>
                     <button className="flex items-center justify-center gap-2 self-start px-4 py-2 bg-gray-200 rounded-lg hover:bg-gray-300">
                          <svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M9 3.75V14.25M3.75 9H14.25" stroke="#1C1C1C" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/></svg>
@@ -580,10 +618,86 @@ const PricingDataForm = () => {
                     </button>
                 </div>
                  <div className="p-4 bg-white rounded-lg border border-gray-200 flex flex-col gap-6">
-                     <h3 className="text-sm font-medium text-gray-700 tracking-tight">Premium Rating Index & Ratio</h3>
-                    <CheckboxWithNA label="Rate Change" id="rate-change" />
-                    <CheckboxWithNA label="Tech Ratio" id="tech-ratio" />
-                    <CheckboxWithNA label="Rate Adequacy" id="rate-adequacy" />
+                     <div className="flex items-center justify-between">
+                         <h3 className="text-sm font-medium text-gray-700 tracking-tight">Premium Rating Index & Ratio</h3>
+                     </div>
+                    <div className="flex flex-col gap-6">
+                        <div className="flex gap-4">
+                            <div className="bg-gray-100 rounded-t-lg border-b border-gray-300 p-2 flex items-center gap-2">
+                                <button onClick={() => setRateChangeChecked(!rateChangeChecked)} className="flex items-center gap-2">
+                                    {rateChangeChecked ? (
+                                        <div data-state="Enabled" data-type="Selected" style={{width: '100%', height: '100%', justifyContent: 'center', alignItems: 'center', display: 'inline-flex'}}>
+                                            <div style={{padding: 11, borderRadius: 100, justifyContent: 'center', alignItems: 'center', display: 'flex'}}>
+                                                <div style={{width: 18, height: 18, borderRadius: 2, background: '#3C3C3C', position: 'relative'}}>
+                                                    <svg width="12" height="9" viewBox="0 0 12 9" fill="none" xmlns="http://www.w3.org/2000/svg" style={{position: 'absolute', left: 3, top: 4.5}}>
+                                                        <path d="M1 4.5L4.33333 8L11 1" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                                                    </svg>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    ) : (
+                                        <div data-state="Enabled" data-type="Unselected" style={{width: '100%', height: '100%', justifyContent: 'center', alignItems: 'center', display: 'inline-flex'}}>
+                                            <div style={{padding: 11, borderRadius: 100, justifyContent: 'center', alignItems: 'center', display: 'flex'}}>
+                                                <div style={{width: 18, height: 18, borderRadius: 2, border: '2px #807F7B solid'}} />
+                                            </div>
+                                        </div>
+                                    )}
+                                    <span className="text-gray-600 text-sm">N/A</span>
+                                </button>
+                            </div>
+                            <M3TextField label="Rate Change" id="rate-change-input" containerClassName="flex-1" disabled={rateChangeChecked} />
+                        </div>
+                        <div className="flex gap-4">
+                            <div className="bg-gray-100 rounded-t-lg border-b border-gray-300 p-2 flex items-center gap-2">
+                                <button onClick={() => setTechRatioChecked(!techRatioChecked)} className="flex items-center gap-2">
+                                    {techRatioChecked ? (
+                                        <div data-state="Enabled" data-type="Selected" style={{width: '100%', height: '100%', justifyContent: 'center', alignItems: 'center', display: 'inline-flex'}}>
+                                            <div style={{padding: 11, borderRadius: 100, justifyContent: 'center', alignItems: 'center', display: 'flex'}}>
+                                                <div style={{width: 18, height: 18, borderRadius: 2, background: '#3C3C3C', position: 'relative'}}>
+                                                    <svg width="12" height="9" viewBox="0 0 12 9" fill="none" xmlns="http://www.w3.org/2000/svg" style={{position: 'absolute', left: 3, top: 4.5}}>
+                                                        <path d="M1 4.5L4.33333 8L11 1" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                                                    </svg>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    ) : (
+                                        <div data-state="Enabled" data-type="Unselected" style={{width: '100%', height: '100%', justifyContent: 'center', alignItems: 'center', display: 'inline-flex'}}>
+                                            <div style={{padding: 11, borderRadius: 100, justifyContent: 'center', alignItems: 'center', display: 'flex'}}>
+                                                <div style={{width: 18, height: 18, borderRadius: 2, border: '2px #807F7B solid'}} />
+                                            </div>
+                                        </div>
+                                    )}
+                                    <span className="text-gray-600 text-sm">N/A</span>
+                                </button>
+                            </div>
+                            <M3TextField label="Tech Ratio" id="tech-ratio-input" containerClassName="flex-1" disabled={techRatioChecked} />
+                        </div>
+                        <div className="flex gap-4">
+                            <div className="bg-gray-100 rounded-t-lg border-b border-gray-300 p-2 flex items-center gap-2">
+                                <button onClick={() => setRateAdequacyChecked(!rateAdequacyChecked)} className="flex items-center gap-2">
+                                    {rateAdequacyChecked ? (
+                                        <div data-state="Enabled" data-type="Selected" style={{width: '100%', height: '100%', justifyContent: 'center', alignItems: 'center', display: 'inline-flex'}}>
+                                            <div style={{padding: 11, borderRadius: 100, justifyContent: 'center', alignItems: 'center', display: 'flex'}}>
+                                                <div style={{width: 18, height: 18, borderRadius: 2, background: '#3C3C3C', position: 'relative'}}>
+                                                    <svg width="12" height="9" viewBox="0 0 12 9" fill="none" xmlns="http://www.w3.org/2000/svg" style={{position: 'absolute', left: 3, top: 4.5}}>
+                                                        <path d="M1 4.5L4.33333 8L11 1" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                                                    </svg>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    ) : (
+                                        <div data-state="Enabled" data-type="Unselected" style={{width: '100%', height: '100%', justifyContent: 'center', alignItems: 'center', display: 'inline-flex'}}>
+                                            <div style={{padding: 11, borderRadius: 100, justifyContent: 'center', alignItems: 'center', display: 'flex'}}>
+                                                <div style={{width: 18, height: 18, borderRadius: 2, border: '2px #807F7B solid'}} />
+                                            </div>
+                                        </div>
+                                    )}
+                                    <span className="text-gray-600 text-sm">N/A</span>
+                                </button>
+                            </div>
+                            <M3TextField label="Rate Adequacy" id="rate-adequacy-input" containerClassName="flex-1" disabled={rateAdequacyChecked} />
+                        </div>
+                    </div>
                     <M3TextField multiline id="pricing-notes" label="Pricing Notes" bgClass="bg-white" />
                 </div>
             </div>
@@ -692,7 +806,9 @@ const OMRAForm = () => {
                     <RadioButton group="policySection" value="cost_fair_value" selectedValue={selections.policySection} onClick={handleSelection}>
                         The cost remains fair value for the insured relative to the coverage and service provided.
                     </RadioButton>
-                    <M3TextField multiline id="cost-comment" label="Alternatively please comment with reference to the relevant items detailed on the 'Supporting Narrative' link." bgClass="bg-white" noTruncate={true} />
+                    {selections.policySection === 'cost_fair_value' && (
+                        <M3TextField multiline id="cost-comment" label="Alternatively please comment with reference to the relevant items detailed on the 'Supporting Narrative' link." bgClass="bg-white" noTruncate={true} />
+                    )}
                 </QuestionCard>
                 
                 <QuestionCard>

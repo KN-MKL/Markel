@@ -225,7 +225,7 @@ const Sidebar = ({ activeRecord, setActiveRecord, recordData, className = '' }) 
   }, [isExpanded]);
 
     return (
-    <aside className={`flex flex-col self-stretch p-4 ${className}`}>
+    <aside className={`flex flex-col self-stretch p-4 flex-none ${className}`}>
       <div className={`flex h-full w-full flex-col justify-between overflow-hidden rounded-lg outline outline-[0.5px] outline-[#ADACA7] bg-transparent transition-all duration-300 ease-in-out ${isExpanded ? 'w-[1024px]' : 'w-[269px]'}`}>
         {/* Header */}
         <div className="self-stretch p-4 flex flex-col justify-start items-start gap-4 border-b border-gray-200 bg-transparent">

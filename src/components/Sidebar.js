@@ -163,3 +163,127 @@ const RecordGroup = ({ title, color, isPending, items, activeRecordId, onRecordC
     </div>
   );
 };
+
+// --- Sidebar ---
+const Sidebar = ({ activeRecord, setActiveRecord, recordData, className = '' }) => {
+  // Normalize incoming data to groups
+  const groups = [
+    { key: 'fon', title: 'Moved to FON', color: '#216270', isPending: false },
+    { key: 'pending', title: 'Pending FON Move', color: '#FFC8B0', isPending: true },
+    { key: 'ust', title: 'With UST', color: '#FFC8B0', isPending: true },
+    { key: 'rejected', title: 'Rejected', color: '#C02000', isPending: false },
+  ];
+
+  const list = groups.map(g => ({ ...g, items: recordData[g.key] || [] }));
+  const totalRecords = list.reduce((sum, g) => sum + g.items.length, 0);
+
+  const [isExpanded, setIsExpanded] = React.useState(false);
+  // Responsive expanded width: never smaller than 360px, prefer ~42vw, cap at 1024px
+  const expandedWidth = 'clamp(360px, 42vw, 1024px)';
+  const verticalScrollRef = React.useRef(null);
+  const [showTopShadow, setShowTopShadow] = React.useState(false);
+  const [showBottomShadow, setShowBottomShadow] = React.useState(true);
+
+  const handleVerticalScroll = () => {
+    const el = verticalScrollRef.current;
+    if (!el) return;
+    const { scrollTop, scrollHeight, clientHeight } = el;
+    setShowTopShadow(scrollTop > 5);
+    setShowBottomShadow(scrollTop + clientHeight < scrollHeight - 5);
+  };
+
+  React.useEffect(() => {
+    const v = verticalScrollRef.current;
+    if (!v) return;
+    v.addEventListener('scroll', handleVerticalScroll);
+    handleVerticalScroll();
+    return () => v.removeEventListener('scroll', handleVerticalScroll);
+  }, [isExpanded]);
+
+  // Track horizontal scrolling for sticky reference shadow
+  const horizontalScrollRef = React.useRef(null);
+  const [showStickyShadow, setShowStickyShadow] = React.useState(false);
+
+  React.useEffect(() => {
+    const h = horizontalScrollRef.current;
+    if (!h) return;
+    const onScroll = () => setShowStickyShadow(h.scrollLeft > 2);
+    h.addEventListener('scroll', onScroll);
+    onScroll();
+    return () => h.removeEventListener('scroll', onScroll);
+  }, [isExpanded]);
+
+  return (
+    <aside
+      className={`flex flex-col self-stretch p-4 flex-none transition-all duration-300 ease-in-out ${className}`}
+      style={{ width: isExpanded ? expandedWidth : '269px' }}
+    >
+      <div className={`flex h-full w-full flex-col justify-between overflow-hidden rounded-lg outline outline-[0.5px] outline-[#ADACA7] bg-transparent`}>
+        {/* Header */}
+        <div className="self-stretch p-4 flex flex-col justify-start items-start gap-4 border-b border-gray-200 bg-transparent">
+          <div className="self-stretch flex justify-start items-center gap-4">
+            <div className="px-2 py-1 bg-[#E9F0F2] rounded flex justify-center items-center">
+              <span className="text-[#5C5A59] text-[11px] font-medium leading-4 tracking-[0.5px]">{totalRecords}</span>
+            </div>
+            <span className="flex-1 text-[#5C5A59] text-base font-medium leading-6 tracking-[0.15px]">Records</span>
+            <button onClick={() => setIsExpanded(!isExpanded)} className="p-2 rounded-full hover:bg-gray-100"><ToggleExpandIcon /></button>
+          </div>
+        </div>
+
+        {/* Scrollable area */}
+        <div className="relative flex-1">
+          <div ref={verticalScrollRef} className="absolute inset-0 overflow-y-auto custom-scrollbar">
+            {isExpanded ? (
+              <div ref={horizontalScrollRef} className="overflow-x-auto custom-scrollbar-x">
+                <div className="p-4 inline-block min-w-full">
+                  <ExpandedHeader showStickyShadow={showStickyShadow} />
+                  <div className="flex flex-col gap-4 mt-2">
+                    {list.map(group => (
+                      <RecordGroup
+                        key={group.key}
+                        title={group.title}
+                        color={group.color}
+                        isPending={group.isPending}
+                        items={group.items}
+                        activeRecordId={activeRecord}
+                        onRecordClick={setActiveRecord}
+                        isExpanded={isExpanded}
+                        showStickyShadow={showStickyShadow}
+                      />
+                    ))}
+                  </div>
+                </div>
+              </div>
+            ) : (
+              <div className="p-4 flex flex-col gap-4">
+                {list.map(group => (
+                  <RecordGroup
+                    key={group.key}
+                    title={group.title}
+                    color={group.color}
+                    isPending={group.isPending}
+                    items={group.items}
+                    activeRecordId={activeRecord}
+                    onRecordClick={setActiveRecord}
+                    isExpanded={false}
+                    showStickyShadow={false}
+                  />
+                ))}
+              </div>
+            )}
+          </div>
+          {/* Top/Bottom shadows for vertical scroll */}
+          <div className={`absolute top-0 left-0 right-0 h-4 transition-opacity duration-300 pointer-events-none ${showTopShadow ? 'opacity-100' : 'opacity-0'}`} style={{ boxShadow: 'inset 0 18px 12px -12px rgba(0,0,0,0.14)' }} />
+          <div className={`absolute bottom-0 left-0 right-0 h-4 transition-opacity duration-300 pointer-events-none ${showBottomShadow ? 'opacity-100' : 'opacity-0'}`} style={{ boxShadow: 'inset 0 -18px 12px -12px rgba(0,0,0,0.14)' }} />
+        </div>
+
+        {/* Footer */}
+        <div className="self-stretch p-4 bg-white border-t border-gray-200">
+          <span className="text-[#3C3C3C] text-xs font-medium leading-4 tracking-[0.5px]">{2} of {totalRecords} sub-tasks incomplete</span>
+        </div>
+      </div>
+    </aside>
+  );
+};
+
+export default Sidebar;

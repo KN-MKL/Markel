@@ -47,8 +47,8 @@ const RecordItem = ({ item, active, onRecordClick, isExpanded, showStickyShadow 
 
         <div
           onClick={() => onRecordClick(id)}
-          className={`w-full bg-white rounded-lg border flex items-stretch cursor-pointer transition-all duration-200 text-sm text-[#3C3C3C] ${
-            active ? 'shadow-[0px_2px_16px_rgba(0,0,0,0.05)] border-[#807F7B]' : 'border-[#D9D9D6]'
+          className={`w-full bg-white rounded-lg flex items-stretch cursor-pointer transition-all duration-200 text-sm text-[#3C3C3C] ${
+            active ? 'border-2 border-[#3C3C3C] shadow-[0px_2px_16px_rgba(0,0,0,0.06)]' : 'border border-[#D9D9D6]'
           }`}
           role="button"
           tabIndex={0}
@@ -62,8 +62,14 @@ const RecordItem = ({ item, active, onRecordClick, isExpanded, showStickyShadow 
             <div className="h-6 p-1 bg-[#ECECEC] rounded flex justify-center items-center"><NotStartedIcon /></div>
           </div>
           {/* Sticky Reference Column */}
-          <div className={`sticky left-[8.5rem] flex-shrink-0 w-40 py-3 px-2 flex items-center truncate bg-white z-10 transition-shadow duration-200 ${showStickyShadow ? 'shadow-[8px_0_10px_-4px_rgba(0,0,0,0.15)]' : ''}`}>
+          <div className={`sticky left-[8.5rem] flex-shrink-0 w-40 py-3 px-2 flex items-center truncate bg-white z-10 relative`}>
             <span>{reference || `${code || ''}${type || ''} ${suffix || ''}`}</span>
+            {showStickyShadow && (
+              <>
+                <div className="absolute top-0 bottom-0 left-[-100vw] right-full bg-white pointer-events-none" />
+                <div className="absolute right-0 top-0 bottom-0 w-3 pointer-events-none" style={{ background: 'linear-gradient(to left, rgba(0,0,0,0.14), rgba(0,0,0,0))' }} />
+              </>
+            )}
           </div>
           {/* Scrollable Columns */}
           <div className="flex-shrink-0 w-40 py-3 px-2 flex items-center truncate"><span>{majorClass || '-'}</span></div>
@@ -82,8 +88,8 @@ const RecordItem = ({ item, active, onRecordClick, isExpanded, showStickyShadow 
   return (
     <div
       onClick={() => onRecordClick(id)}
-      className={`relative w-full bg-white rounded-lg border flex items-center cursor-pointer transition-all duration-200 ${
-        active ? 'shadow-[0px_2px_16px_rgba(0,0,0,0.05)] border-[#807F7B]' : 'border-[#D9D9D6]'
+      className={`relative w-full bg-white rounded-lg flex items-center cursor-pointer transition-all duration-200 ${
+        active ? 'border-2 border-[#3C3C3C] shadow-[0px_2px_16px_rgba(0,0,0,0.06)]' : 'border border-[#D9D9D6]'
       }`}
       role="button"
       tabIndex={0}
@@ -116,7 +122,15 @@ const ExpandedHeader = ({ showStickyShadow }) => (
     {/* Sticky Status Header */}
     <div className="sticky left-14 flex-shrink-0 w-20 flex items-center justify-center bg-[#F4F2EB] z-10">Status</div>
     {/* Sticky Reference Header */}
-    <div className={`sticky left-[8.5rem] flex-shrink-0 w-40 px-2 bg-[#F4F2EB] z-10 transition-shadow duration-200 ${showStickyShadow ? 'shadow-[8px_0_10px_-4px_rgba(0,0,0,0.15)]' : ''}`}>Reference</div>
+    <div className={`sticky left-[8.5rem] flex-shrink-0 w-40 px-2 bg-[#F4F2EB] z-10 relative`}>
+      Reference
+      {showStickyShadow && (
+        <>
+          <div className="absolute top-0 bottom-0 left-[-100vw] right-full bg-[#F4F2EB] pointer-events-none" />
+          <div className="absolute right-0 top-0 bottom-0 w-3 pointer-events-none" style={{ background: 'linear-gradient(to left, rgba(0,0,0,0.14), rgba(0,0,0,0))' }} />
+        </>
+      )}
+    </div>
     {/* Scrollable Headers */}
     <div className="flex-shrink-0 w-40 px-2">Major Class</div>
     <div className="flex-shrink-0 w-40 px-2">Minor Class</div>

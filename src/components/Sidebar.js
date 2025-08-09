@@ -114,7 +114,7 @@ const ExpandedHeader = ({ showStickyShadow }) => (
   <div className="sticky top-0 z-20 flex w-full text-xs text-[#5C5A59] font-medium tracking-[0.5px] bg-[#F4F2EB] py-2">
     <div className="sticky left-0 flex-shrink-0 w-14 p-2 bg-[#F4F2EB] z-10"></div>
     <div className="sticky left-14 flex-shrink-0 w-20 flex items-center justify-center bg-[#F4F2EB] z-10">Status</div>
-    <div className={`sticky left-[8.5rem] flex-shrink-0 w-48 px-2 bg-[#F4F2EB] z-10 transition-shadow duration-200 ${showStickyShadow ? 'shadow-[4px_0_5px_-2px_rgba(0,0,0,0.08)]' : ''}`}>Reference</div>
+    <div className={`sticky left-[8.5rem] flex-shrink-0 w-40 px-2 bg-[#F4F2EB] z-10 transition-shadow duration-200 ${showStickyShadow ? 'shadow-[4px_0_5px_-2px_rgba(0,0,0,0.08)]' : ''}`}>Reference</div>
     <div className="flex-shrink-0 w-40 px-2">Major Class</div>
     <div className="flex-shrink-0 w-40 px-2">Minor Class</div>
     <div className="flex-shrink-0 w-32 px-2">Class</div>
@@ -125,52 +125,7 @@ const ExpandedHeader = ({ showStickyShadow }) => (
   </div>
 );
 
-// --- Row (expanded) ---
-const ExpandedRecordRow = ({ item, active, onClick, showEdgeShadow }) => {
-  const { ref, code, suffix } = item;
-  const [checked, setChecked] = React.useState(false);
-  return (
-    <div className={`relative`}>
-      {active && <div className="absolute left-[-16px] top-1/2 -translate-y-1/2 w-1 h-11 bg-[#3C3C3C] rounded-r-lg" />}
-      <div
-        onClick={onClick}
-        className={`w-full bg-transparent rounded-lg border flex items-stretch cursor-pointer transition-all duration-200 text-sm text-[#3C3C3C] ${
-          active ? 'shadow-[0px_2px_16px_rgba(0,0,0,0.05)] border-[#807F7B]' : 'border-[#D9D9D6]'
-        }`}
-        role="button"
-        tabIndex={0}
-      >
-        {/* 1: Checkbox (transparent bg) */}
-        <div className="sticky left-0 z-10 flex-shrink-0 w-14 flex items-center justify-center p-4 bg-transparent rounded-l-lg">
-          <M3Checkbox checked={checked} onChange={(e) => setChecked(e.target.checked)} className="!m-0" compact />
-        </div>
-        {/* 2: Status (transparent bg) */}
-        <div className="sticky left-14 z-10 flex-shrink-0 w-20 flex items-center justify-center bg-transparent">
-          <div className="h-6 p-1 bg-[#ECECEC] rounded flex justify-center items-center"><NotStartedIcon /></div>
-        </div>
-        {/* 3: Reference (conditional shadow, transparent bg) */}
-        <div className="sticky z-30 flex-shrink-0 w-48 py-3 px-2 flex items-center bg-transparent truncate relative" style={{ left: '8.5rem' }}>
-          <span>{ref || `${code}${suffix ? ` ${suffix}` : ''}`}</span>
-          {showEdgeShadow && (
-            <>
-              {/* Left-side mask stretching to the sidebar's left edge */}
-              <div className="absolute top-0 bottom-0 left-[-100vw] right-full bg-[#F5F5F5] pointer-events-none z-30" />
-              <div className="absolute right-0 top-0 bottom-0 w-3 pointer-events-none z-30" style={{ boxShadow: 'inset -10px 0 8px -8px rgba(0,0,0,0.12)' }} />
-            </>
-          )}
-        </div>
-        {/* Non-sticky columns */}
-        <div className="flex-shrink-0 w-40 py-3 px-2 flex items-center truncate"><span>-</span></div>
-        <div className="flex-shrink-0 w-40 py-3 px-2 flex items-center truncate"><span>-</span></div>
-        <div className="flex-shrink-0 w-32 py-3 px-2 flex items-center truncate"><span>-</span></div>
-        <div className="flex-shrink-0 w-32 py-3 px-2 flex items-center truncate"><span>-</span></div>
-        <div className="flex-shrink-0 w-32 py-3 px-2 flex items-center truncate"><span>-</span></div>
-        <div className="flex-shrink-0 w-32 py-3 px-2 flex items-center truncate"><span>-</span></div>
-        <div className="flex-shrink-0 w-32 py-3 px-2 flex items-center truncate"><span>-</span></div>
-      </div>
-    </div>
-  );
-};
+// (Removed legacy ExpandedRecordRow; handled in RecordItem)
 
 const RecordGroup = ({ title, color, isPending, items, activeRecordId, onRecordClick, isExpanded, showStickyShadow }) => {
   const [isOpen, setIsOpen] = React.useState(true);

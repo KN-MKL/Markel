@@ -137,4 +137,29 @@ const RecordGroup = ({ title, color, isPending, items, activeRecordId, onRecordC
       <div className="sticky top-[36px] z-10 bg-[#F4F2EB] py-2">
         <div className="flex items-center w-full overflow-hidden">
           <div className="sticky left-0 flex items-center gap-2 pl-4 bg-[#F4F2EB] z-10 flex-shrink-0">
-            <div className={`w-2 h-2 rounded-full ${isPending ? 'border border-[#FF7133]' : ''}`
+            <div className={`w-2 h-2 rounded-full ${isPending ? 'border border-[#FF7133]' : ''}`} style={{ backgroundColor: color }} />
+            <span className="text-[#5C5A59] text-sm font-medium leading-5 tracking-[0.1px]">{title}</span>
+          </div>
+          <div className="flex-1 min-w-0 border-b border-dashed border-[#ADACA7] mx-2"></div>
+          <button onClick={() => setIsOpen(!isOpen)} className="sticky right-0 p-1 bg-[#F4F2EB] z-10 pr-4">
+            {isOpen ? <ChevronUpIcon /> : <ChevronDownIcon />}
+          </button>
+        </div>
+      </div>
+      {isOpen && (
+        <div className="flex flex-col gap-2">
+          {items.map((item) => (
+            <RecordItem
+              key={item.id}
+              item={item}
+              active={String(item.id) === String(activeRecordId)}
+              onRecordClick={onRecordClick}
+              isExpanded={isExpanded}
+              showStickyShadow={showStickyShadow}
+            />
+          ))}
+        </div>
+      )}
+    </div>
+  );
+};

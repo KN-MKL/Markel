@@ -76,16 +76,14 @@ const ExpandedHeader = ({ showEdgeShadow }) => (
     <div className="sticky left-0 flex-shrink-0 w-14 p-2 bg-transparent z-20"></div>
     {/* 2: Status (transparent bg) */}
     <div className="sticky left-14 flex-shrink-0 w-20 flex items-center justify-center bg-transparent z-20">Status</div>
-    {/* 3: Reference (conditional shadow, transparent bg) */}
-    <div className="sticky flex-shrink-0 w-48 px-2 bg-transparent z-30 relative" style={{ left: '8.5rem' }}>
+    {/* 3: Reference (conditional shadow) */}
+    <div
+      className={`sticky flex-shrink-0 w-40 px-2 bg-transparent z-20 ${
+        showEdgeShadow ? 'shadow-[4px_0_5px_-2px_rgba(0,0,0,0.08)]' : ''
+      }`}
+      style={{ left: '8.5rem' }}
+    >
       Reference
-      {showEdgeShadow && (
-        <>
-          {/* Left-side mask stretching to the sidebar's left edge */}
-          <div className="absolute top-0 bottom-0 left-[-100vw] right-full bg-[#F5F5F5] pointer-events-none z-30" />
-          <div className="absolute right-0 top-0 bottom-0 w-3 pointer-events-none z-30" style={{ boxShadow: 'inset -10px 0 8px -8px rgba(0,0,0,0.12)' }} />
-        </>
-      )}
     </div>
     {/* Non-sticky columns */}
     <div className="flex-shrink-0 w-40 px-2">Major Class</div>
@@ -121,16 +119,14 @@ const ExpandedRecordRow = ({ item, active, onClick, showEdgeShadow }) => {
         <div className="sticky left-14 z-10 flex-shrink-0 w-20 flex items-center justify-center bg-transparent">
           <div className="h-6 p-1 bg-[#ECECEC] rounded flex justify-center items-center"><NotStartedIcon /></div>
         </div>
-        {/* 3: Reference (conditional shadow, transparent bg) */}
-        <div className="sticky z-30 flex-shrink-0 w-48 py-3 px-2 flex items-center bg-transparent truncate relative" style={{ left: '8.5rem' }}>
+        {/* 3: Reference (conditional shadow) */}
+        <div
+          className={`sticky z-20 flex-shrink-0 w-40 py-3 px-2 flex items-center bg-transparent truncate ${
+            showEdgeShadow ? 'shadow-[4px_0_5px_-2px_rgba(0,0,0,0.08)]' : ''
+          }`}
+          style={{ left: '8.5rem' }}
+        >
           <span>{ref || `${code} ${suffix || ''}`}</span>
-          {showEdgeShadow && (
-            <>
-              {/* Left-side mask stretching to the sidebar's left edge */}
-              <div className="absolute top-0 bottom-0 left-[-100vw] right-full bg-[#F5F5F5] pointer-events-none z-30" />
-              <div className="absolute right-0 top-0 bottom-0 w-3 pointer-events-none z-30" style={{ boxShadow: 'inset -10px 0 8px -8px rgba(0,0,0,0.12)' }} />
-            </>
-          )}
         </div>
         {/* Non-sticky columns */}
         <div className="flex-shrink-0 w-40 py-3 px-2 flex items-center truncate"><span>-</span></div>
@@ -191,8 +187,8 @@ const Sidebar = ({ activeRecord, setActiveRecord, recordData, className = '' }) 
   const totalRecords = list.reduce((sum, g) => sum + g.items.length, 0);
 
   const [isExpanded, setIsExpanded] = React.useState(false);
-  // Responsive expanded width: never smaller than 360px, prefer ~42vw, cap at 1024px
-  const expandedWidth = 'clamp(360px, 42vw, 1024px)';
+  // Keep Gemini layout behavior: discrete 269px ↔ 1024px toggle
+  const expandedWidth = isExpanded ? '1024px' : '269px';
   const verticalScrollRef = React.useRef(null);
   const [showTopShadow, setShowTopShadow] = React.useState(false);
   const [showBottomShadow, setShowBottomShadow] = React.useState(true);
@@ -229,7 +225,7 @@ const Sidebar = ({ activeRecord, setActiveRecord, recordData, className = '' }) 
     return (
     <aside
       className={`flex flex-col self-stretch p-4 flex-none transition-all duration-300 ease-in-out ${className}`}
-      style={{ width: isExpanded ? expandedWidth : '269px' }}
+      style={{ width: expandedWidth }}
     >
       <div className={`flex h-full w-full flex-col justify-between overflow-hidden rounded-lg outline outline-[0.5px] outline-[#ADACA7] bg-transparent`}>
         {/* Header */}
@@ -252,7 +248,14 @@ const Sidebar = ({ activeRecord, setActiveRecord, recordData, className = '' }) 
                   <ExpandedHeader showEdgeShadow={showEdgeShadow} />
                   <div className="flex flex-col gap-4 mt-2">
                     {list.map(group => (
-                      <RecordGroup key={group.key} {...group} activeRecordId={activeRecord} onRecordClick={setActiveRecord} isExpanded={isExpanded} showEdgeShadow={showEdgeShadow} />
+                      <RecordGroup
+                        key={group.key}
+                        {...group}
+                        activeRecordId={activeRecord}
+                        onRecordClick={setActiveRecord}
+                        isExpanded={isExpanded}
+                        showEdgeShadow={showEdgeShadow}
+                      />
                     ))}
                   </div>
                 </div>

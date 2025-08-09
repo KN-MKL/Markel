@@ -110,14 +110,14 @@ const OMRAForm = ({ className = "" }) => {
                         No
                     </RadioButton>
                 </QuestionCard>
-            </div>
-            
-            {/* Right Column */}
+                    </div>
+
+                    {/* Right Column */}
             <div className="flex-1 flex flex-col gap-4">
                 <QuestionCard>
                     <h3 className="text-sm font-normal text-zinc-800">
                         The policy documentation/wording must:- be clear, fair, not misleading- clearly set out what is and isn't covered, how to cancel, claim and complain- meet the target customer's needs and reasonable expectations- make clear any aspects of cover that are optional (and whether they are included on this policy or embedded)<br/><br/>
-                        Please choose an option which describes the wording offered to the target customer:
+                                Please choose an option which describes the wording offered to the target customer:
                     </h3>
                     <RadioButton group="policySection" value="markel_approved" selectedValue={selections.policySection} onClick={handleSelection}>
                         Markel approved wording and approved for the customer type
@@ -137,7 +137,9 @@ const OMRAForm = ({ className = "" }) => {
                     <RadioButton group="policySection" value="cost_fair_value" selectedValue={selections.policySection} onClick={handleSelection}>
                         The cost remains fair value for the insured relative to the coverage and service provided.
                     </RadioButton>
-                    <M3TextField multiline id="cost-comment" label="Alternatively please comment with reference to the relevant items detailed on the 'Supporting Narrative' link." bgClass="bg-white" noTruncate={true} />
+                    {selections.policySection === 'cost_fair_value' && (
+                        <M3TextField multiline id="cost-comment" label="Alternatively please comment with reference to the relevant items detailed on the 'Supporting Narrative' link." bgClass="bg-white" noTruncate={true} />
+                    )}
                 </QuestionCard>
                 
                 <QuestionCard>

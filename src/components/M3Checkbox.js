@@ -7,11 +7,15 @@ const M3Checkbox = ({
     disabled = false,
     className = "",
     description = "",
-    indeterminate = false
+    indeterminate = false,
+    compact = false
 }) => {
+    const containerAlignClass = compact ? 'items-center' : 'items-start';
+    const tickMarginClass = compact ? 'mt-0' : 'mt-1';
+
     return (
-        <label className={`flex items-start gap-3 cursor-pointer ${disabled ? 'opacity-50 cursor-not-allowed' : ''} ${className}`}>
-            <div className="relative flex items-center justify-center mt-1">
+        <label className={`flex ${containerAlignClass} gap-3 cursor-pointer ${disabled ? 'opacity-50 cursor-not-allowed' : ''} ${className}`}>
+            <div className={`relative flex items-center justify-center ${tickMarginClass}`}>
                 <input
                     type="checkbox"
                     checked={checked}
@@ -34,16 +38,20 @@ const M3Checkbox = ({
                     )}
                 </div>
             </div>
-            <div className="flex-1">
-                <span className={`text-sm ${disabled ? 'text-gray-500' : 'text-gray-700'}`}>
-                    {label}
-                </span>
-                {description && (
-                    <p className={`text-xs mt-1 ${disabled ? 'text-gray-400' : 'text-gray-500'}`}>
-                        {description}
-                    </p>
-                )}
-            </div>
+            {(label || description) && (
+                <div className="flex-1">
+                    {label && (
+                        <span className={`text-sm ${disabled ? 'text-gray-500' : 'text-gray-700'}`}>
+                            {label}
+                        </span>
+                    )}
+                    {description && (
+                        <p className={`text-xs mt-1 ${disabled ? 'text-gray-400' : 'text-gray-500'}`}>
+                            {description}
+                        </p>
+                    )}
+                </div>
+            )}
         </label>
     );
 };

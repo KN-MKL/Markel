@@ -134,7 +134,7 @@ const RecordGroup = ({ title, color, isPending, items, activeRecordId, onRecordC
   const [isOpen, setIsOpen] = React.useState(true);
   return (
     <div>
-      <div className="sticky top-[36px] z-10 bg-[#F4F2EB] py-2">
+      <div className="sticky z-10 bg-[#F4F2EB] py-2" style={{ top: isExpanded ? 36 : 0 }}>
         <div className="flex items-center w-full overflow-hidden">
           <div className="sticky left-0 flex items-center gap-2 pl-4 bg-[#F4F2EB] z-10 flex-shrink-0">
             <div className={`w-2 h-2 rounded-full ${isPending ? 'border border-[#FF7133]' : ''}`} style={{ backgroundColor: color }} />
@@ -226,8 +226,8 @@ const Sidebar = ({ activeRecord, setActiveRecord, recordData, className = '' }) 
             </div>
             <span className="flex-1 text-[#5C5A59] text-base font-medium leading-6 tracking-[0.15px]">Records</span>
             <button onClick={() => setIsExpanded(!isExpanded)} className="p-2 rounded-full hover:bg-gray-100"><ToggleExpandIcon /></button>
-          </div>
-        </div>
+                        </div>
+                    </div>
 
         {/* Scrollable area */}
         <div className="relative flex-1">
@@ -250,33 +250,23 @@ const Sidebar = ({ activeRecord, setActiveRecord, recordData, className = '' }) 
                         showStickyShadow={showStickyShadow}
                       />
                     ))}
-                  </div>
+                    </div>
                 </div>
               </div>
             ) : (
               <div className="p-4 flex flex-col gap-4">
                 {list.map(group => (
-                  <div key={group.key}>
-                    <div className="flex justify-between items-center py-2">
-                      <div className="flex justify-start items-center gap-3">
-                        <div className={`w-2 h-2 rounded-full ${group.isPending ? 'border border-[#FF7133]' : ''}`} style={{ backgroundColor: group.color }} />
-                        <span className="text-[#5C5A59] text-sm font-medium leading-5 tracking-[0.1px]">{group.title}</span>
-                        </div>
-                      <button className="p-1"><ChevronUpIcon /></button>
-                    </div>
-                    <div className="flex flex-col gap-2">
-                      {group.items.map(item => (
-                        <RecordItem
-                          key={item.id}
-                          item={item}
-                          active={String(item.id) === String(activeRecord)}
-                          onRecordClick={setActiveRecord}
-                          isExpanded={false}
-                          showStickyShadow={false}
-                        />
-                      ))}
-                    </div>
-                </div>
+                  <RecordGroup
+                    key={group.key}
+                    title={group.title}
+                    color={group.color}
+                    isPending={group.isPending}
+                    items={group.items}
+                    activeRecordId={activeRecord}
+                    onRecordClick={setActiveRecord}
+                    isExpanded={false}
+                    showStickyShadow={false}
+                  />
                 ))}
               </div>
             )}

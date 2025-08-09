@@ -154,13 +154,13 @@ const RecordGroup = ({ title, color, isPending, items, activeRecordId, onRecordC
           <div className="sticky left-0 flex items-center gap-2 pl-4 bg-transparent z-10 flex-shrink-0">
             <div className={`w-2 h-2 rounded-full ${isPending ? 'border border-[#FF7133]' : ''}`} style={{ backgroundColor: color }} />
             <span className="text-[#5C5A59] text-sm font-medium leading-5 tracking-[0.1px]">{title}</span>
-          </div>
+                </div>
           <div className="flex-1 min-w-0 border-b border-dashed border-[#ADACA7] mx-2" />
           <button onClick={() => setIsOpen(!isOpen)} className="sticky right-0 p-1 bg-transparent z-10 pr-4">
             {isOpen ? <ChevronUpIcon /> : <ChevronDownIcon />}
-          </button>
+                </button>
         </div>
-      </div>
+            </div>
             {isOpen && (
         <div className="flex flex-col gap-2">
           {items.map((item) => {
@@ -191,6 +191,8 @@ const Sidebar = ({ activeRecord, setActiveRecord, recordData, className = '' }) 
   const totalRecords = list.reduce((sum, g) => sum + g.items.length, 0);
 
   const [isExpanded, setIsExpanded] = React.useState(false);
+  // Responsive expanded width: never smaller than 360px, prefer ~42vw, cap at 1024px
+  const expandedWidth = 'clamp(360px, 42vw, 1024px)';
   const verticalScrollRef = React.useRef(null);
   const [showTopShadow, setShowTopShadow] = React.useState(false);
   const [showBottomShadow, setShowBottomShadow] = React.useState(true);
@@ -225,7 +227,10 @@ const Sidebar = ({ activeRecord, setActiveRecord, recordData, className = '' }) 
   }, [isExpanded]);
 
     return (
-    <aside className={`flex flex-col self-stretch p-4 flex-none transition-all duration-300 ease-in-out ${isExpanded ? 'w-[1024px]' : 'w-[269px]'} ${className}`}>
+    <aside
+      className={`flex flex-col self-stretch p-4 flex-none transition-all duration-300 ease-in-out ${className}`}
+      style={{ width: isExpanded ? expandedWidth : '269px' }}
+    >
       <div className={`flex h-full w-full flex-col justify-between overflow-hidden rounded-lg outline outline-[0.5px] outline-[#ADACA7] bg-transparent`}>
         {/* Header */}
         <div className="self-stretch p-4 flex flex-col justify-start items-start gap-4 border-b border-gray-200 bg-transparent">

@@ -222,7 +222,7 @@ const Sidebar = ({ activeRecord, setActiveRecord, recordData, className = '' }) 
         {/* Header */}
         <div className="self-stretch p-4 flex flex-col justify-start items-start gap-4 border-b border-gray-200 bg-transparent">
           <div className="self-stretch flex justify-start items-center gap-4">
-            <div className="px-2 py-1 bg-[#E9F0F2] rounded flex justify-center items-center">
+            <div className="px-2 py-1 bg[#E9F0F2] rounded flex justify-center items-center">
               <span className="text-[#5C5A59] text-[11px] font-medium leading-4 tracking-[0.5px]">{totalRecords}</span>
             </div>
             <span className="flex-1 text-[#5C5A59] text-base font-medium leading-6 tracking-[0.15px]">Records</span>

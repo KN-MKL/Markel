@@ -140,7 +140,9 @@ const M3TextField = ({
     if (dropdown) { 
         // For dropdowns, use the same label behavior as regular text fields
         const dropdownIsFloating = isFocused || isOpen || value !== '';
-        const dropdownLabelClass = `absolute left-3 right-7 transition-all duration-200 ease-out pointer-events-none truncate ${
+        // Reserve space for the chevron: icon (24px) + right inset (16px) + desired gap (~4px) = 44px => 2.75rem
+        // Constrain label width so it never runs under the chevron and neatly truncates before it
+        const dropdownLabelClass = `absolute left-3 right-[2.75rem] truncate transition-all duration-200 ease-out pointer-events-none ${
             dropdownIsFloating 
                 ? `-top-2 text-xs ${disabled ? 'bg-gray-100' : bgClass} px-1 text-[#3C3C3C] transform scale-100` 
                 : `top-1/2 -translate-y-1/2 text-base text-[#5C5A59] transform scale-100`
@@ -152,11 +154,11 @@ const M3TextField = ({
                     onClick={handleDropdownClick}
                     onFocus={handleFocus}
                     onBlur={handleBlur}
-                    className={`w-full h-full text-left ${commonWrapperClass} hover:border-[#ADACA7] transition-colors pr-7`}
+                    className={`w-full h-full text-left ${commonWrapperClass} hover:border-[#ADACA7] transition-colors`}
                     disabled={disabled}
                 >
                     <label htmlFor={id} className={dropdownLabelClass}>{label}</label>
-                    <span className={`w-full h-full pl-4 pr-7 text-base text-[#3C3C3C] flex items-center transition-opacity duration-200 truncate ${
+                    <span className={`w-full h-full pl-4 pr-[2.75rem] min-w-0 text-base text-[#3C3C3C] flex items-center truncate transition-opacity duration-200 ${
                         value || (isFocused || isOpen) ? 'opacity-100' : 'opacity-0'
                     }`}>
                         {value || (isFocused || isOpen ? 'Select an option' : '')}

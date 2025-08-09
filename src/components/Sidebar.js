@@ -37,14 +37,54 @@ const RightChevronIcon = () => (
   </svg>
 );
 
-// --- Row (collapsed) ---
-const CollapsedRecordItem = ({ item, active, onClick }) => {
-  const { ref, code, suffix } = item;
+// --- Combined Record Item (collapsed/expanded) ---
+const RecordItem = ({ item, active, onRecordClick, isExpanded, showStickyShadow }) => {
+  const { id, ref, code, suffix, majorClass, minorClass, class: className, entity, limit, excess, underwriter } = item;
+  const [checked, setChecked] = React.useState(false);
+
+  if (isExpanded) {
+    return (
+      <div className="relative">
+        {active && <div className="absolute top-1/2 -translate-y-1/2 left-[-16px] w-1 h-11 bg-[#3C3C3C] rounded-r-lg z-30" />}
+        <div
+          onClick={() => onRecordClick(id)}
+          className={`w-full bg-white rounded-lg outline outline-1 flex items-stretch cursor-pointer transition-all duration-200 text-sm text-[#3C3C3C] ${
+            active ? 'shadow-[0px_2px_16px_rgba(0,0,0,0.05)] outline-[#807F7B]' : 'outline-[#D9D9D6]'
+          }`}
+          role="button"
+          tabIndex={0}
+        >
+          {/* Sticky Checkbox */}
+          <div className="sticky left-0 flex-shrink-0 w-14 flex items-center justify-center p-4 bg-white rounded-l-lg z-10">
+            <M3Checkbox checked={checked} onChange={(e) => setChecked(e.target.checked)} className="!m-0" compact />
+          </div>
+          {/* Sticky Status */}
+          <div className="sticky left-14 flex-shrink-0 w-20 flex items-center justify-center bg-white z-10">
+            <div className="h-6 p-1 bg-[#ECECEC] rounded flex justify-center items-center"><NotStartedIcon /></div>
+          </div>
+          {/* Sticky Reference */}
+          <div className={`sticky left-[8.5rem] flex-shrink-0 w-40 py-3 px-2 flex items-center truncate bg-white z-10 transition-shadow duration-200 ${showStickyShadow ? 'shadow-[4px_0_5px_-2px_rgba(0,0,0,0.08)]' : ''}`}>
+            <span>{ref || `${code}${suffix ? ` ${suffix}` : ''}`}</span>
+          </div>
+          {/* Scrollable columns */}
+          <div className="flex-shrink-0 w-40 py-3 px-2 flex items-center truncate"><span>{majorClass || '-'}</span></div>
+          <div className="flex-shrink-0 w-40 py-3 px-2 flex items-center truncate"><span>{minorClass || '-'}</span></div>
+          <div className="flex-shrink-0 w-32 py-3 px-2 flex items-center truncate"><span>{className || '-'}</span></div>
+          <div className="flex-shrink-0 w-32 py-3 px-2 flex items-center truncate"><span>{entity || '-'}</span></div>
+          <div className="flex-shrink-0 w-32 py-3 px-2 flex items-center truncate"><span>{limit || '-'}</span></div>
+          <div className="flex-shrink-0 w-32 py-3 px-2 flex items-center truncate"><span>{excess || '-'}</span></div>
+          <div className="flex-shrink-0 w-32 py-3 px-2 flex items-center truncate"><span>{underwriter || '-'}</span></div>
+        </div>
+      </div>
+    );
+  }
+
+  // Collapsed view
   return (
     <div
-      onClick={onClick}
-      className={`relative w-full bg-white rounded-lg border flex items-center cursor-pointer transition-all duration-200 ${
-        active ? 'shadow-[0px_2px_16px_rgba(0,0,0,0.05)] border-[#807F7B]' : 'border-[#D9D9D6]'
+      onClick={() => onRecordClick(id)}
+      className={`relative w-full bg-white rounded-lg outline outline-1 flex items-center cursor-pointer transition-all duration-200 ${
+        active ? 'shadow-[0px_2px_16px_rgba(0,0,0,0.05)] outline-[#807F7B]' : 'outline-[#D9D9D6]'
       }`}
       role="button"
       tabIndex={0}
@@ -54,7 +94,7 @@ const CollapsedRecordItem = ({ item, active, onClick }) => {
         <div className="h-6 p-1 bg-[#ECECEC] rounded flex justify-center items-center"><NotStartedIcon /></div>
       </div>
       <div className="flex-1 self-stretch px-4 py-2 flex flex-col justify-center items-start">
-        <div className="flex justify-start items-center text-[#3C3C3C] text-sm leading-5 tracking-[0.25px]">
+        <div className="flex justify-start items-center text-[#3C3C3C] text-sm font-normal leading-5 tracking-[0.25px]">
           <span>{ref || code}</span>
           {code && <div className="px-1 py-0.5 mx-1 border-b border-[#807F7B]"><span>{code}</span></div>}
           {suffix && <span>{suffix}</span>}
@@ -70,22 +110,11 @@ const CollapsedRecordItem = ({ item, active, onClick }) => {
 };
 
 // --- Header (expanded) ---
-const ExpandedHeader = ({ showEdgeShadow }) => (
-  <div className="sticky top-0 z-20 flex w-full text-xs text-[#5C5A59] font-medium tracking-[0.5px] bg-transparent py-2">
-    {/* 1: Checkbox (transparent bg) */}
-    <div className="sticky left-0 flex-shrink-0 w-14 p-2 bg-transparent z-20"></div>
-    {/* 2: Status (transparent bg) */}
-    <div className="sticky left-14 flex-shrink-0 w-20 flex items-center justify-center bg-transparent z-20">Status</div>
-    {/* 3: Reference (conditional shadow) */}
-    <div
-      className={`sticky flex-shrink-0 w-40 px-2 bg-transparent z-20 ${
-        showEdgeShadow ? 'shadow-[4px_0_5px_-2px_rgba(0,0,0,0.08)]' : ''
-      }`}
-      style={{ left: '8.5rem' }}
-    >
-      Reference
-    </div>
-    {/* Non-sticky columns */}
+const ExpandedHeader = ({ showStickyShadow }) => (
+  <div className="sticky top-0 z-20 flex w-full text-xs text-[#5C5A59] font-medium tracking-[0.5px] bg-[#F4F2EB] py-2">
+    <div className="sticky left-0 flex-shrink-0 w-14 p-2 bg-[#F4F2EB] z-10"></div>
+    <div className="sticky left-14 flex-shrink-0 w-20 flex items-center justify-center bg-[#F4F2EB] z-10">Status</div>
+    <div className={`sticky left-[8.5rem] flex-shrink-0 w-48 px-2 bg-[#F4F2EB] z-10 transition-shadow duration-200 ${showStickyShadow ? 'shadow-[4px_0_5px_-2px_rgba(0,0,0,0.08)]' : ''}`}>Reference</div>
     <div className="flex-shrink-0 w-40 px-2">Major Class</div>
     <div className="flex-shrink-0 w-40 px-2">Minor Class</div>
     <div className="flex-shrink-0 w-32 px-2">Class</div>
@@ -119,14 +148,16 @@ const ExpandedRecordRow = ({ item, active, onClick, showEdgeShadow }) => {
         <div className="sticky left-14 z-10 flex-shrink-0 w-20 flex items-center justify-center bg-transparent">
           <div className="h-6 p-1 bg-[#ECECEC] rounded flex justify-center items-center"><NotStartedIcon /></div>
         </div>
-        {/* 3: Reference (conditional shadow) */}
-        <div
-          className={`sticky z-20 flex-shrink-0 w-40 py-3 px-2 flex items-center bg-transparent truncate ${
-            showEdgeShadow ? 'shadow-[4px_0_5px_-2px_rgba(0,0,0,0.08)]' : ''
-          }`}
-          style={{ left: '8.5rem' }}
-        >
-          <span>{ref || `${code} ${suffix || ''}`}</span>
+        {/* 3: Reference (conditional shadow, transparent bg) */}
+        <div className="sticky z-30 flex-shrink-0 w-48 py-3 px-2 flex items-center bg-transparent truncate relative" style={{ left: '8.5rem' }}>
+          <span>{ref || `${code}${suffix ? ` ${suffix}` : ''}`}</span>
+          {showEdgeShadow && (
+            <>
+              {/* Left-side mask stretching to the sidebar's left edge */}
+              <div className="absolute top-0 bottom-0 left-[-100vw] right-full bg-[#F5F5F5] pointer-events-none z-30" />
+              <div className="absolute right-0 top-0 bottom-0 w-3 pointer-events-none z-30" style={{ boxShadow: 'inset -10px 0 8px -8px rgba(0,0,0,0.12)' }} />
+            </>
+          )}
         </div>
         {/* Non-sticky columns */}
         <div className="flex-shrink-0 w-40 py-3 px-2 flex items-center truncate"><span>-</span></div>
@@ -141,37 +172,38 @@ const ExpandedRecordRow = ({ item, active, onClick, showEdgeShadow }) => {
   );
 };
 
-const RecordGroup = ({ title, color, isPending, items, activeRecordId, onRecordClick, isExpanded, showEdgeShadow }) => {
-    const [isOpen, setIsOpen] = React.useState(true);
-    return (
+const RecordGroup = ({ title, color, isPending, items, activeRecordId, onRecordClick, isExpanded, showStickyShadow }) => {
+  const [isOpen, setIsOpen] = React.useState(true);
+  return (
     <div>
-      <div className="sticky top-[36px] z-10 bg-transparent py-2">
-        <div className="flex items-center w-full overflow-hidden">
-          <div className="sticky left-0 flex items-center gap-2 pl-4 bg-transparent z-10 flex-shrink-0">
+      <div className="sticky top-[36px] z-10 bg-[#F4F2EB] py-2">
+        <div className="flex items-center w-full">
+          <div className="sticky left-0 flex items-center gap-2 pl-4 bg-[#F4F2EB] z-10 flex-shrink-0">
             <div className={`w-2 h-2 rounded-full ${isPending ? 'border border-[#FF7133]' : ''}`} style={{ backgroundColor: color }} />
             <span className="text-[#5C5A59] text-sm font-medium leading-5 tracking-[0.1px]">{title}</span>
-                </div>
+          </div>
           <div className="flex-1 min-w-0 border-b border-dashed border-[#ADACA7] mx-2" />
-          <button onClick={() => setIsOpen(!isOpen)} className="sticky right-0 p-1 bg-transparent z-10 pr-4">
+          <button onClick={() => setIsOpen(!isOpen)} className="sticky right-0 p-1 bg-[#F4F2EB] z-10 pr-4">
             {isOpen ? <ChevronUpIcon /> : <ChevronDownIcon />}
-                </button>
+          </button>
         </div>
-            </div>
-            {isOpen && (
+      </div>
+      {isOpen && (
         <div className="flex flex-col gap-2">
-          {items.map((item) => {
-            const active = String(item.id) === String(activeRecordId);
-            const onClick = () => onRecordClick(item.id);
-            return isExpanded ? (
-              <ExpandedRecordRow key={item.id} item={item} active={active} onClick={onClick} showEdgeShadow={showEdgeShadow} />
-            ) : (
-              <CollapsedRecordItem key={item.id} item={item} active={active} onClick={onClick} />
-            );
-          })}
-                </div>
-            )}
+          {items.map((item) => (
+            <RecordItem
+              key={item.id}
+              item={item}
+              active={String(item.id) === String(activeRecordId)}
+              onRecordClick={onRecordClick}
+              isExpanded={isExpanded}
+              showStickyShadow={showStickyShadow}
+            />
+          ))}
         </div>
-    );
+      )}
+    </div>
+  );
 };
 
 const Sidebar = ({ activeRecord, setActiveRecord, recordData, className = '' }) => {
@@ -187,8 +219,8 @@ const Sidebar = ({ activeRecord, setActiveRecord, recordData, className = '' }) 
   const totalRecords = list.reduce((sum, g) => sum + g.items.length, 0);
 
   const [isExpanded, setIsExpanded] = React.useState(false);
-  // Keep Gemini layout behavior: discrete 269px ↔ 1024px toggle
-  const expandedWidth = isExpanded ? '1024px' : '269px';
+  // Responsive expanded width: never smaller than 360px, prefer ~42vw, cap at 1024px
+  const expandedWidth = 'clamp(360px, 42vw, 1024px)';
   const verticalScrollRef = React.useRef(null);
   const [showTopShadow, setShowTopShadow] = React.useState(false);
   const [showBottomShadow, setShowBottomShadow] = React.useState(true);
@@ -209,14 +241,14 @@ const Sidebar = ({ activeRecord, setActiveRecord, recordData, className = '' }) 
     return () => v.removeEventListener('scroll', handleVerticalScroll);
   }, [isExpanded]);
 
-  // Track horizontal scrolling to show sticky reference shadow only when scrolled
+  // Track horizontal scrolling to toggle sticky shadow
   const horizontalScrollRef = React.useRef(null);
-  const [showEdgeShadow, setShowEdgeShadow] = React.useState(false);
+  const [showStickyShadow, setShowStickyShadow] = React.useState(false);
 
   React.useEffect(() => {
     const h = horizontalScrollRef.current;
     if (!h) return;
-    const onScroll = () => setShowEdgeShadow(h.scrollLeft > 0);
+    const onScroll = () => setShowStickyShadow(h.scrollLeft > 2);
     h.addEventListener('scroll', onScroll);
     onScroll();
     return () => h.removeEventListener('scroll', onScroll);
@@ -225,7 +257,7 @@ const Sidebar = ({ activeRecord, setActiveRecord, recordData, className = '' }) 
     return (
     <aside
       className={`flex flex-col self-stretch p-4 flex-none transition-all duration-300 ease-in-out ${className}`}
-      style={{ width: expandedWidth }}
+      style={{ width: isExpanded ? expandedWidth : '269px' }}
     >
       <div className={`flex h-full w-full flex-col justify-between overflow-hidden rounded-lg outline outline-[0.5px] outline-[#ADACA7] bg-transparent`}>
         {/* Header */}
@@ -245,17 +277,10 @@ const Sidebar = ({ activeRecord, setActiveRecord, recordData, className = '' }) 
             {isExpanded ? (
               <div ref={horizontalScrollRef} className="overflow-x-auto custom-scrollbar-x">
                 <div className="p-4 inline-block min-w-full">
-                  <ExpandedHeader showEdgeShadow={showEdgeShadow} />
+                  <ExpandedHeader showStickyShadow={showStickyShadow} />
                   <div className="flex flex-col gap-4 mt-2">
                     {list.map(group => (
-                      <RecordGroup
-                        key={group.key}
-                        {...group}
-                        activeRecordId={activeRecord}
-                        onRecordClick={setActiveRecord}
-                        isExpanded={isExpanded}
-                        showEdgeShadow={showEdgeShadow}
-                      />
+                      <RecordGroup key={group.key} {...group} activeRecordId={activeRecord} onRecordClick={setActiveRecord} isExpanded={isExpanded} showStickyShadow={showStickyShadow} />
                     ))}
                   </div>
                 </div>
@@ -273,7 +298,7 @@ const Sidebar = ({ activeRecord, setActiveRecord, recordData, className = '' }) 
                     </div>
                     <div className="flex flex-col gap-2">
                       {group.items.map(item => (
-                        <CollapsedRecordItem key={item.id} item={item} active={String(item.id) === String(activeRecord)} onClick={() => setActiveRecord(item.id)} />
+                        <RecordItem key={item.id} item={item} active={String(item.id) === String(activeRecord)} onRecordClick={setActiveRecord} isExpanded={false} />
                       ))}
                     </div>
                 </div>

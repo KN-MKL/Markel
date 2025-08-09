@@ -116,7 +116,7 @@ const ExpandedHeader = ({ showStickyShadow }) => (
     {/* Sticky Status Header */}
     <div className="sticky left-14 flex-shrink-0 w-20 flex items-center justify-center bg-[#F4F2EB] z-10">Status</div>
     {/* Sticky Reference Header */}
-    <div className={`sticky left-[8.5rem] flex-shrink-0 w-40 px-2 bg-[#F4F2EB] z-10 transition-shadow duration-200 ${showStickyShadow ? 'shadow-[4px_0_5px_-2px_rgba(0,0,0,0.08)]' : ''}`}>Reference</div>
+    <div className={`sticky left-[8.5rem] flex-shrink-0 w-40 px-2 bg-[#F4F2EB] z-10 transition-shadow duration-200 ${showStickyShadow ? 'shadow-[6px_0_10px_-2px_rgba(0,0,0,0.15)]' : ''}`}>Reference</div>
     {/* Scrollable Headers */}
     <div className="flex-shrink-0 w-40 px-2">Major Class</div>
     <div className="flex-shrink-0 w-40 px-2">Minor Class</div>
@@ -282,8 +282,8 @@ const Sidebar = ({ activeRecord, setActiveRecord, recordData, className = '' }) 
             )}
           </div>
           {/* Top/Bottom shadows for vertical scroll */}
-          <div className={`absolute top-0 left-0 right-0 h-4 transition-opacity duration-300 pointer-events-none ${showTopShadow ? 'opacity-100' : 'opacity-0'}`} style={{ boxShadow: 'inset 0 10px 8px -8px rgba(0,0,0,0.05)' }} />
-          <div className={`absolute bottom-0 left-0 right-0 h-4 transition-opacity duration-300 pointer-events-none ${showBottomShadow ? 'opacity-100' : 'opacity-0'}`} style={{ boxShadow: 'inset 0 -10px 8px -8px rgba(0,0,0,0.05)' }} />
+          <div className={`absolute top-0 left-0 right-0 h-5 transition-opacity duration-300 pointer-events-none ${showTopShadow ? 'opacity-100' : 'opacity-0'}`} style={{ boxShadow: 'inset 0 14px 12px -10px rgba(0,0,0,0.18)' }} />
+          <div className={`absolute bottom-0 left-0 right-0 h-5 transition-opacity duration-300 pointer-events-none ${showBottomShadow ? 'opacity-100' : 'opacity-0'}`} style={{ boxShadow: 'inset 0 -14px 12px -10px rgba(0,0,0,0.18)' }} />
         </div>
 
         {/* Footer */}

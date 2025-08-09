@@ -128,52 +128,7 @@ const ExpandedHeader = ({ showStickyShadow }) => (
   </div>
 );
 
-// --- Row (expanded) ---
-const ExpandedRecordRow = ({ item, active, onClick, showEdgeShadow }) => {
-  const { ref, code, suffix } = item;
-  const [checked, setChecked] = React.useState(false);
-  return (
-    <div className={`relative`}>
-      {active && <div className="absolute left-[-16px] top-1/2 -translate-y-1/2 w-1 h-11 bg-[#3C3C3C] rounded-r-lg" />}
-      <div
-        onClick={onClick}
-        className={`w-full bg-transparent rounded-lg border flex items-stretch cursor-pointer transition-all duration-200 text-sm text-[#3C3C3C] ${
-          active ? 'shadow-[0px_2px_16px_rgba(0,0,0,0.05)] border-[#807F7B]' : 'border-[#D9D9D6]'
-        }`}
-        role="button"
-        tabIndex={0}
-      >
-        {/* 1: Checkbox (transparent bg) */}
-        <div className="sticky left-0 z-10 flex-shrink-0 w-14 flex items-center justify-center p-4 bg-transparent rounded-l-lg">
-          <M3Checkbox checked={checked} onChange={(e) => setChecked(e.target.checked)} className="!m-0" compact />
-        </div>
-        {/* 2: Status (transparent bg) */}
-        <div className="sticky left-14 z-10 flex-shrink-0 w-20 flex items-center justify-center bg-transparent">
-          <div className="h-6 p-1 bg-[#ECECEC] rounded flex justify-center items-center"><NotStartedIcon /></div>
-        </div>
-        {/* 3: Reference (conditional shadow, transparent bg) */}
-        <div className="sticky z-30 flex-shrink-0 w-48 py-3 px-2 flex items-center bg-transparent truncate relative" style={{ left: '8.5rem' }}>
-          <span>{ref || `${code} ${suffix || ''}`}</span>
-          {showEdgeShadow && (
-            <>
-              {/* Left-side mask stretching to the sidebar's left edge */}
-              <div className="absolute top-0 bottom-0 left-[-100vw] right-full bg-[#F5F5F5] pointer-events-none z-30" />
-              <div className="absolute right-0 top-0 bottom-0 w-3 pointer-events-none z-30" style={{ boxShadow: 'inset -10px 0 8px -8px rgba(0,0,0,0.12)' }} />
-            </>
-          )}
-        </div>
-        {/* Non-sticky columns */}
-        <div className="flex-shrink-0 w-40 py-3 px-2 flex items-center truncate"><span>-</span></div>
-        <div className="flex-shrink-0 w-40 py-3 px-2 flex items-center truncate"><span>-</span></div>
-        <div className="flex-shrink-0 w-32 py-3 px-2 flex items-center truncate"><span>-</span></div>
-        <div className="flex-shrink-0 w-32 py-3 px-2 flex items-center truncate"><span>-</span></div>
-        <div className="flex-shrink-0 w-32 py-3 px-2 flex items-center truncate"><span>-</span></div>
-        <div className="flex-shrink-0 w-32 py-3 px-2 flex items-center truncate"><span>-</span></div>
-        <div className="flex-shrink-0 w-32 py-3 px-2 flex items-center truncate"><span>-</span></div>
-      </div>
-    </div>
-  );
-};
+// (Legacy ExpandedRecordRow removed; unified in RecordItem)
 
 const RecordGroup = ({ title, color, isPending, items, activeRecordId, onRecordClick, isExpanded, showStickyShadow }) => {
   const [isOpen, setIsOpen] = React.useState(true);
@@ -184,14 +139,14 @@ const RecordGroup = ({ title, color, isPending, items, activeRecordId, onRecordC
           <div className="sticky left-0 flex items-center gap-2 pl-4 bg-[#F4F2EB] z-10 flex-shrink-0">
             <div className={`w-2 h-2 rounded-full ${isPending ? 'border border-[#FF7133]' : ''}`} style={{ backgroundColor: color }} />
             <span className="text-[#5C5A59] text-sm font-medium leading-5 tracking-[0.1px]">{title}</span>
-          </div>
+                </div>
           <div className="flex-1 min-w-0 border-b border-dashed border-[#ADACA7] mx-2"></div>
           <button onClick={() => setIsOpen(!isOpen)} className="sticky right-0 p-1 bg-[#F4F2EB] z-10 pr-4">
             {isOpen ? <ChevronUpIcon /> : <ChevronDownIcon />}
-          </button>
+                </button>
         </div>
-      </div>
-      {isOpen && (
+            </div>
+            {isOpen && (
         <div className="flex flex-col gap-2">
           {items.map((item) => (
             <RecordItem
@@ -202,11 +157,11 @@ const RecordGroup = ({ title, color, isPending, items, activeRecordId, onRecordC
               isExpanded={isExpanded}
               showStickyShadow={showStickyShadow}
             />
-          ))}
+                    ))}
+                </div>
+            )}
         </div>
-      )}
-    </div>
-  );
+    );
 };
 
 const Sidebar = ({ activeRecord, setActiveRecord, recordData, className = '' }) => {
@@ -306,7 +261,7 @@ const Sidebar = ({ activeRecord, setActiveRecord, recordData, className = '' }) 
                       <div className="flex justify-start items-center gap-3">
                         <div className={`w-2 h-2 rounded-full ${group.isPending ? 'border border-[#FF7133]' : ''}`} style={{ backgroundColor: group.color }} />
                         <span className="text-[#5C5A59] text-sm font-medium leading-5 tracking-[0.1px]">{group.title}</span>
-                      </div>
+                        </div>
                       <button className="p-1"><ChevronUpIcon /></button>
                     </div>
                     <div className="flex flex-col gap-2">
@@ -321,7 +276,7 @@ const Sidebar = ({ activeRecord, setActiveRecord, recordData, className = '' }) 
                         />
                       ))}
                     </div>
-                  </div>
+                </div>
                 ))}
               </div>
             )}

@@ -46,7 +46,7 @@ const RecordItem = ({ item, active, onRecordClick, isExpanded, showStickyShadow 
         <div
           onClick={() => onRecordClick(id)}
           className={`w-full bg-white rounded-lg flex items-stretch cursor-pointer transition-all duration-200 text-sm text-[#3C3C3C] ${
-            active ? (showStickyShadow ? 'border-2 border-[#3C3C3C] shadow-[0px_2px_16px_rgba(0,0,0,0.06)]' : 'border border-[#807F7B]') : 'border border-[#D9D9D6]'
+            active ? 'border border-[#807F7B] shadow-[0px_2px_16px_rgba(0,0,0,0.05)]' : 'border border-[#D9D9D6]'
           }`}
           role="button"
           tabIndex={0}
@@ -67,8 +67,10 @@ const RecordItem = ({ item, active, onRecordClick, isExpanded, showStickyShadow 
             <span>{reference || `${code || ''}${type || ''} ${suffix || ''}`}</span>
             {showStickyShadow && (
               <>
-                <div className="absolute top-0 bottom-0 left-[-100vw] right-full bg-white pointer-events-none" />
-                <div className="absolute right-0 top-0 bottom-0 w-3 pointer-events-none" style={{ background: 'linear-gradient(to right, rgba(0,0,0,0.14), rgba(0,0,0,0))' }} />
+                {/* Illusion: fixed left padding pane to keep visual spacing when content scrolls */}
+                <div className="absolute left-[-100vw] right-full bg-white pointer-events-none" style={{ top: '-12px', bottom: '-12px' }} />
+                {/* Right-edge gradient only */}
+                <div className="absolute right-0 pointer-events-none" style={{ top: '-12px', bottom: '-12px', width: '12px', background: 'linear-gradient(to right, rgba(0,0,0,0.14), rgba(0,0,0,0))' }} />
               </>
             )}
           </div>
@@ -90,7 +92,7 @@ const RecordItem = ({ item, active, onRecordClick, isExpanded, showStickyShadow 
     <div
       onClick={() => onRecordClick(id)}
       className={`relative w-full bg-white rounded-lg flex items-center cursor-pointer transition-all duration-200 ${
-        active ? (showStickyShadow ? 'border-2 border-[#3C3C3C] shadow-[0px_2px_16px_rgba(0,0,0,0.06)]' : 'border border-[#807F7B]') : 'border border-[#D9D9D6]'
+        active ? 'border border-[#807F7B] shadow-[0px_2px_16px_rgba(0,0,0,0.05)]' : 'border border-[#D9D9D6]'
       }`}
       role="button"
       tabIndex={0}

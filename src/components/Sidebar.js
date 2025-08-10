@@ -67,7 +67,7 @@ const RecordItem = ({ item, active, onRecordClick, isExpanded, showStickyShadow 
             {showStickyShadow && (
               <>
                 <div className="absolute top-0 bottom-0 left-[-100vw] right-full bg-white pointer-events-none" />
-                <div className="absolute right-0 top-0 bottom-0 w-3 pointer-events-none" style={{ background: 'linear-gradient(to left, rgba(0,0,0,0.14), rgba(0,0,0,0))' }} />
+                <div className="absolute right-0 top-0 bottom-0 w-3 pointer-events-none" style={{ background: 'linear-gradient(to right, rgba(0,0,0,0.14), rgba(0,0,0,0))' }} />
               </>
             )}
           </div>
@@ -127,7 +127,7 @@ const ExpandedHeader = ({ showStickyShadow }) => (
       {showStickyShadow && (
         <>
           <div className="absolute left-[-100vw] right-full bg-[#F4F2EB] pointer-events-none" style={{ top: '-8px', bottom: '-8px' }} />
-          <div className="absolute right-0 pointer-events-none" style={{ top: '-8px', bottom: '-8px', width: '12px', background: 'linear-gradient(to left, rgba(0,0,0,0.14), rgba(0,0,0,0))' }} />
+          <div className="absolute right-0 pointer-events-none" style={{ top: '-8px', bottom: '-8px', width: '12px', background: 'linear-gradient(to right, rgba(0,0,0,0.14), rgba(0,0,0,0))' }} />
         </>
       )}
     </div>
@@ -153,14 +153,14 @@ const RecordGroup = ({ title, color, isPending, items, activeRecordId, onRecordC
           <div className="sticky left-0 flex items-center gap-2 pl-4 bg-[#F4F2EB] z-10 flex-shrink-0">
             <div className={`w-2 h-2 rounded-full ${isPending ? 'border border-[#FF7133]' : ''}`} style={{ backgroundColor: color }} />
             <span className="text-[#5C5A59] text-sm font-medium leading-5 tracking-[0.1px]">{title}</span>
-          </div>
+                </div>
           <div className="flex-1 min-w-0 border-b border-dashed border-[#ADACA7] mx-2"></div>
           <button onClick={() => setIsOpen(!isOpen)} className="sticky right-0 p-1 bg-[#F4F2EB] z-10 pr-4">
             {isOpen ? <ChevronUpIcon /> : <ChevronDownIcon />}
-          </button>
+                </button>
         </div>
-      </div>
-      {isOpen && (
+            </div>
+            {isOpen && (
         <div className="flex flex-col gap-2">
           {items.map((item) => (
             <RecordItem
@@ -171,11 +171,11 @@ const RecordGroup = ({ title, color, isPending, items, activeRecordId, onRecordC
               isExpanded={isExpanded}
               showStickyShadow={showStickyShadow}
             />
-          ))}
+                    ))}
+                </div>
+            )}
         </div>
-      )}
-    </div>
-  );
+    );
 };
 
 // --- Sidebar ---
@@ -227,7 +227,7 @@ const Sidebar = ({ activeRecord, setActiveRecord, recordData, className = '' }) 
     return () => h.removeEventListener('scroll', onScroll);
   }, [isExpanded]);
 
-  return (
+    return (
     <aside
       className={`flex flex-col self-stretch p-4 flex-none transition-all duration-300 ease-in-out ${className}`}
       style={{ width: isExpanded ? expandedWidth : '269px' }}
@@ -241,8 +241,8 @@ const Sidebar = ({ activeRecord, setActiveRecord, recordData, className = '' }) 
             </div>
             <span className="flex-1 text-[#5C5A59] text-base font-medium leading-6 tracking-[0.15px]">Records</span>
             <button onClick={() => setIsExpanded(!isExpanded)} className="p-2 rounded-full hover:bg-gray-100"><ToggleExpandIcon /></button>
-          </div>
-        </div>
+                        </div>
+                    </div>
 
         {/* Scrollable area */}
         <div className="relative flex-1">
@@ -265,7 +265,7 @@ const Sidebar = ({ activeRecord, setActiveRecord, recordData, className = '' }) 
                         showStickyShadow={showStickyShadow}
                       />
                     ))}
-                  </div>
+                    </div>
                 </div>
               </div>
             ) : (
@@ -294,10 +294,10 @@ const Sidebar = ({ activeRecord, setActiveRecord, recordData, className = '' }) 
         {/* Footer */}
         <div className="self-stretch p-4 bg-white border-t border-gray-200">
           <span className="text-[#3C3C3C] text-xs font-medium leading-4 tracking-[0.5px]">{2} of {totalRecords} sub-tasks incomplete</span>
-        </div>
-      </div>
-    </aside>
-  );
+                </div>
+            </div>
+        </aside>
+    );
 };
 
 export default Sidebar;

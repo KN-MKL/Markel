@@ -43,8 +43,6 @@ const RecordItem = ({ item, active, onRecordClick, isExpanded, showStickyShadow 
   if (isExpanded) {
     return (
       <div className="relative">
-        {active && <div className="absolute top-1/2 -translate-y-1/2 left-[-16px] w-1 h-11 bg-[#3C3C3C] rounded-r-lg z-30" />}
-
         <div
           onClick={() => onRecordClick(id)}
           className={`w-full bg-white rounded-lg flex items-stretch cursor-pointer transition-all duration-200 text-sm text-[#3C3C3C] ${
@@ -54,7 +52,10 @@ const RecordItem = ({ item, active, onRecordClick, isExpanded, showStickyShadow 
           tabIndex={0}
         >
           {/* Sticky Checkbox Column */}
-          <div className="sticky left-0 flex-shrink-0 w-14 flex items-center justify-center p-4 bg-white rounded-l-lg z-10">
+          <div className="sticky left-0 flex-shrink-0 w-14 flex items-center justify-center p-4 bg-white rounded-l-lg z-10 relative">
+            {active && (
+              <div className="absolute left-[-16px] top-1/2 -translate-y-1/2 w-1 h-11 bg-[#3C3C3C] rounded-r-lg z-30 pointer-events-none" />
+            )}
             <input type="checkbox" className="w-4 h-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500" />
           </div>
           {/* Sticky Status Column */}

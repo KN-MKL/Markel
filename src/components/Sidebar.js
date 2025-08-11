@@ -37,7 +37,7 @@ const RightChevronIcon = () => (
 );
 
 // --- Record Item ---
-const RecordItem = ({ item, active, onRecordClick, isExpanded, showStickyShadow }) => {
+const RecordItem = ({ item, active, onRecordClick, isExpanded, showStickyShadow, isDuplicating }) => {
   const { id, ref: reference, code, type, suffix, majorClass, minorClass, class: klass, entity, limit, excess, underwriter } = item;
 
   if (isExpanded) {
@@ -99,7 +99,9 @@ const RecordItem = ({ item, active, onRecordClick, isExpanded, showStickyShadow 
     >
       {active && <div className="absolute left-[-16px] top-[6px] w-1 h-11 bg-[#3C3C3C] rounded-r-lg" />}
       <div className="w-10 pl-4 py-[14px] flex flex-col justify-center items-start">
-        <div className="h-6 p-1 bg-[#ECECEC] rounded flex justify-center items-center"><NotStartedIcon /></div>
+        {isDuplicating ? (
+          <input type="checkbox" className="w-4 h-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500" />
+        ) : null}
       </div>
       <div className="flex-1 self-stretch px-4 py-2 flex flex-col justify-center items-start">
         <div className="flex justify-start items-center text-[#3C3C3C] text-sm font-normal leading-5 tracking-[0.25px]">
@@ -147,7 +149,7 @@ const ExpandedHeader = ({ showStickyShadow }) => (
 
 // (Legacy ExpandedRecordRow removed; unified in RecordItem)
 
-const RecordGroup = ({ title, color, isPending, items, activeRecordId, onRecordClick, isExpanded, showStickyShadow }) => {
+const RecordGroup = ({ title, color, isPending, items, activeRecordId, onRecordClick, isExpanded, showStickyShadow, isDuplicating }) => {
   const [isOpen, setIsOpen] = React.useState(true);
   return (
     <div>
@@ -173,6 +175,7 @@ const RecordGroup = ({ title, color, isPending, items, activeRecordId, onRecordC
               onRecordClick={onRecordClick}
               isExpanded={isExpanded}
               showStickyShadow={showStickyShadow}
+              isDuplicating={isDuplicating}
             />
                     ))}
                 </div>
@@ -195,12 +198,14 @@ const Sidebar = ({ activeRecord, setActiveRecord, recordData, className = '', ex
   const totalRecords = list.reduce((sum, g) => sum + g.items.length, 0);
 
   const [isExpanded, setIsExpanded] = React.useState(false);
+  const [isDuplicating, setIsDuplicating] = React.useState(false);
   const [showDupHint, setShowDupHint] = React.useState(false);
 
   // Expand when an external trigger changes (e.g., Duplicate Binding Data)
   React.useEffect(() => {
     if (expandTrigger) {
-      setIsExpanded(true);
+      // Enter duplication mode instead of expanding immediately
+      setIsDuplicating(true);
       setShowDupHint(true);
       const timer = setTimeout(() => setShowDupHint(false), 3500);
       return () => clearTimeout(timer);
@@ -287,7 +292,7 @@ const Sidebar = ({ activeRecord, setActiveRecord, recordData, className = '', ex
                         onRecordClick={setActiveRecord}
                         isExpanded={isExpanded}
                         showStickyShadow={showStickyShadow}
-                        highlightCheckbox={showDupHint}
+                        isDuplicating={isDuplicating}
                       />
                     ))}
                     </div>
@@ -306,6 +311,7 @@ const Sidebar = ({ activeRecord, setActiveRecord, recordData, className = '', ex
                     onRecordClick={setActiveRecord}
                     isExpanded={false}
                     showStickyShadow={false}
+                    isDuplicating={isDuplicating}
                   />
                 ))}
               </div>
@@ -317,9 +323,15 @@ const Sidebar = ({ activeRecord, setActiveRecord, recordData, className = '', ex
         </div>
 
         {/* Footer */}
-        <div className="self-stretch p-4 bg-white border-t border-gray-200">
+        <div className="self-stretch p-4 bg-white border-t border-gray-200 flex items-center justify-between">
           <span className="text-[#3C3C3C] text-xs font-medium leading-4 tracking-[0.5px]">{2} of {totalRecords} sub-tasks incomplete</span>
-                </div>
+          {isDuplicating && (
+            <div className="flex items-center gap-2">
+              <button onClick={() => setIsDuplicating(false)} className="text-xs px-3 py-1 rounded border border-[#D9D9D6]">Cancel</button>
+              <button className="text-xs px-3 py-1 rounded bg-[#216270] text-white">Duplicate</button>
+            </div>
+          )}
+        </div>
             </div>
         </aside>
     );

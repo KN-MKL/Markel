@@ -98,12 +98,12 @@ const RecordItem = ({ item, active, onRecordClick, isExpanded, showStickyShadow,
       tabIndex={0}
     >
       {active && <div className="absolute left-[-16px] top-[6px] w-1 h-11 bg-[#3C3C3C] rounded-r-lg" />}
-      <div className="w-10 pl-4 py-[14px] flex flex-col justify-center items-start">
-        {isDuplicating ? (
+      {isDuplicating && (
+        <div className="w-10 pl-4 py-[14px] flex flex-col justify-center items-start">
           <input type="checkbox" className="w-4 h-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500" />
-        ) : null}
-      </div>
-      <div className="flex-1 self-stretch px-4 py-2 flex flex-col justify-center items-start">
+        </div>
+      )}
+      <div className={`flex-1 self-stretch ${isDuplicating ? 'px-2' : 'pl-4 pr-4'} py-2 flex flex-col justify-center items-start`}>
         <div className="flex justify-start items-center text-[#3C3C3C] text-sm font-normal leading-5 tracking-[0.25px]">
           <span>{reference || code}</span>
           {type && <div className="px-1 py-0.5 mx-1 border-b border-[#807F7B]"><span>{type}</span></div>}
@@ -206,9 +206,6 @@ const Sidebar = ({ activeRecord, setActiveRecord, recordData, className = '', ex
     if (expandTrigger) {
       // Enter duplication mode instead of expanding immediately
       setIsDuplicating(true);
-      setShowDupHint(true);
-      const timer = setTimeout(() => setShowDupHint(false), 3500);
-      return () => clearTimeout(timer);
     }
   }, [expandTrigger]);
   // When expanded, occupy full available width so the right content is hidden
@@ -261,16 +258,7 @@ const Sidebar = ({ activeRecord, setActiveRecord, recordData, className = '', ex
             <span className="flex-1 text-[#5C5A59] text-base font-medium leading-6 tracking-[0.15px]">Records</span>
             <button onClick={() => setIsExpanded(!isExpanded)} className="p-2 rounded-full hover:bg-gray-100"><ToggleExpandIcon /></button>
                         </div>
-            {/* Floating tooltip when duplication flow starts */}
-            {showDupHint && (
-              <div className="relative w-full">
-                <div className="pointer-events-none absolute -top-2 right-4 z-30">
-                  <div className="rounded-md bg-[#333] text-white text-xs leading-5 px-3 py-2 shadow-lg">
-                    Select the checkboxes of the records to duplicate into.
-                  </div>
-                </div>
-              </div>
-            )}
+            {/* Tooltip removed per request */}
                     </div>
 
         {/* Scrollable area */}

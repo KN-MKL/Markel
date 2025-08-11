@@ -81,7 +81,7 @@ const PricingDataForm = ({ className = "" }) => {
             {/* Bottom Row */}
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
                 <div className="p-4 bg-white rounded-lg border border-gray-200 flex flex-col gap-6">
-                    <div className="flex items-center justify-between">
+                        <div className="flex items-center justify-between">
                         <h3 className="text-sm font-medium text-gray-700 tracking-tight">Deductions</h3>
                         <ToggleButton options={['%', '#']} selected={deductionType} setSelected={setDeductionType} dark />
                     </div>
@@ -105,7 +105,7 @@ const PricingDataForm = ({ className = "" }) => {
                             <path d="M9 3.75V14.25M3.75 9H14.25" stroke="#1C1C1C" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
                         </svg>
                         <span className="text-sm font-medium text-zinc-800">Add Deductions</span>
-                    </button>
+                                </button>
                 </div>
                 <div className="p-4 bg-white rounded-lg border border-gray-200 flex flex-col gap-6">
                     <div className="flex items-center justify-between">
@@ -154,8 +154,8 @@ const PricingDataForm = ({ className = "" }) => {
                                         <div data-state="Enabled" data-type="Unselected" style={{width: '100%', height: '100%', justifyContent: 'center', alignItems: 'center', display: 'inline-flex'}}>
                                             <div style={{padding: 11, borderRadius: 100, justifyContent: 'center', alignItems: 'center', display: 'flex'}}>
                                                 <div style={{width: 18, height: 18, borderRadius: 2, border: '2px #807F7B solid'}} />
-                                            </div>
-                                        </div>
+                            </div>
+                            </div>
                                     )}
                                     <span className="text-gray-600 text-sm">N/A</span>
                                 </button>
@@ -171,16 +171,16 @@ const PricingDataForm = ({ className = "" }) => {
                                                 <div style={{width: 18, height: 18, borderRadius: 2, background: '#3C3C3C', position: 'relative'}}>
                                                     <svg width="12" height="9" viewBox="0 0 12 9" fill="none" xmlns="http://www.w3.org/2000/svg" style={{position: 'absolute', left: 3, top: 4.5}}>
                                                         <path d="M1 4.5L4.33333 8L11 1" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                                                    </svg>
+                            </svg>
                                                 </div>
                                             </div>
-                                        </div>
+                    </div>
                                     ) : (
                                         <div data-state="Enabled" data-type="Unselected" style={{width: '100%', height: '100%', justifyContent: 'center', alignItems: 'center', display: 'inline-flex'}}>
                                             <div style={{padding: 11, borderRadius: 100, justifyContent: 'center', alignItems: 'center', display: 'flex'}}>
                                                 <div style={{width: 18, height: 18, borderRadius: 2, border: '2px #807F7B solid'}} />
-                                            </div>
-                                        </div>
+                            </div>
+                            </div>
                                     )}
                                     <span className="text-gray-600 text-sm">N/A</span>
                                 </button>

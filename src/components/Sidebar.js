@@ -37,7 +37,7 @@ const RightChevronIcon = () => (
 );
 
 // --- Record Item ---
-const RecordItem = ({ item, active, onRecordClick, isExpanded, showStickyShadow, highlightCheckbox }) => {
+const RecordItem = ({ item, active, onRecordClick, isExpanded, showStickyShadow }) => {
   const { id, ref: reference, code, type, suffix, majorClass, minorClass, class: klass, entity, limit, excess, underwriter } = item;
 
   if (isExpanded) {
@@ -52,7 +52,7 @@ const RecordItem = ({ item, active, onRecordClick, isExpanded, showStickyShadow,
           tabIndex={0}
         >
           {/* Sticky Checkbox Column */}
-          <div className={`sticky left-0 flex-shrink-0 w-14 flex items-center justify-center p-4 bg-white rounded-l-lg z-10 relative ${highlightCheckbox ? 'ring-2 ring-[#216270] ring-offset-0 animate-pulse' : ''}`}>
+          <div className={`sticky left-0 flex-shrink-0 w-14 flex items-center justify-center p-4 bg-white rounded-l-lg z-10 relative`}>
             {active && (
               <div className="absolute left-[-16px] top-1/2 -translate-y-1/2 w-1 h-11 bg-[#3C3C3C] rounded-r-lg z-30 pointer-events-none" />
             )}
@@ -147,7 +147,7 @@ const ExpandedHeader = ({ showStickyShadow }) => (
 
 // (Legacy ExpandedRecordRow removed; unified in RecordItem)
 
-const RecordGroup = ({ title, color, isPending, items, activeRecordId, onRecordClick, isExpanded, showStickyShadow, highlightCheckbox }) => {
+const RecordGroup = ({ title, color, isPending, items, activeRecordId, onRecordClick, isExpanded, showStickyShadow }) => {
   const [isOpen, setIsOpen] = React.useState(true);
   return (
     <div>
@@ -173,7 +173,6 @@ const RecordGroup = ({ title, color, isPending, items, activeRecordId, onRecordC
               onRecordClick={onRecordClick}
               isExpanded={isExpanded}
               showStickyShadow={showStickyShadow}
-              highlightCheckbox={highlightCheckbox}
             />
                     ))}
                 </div>
@@ -257,9 +256,14 @@ const Sidebar = ({ activeRecord, setActiveRecord, recordData, className = '', ex
             <span className="flex-1 text-[#5C5A59] text-base font-medium leading-6 tracking-[0.15px]">Records</span>
             <button onClick={() => setIsExpanded(!isExpanded)} className="p-2 rounded-full hover:bg-gray-100"><ToggleExpandIcon /></button>
                         </div>
+            {/* Floating tooltip when duplication flow starts */}
             {showDupHint && (
-              <div className="w-full rounded-md bg-[#E9F0F2] text-[#3C3C3C] text-xs leading-5 px-3 py-2">
-                Select the checkboxes of the records you want to duplicate into. The highlighted row is the source record.
+              <div className="relative w-full">
+                <div className="pointer-events-none absolute -top-2 right-4 z-30">
+                  <div className="rounded-md bg-[#333] text-white text-xs leading-5 px-3 py-2 shadow-lg">
+                    Select the checkboxes of the records to duplicate into.
+                  </div>
+                </div>
               </div>
             )}
                     </div>

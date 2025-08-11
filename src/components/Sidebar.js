@@ -74,10 +74,10 @@ const RecordItem = ({ item, active, onRecordClick, isExpanded, showStickyShadow 
               </>
             )}
           </div>
-          {/* Scrollable Columns (Categories) */}
-          <div className="sticky left-[18.5rem] bg-white z-10 flex-shrink-0 w-40 py-3 px-2 flex items-center truncate"><span>{majorClass || '-'}</span></div>
-          <div className="sticky left-[28.5rem] bg-white z-10 flex-shrink-0 w-40 py-3 px-2 flex items-center truncate"><span>{minorClass || '-'}</span></div>
-          <div className="sticky left-[38.5rem] bg-white z-10 flex-shrink-0 w-32 py-3 px-2 flex items-center truncate"><span>{klass || '-'}</span></div>
+          {/* Scrollable Columns (Categories should scroll) */}
+          <div className="flex-shrink-0 w-40 py-3 px-2 flex items-center truncate"><span>{majorClass || '-'}</span></div>
+          <div className="flex-shrink-0 w-40 py-3 px-2 flex items-center truncate"><span>{minorClass || '-'}</span></div>
+          <div className="flex-shrink-0 w-32 py-3 px-2 flex items-center truncate"><span>{klass || '-'}</span></div>
           <div className="flex-shrink-0 w-32 py-3 px-2 flex items-center truncate"><span>{entity || '-'}</span></div>
           <div className="flex-shrink-0 w-32 py-3 px-2 flex items-center truncate"><span>{limit || '-'}</span></div>
           <div className="flex-shrink-0 w-32 py-3 px-2 flex items-center truncate"><span>{excess || '-'}</span></div>
@@ -135,9 +135,9 @@ const ExpandedHeader = ({ showStickyShadow }) => (
       )}
     </div>
     {/* Scrollable Headers */}
-    <div className="sticky left-[18.5rem] flex-shrink-0 w-40 px-2 bg-[#F4F2EB] z-10">Major Class</div>
-    <div className="sticky left-[28.5rem] flex-shrink-0 w-40 px-2 bg-[#F4F2EB] z-10">Minor Class</div>
-    <div className="sticky left-[38.5rem] flex-shrink-0 w-32 px-2 bg-[#F4F2EB] z-10">Class</div>
+    <div className="flex-shrink-0 w-40 px-2">Major Class</div>
+    <div className="flex-shrink-0 w-40 px-2">Minor Class</div>
+    <div className="flex-shrink-0 w-32 px-2">Class</div>
     <div className="flex-shrink-0 w-32 px-2">Entity</div>
     <div className="flex-shrink-0 w-32 px-2">Limit</div>
     <div className="flex-shrink-0 w-32 px-2">Excess</div>

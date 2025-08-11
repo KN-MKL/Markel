@@ -1,7 +1,7 @@
 import React from 'react';
 import Icon from './Icon';
 
-const Header = ({ className = "" }) => (
+const Header = ({ className = "", onDuplicate }) => (
     <header className={`flex w-full items-center justify-between gap-6 self-stretch border-b border-solid border-[#D9D9D6] bg-white p-6 ${className}`}>
         <div className="flex flex-1 items-start gap-4">
             <div className="flex h-12 w-12 flex-col items-center justify-center">
@@ -14,7 +14,7 @@ const Header = ({ className = "" }) => (
                 <p className="text-base tracking-wide text-[#5C5A59]">Complete all required fields for the selected Record before proceeding.</p>
             </div>
         </div>
-        <button className="h-10 overflow-hidden rounded-lg border border-solid border-[#D9D9D6] px-6 py-2 text-sm font-medium text-[#3C3C3C] hover:bg-gray-50 active:bg-gray-100 transition-colors">
+        <button onClick={onDuplicate} className="h-10 overflow-hidden rounded-lg border border-solid border-[#D9D9D6] px-6 py-2 text-sm font-medium text-[#3C3C3C] hover:bg-gray-50 active:bg-gray-100 transition-colors">
             Duplicate Binding Data
         </button>
     </header>

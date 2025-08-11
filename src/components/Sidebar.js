@@ -182,7 +182,7 @@ const RecordGroup = ({ title, color, isPending, items, activeRecordId, onRecordC
 };
 
 // --- Sidebar ---
-const Sidebar = ({ activeRecord, setActiveRecord, recordData, className = '' }) => {
+const Sidebar = ({ activeRecord, setActiveRecord, recordData, className = '', expandTrigger }) => {
   // Normalize incoming data to groups
   const groups = [
     { key: 'fon', title: 'Moved to FON', color: '#216270', isPending: false },
@@ -195,6 +195,13 @@ const Sidebar = ({ activeRecord, setActiveRecord, recordData, className = '' }) 
   const totalRecords = list.reduce((sum, g) => sum + g.items.length, 0);
 
   const [isExpanded, setIsExpanded] = React.useState(false);
+
+  // Expand when an external trigger changes (e.g., Duplicate Binding Data)
+  React.useEffect(() => {
+    if (expandTrigger) {
+      setIsExpanded(true);
+    }
+  }, [expandTrigger]);
   // When expanded, occupy full available width so the right content is hidden
   const expandedWidth = '100%';
   const verticalScrollRef = React.useRef(null);

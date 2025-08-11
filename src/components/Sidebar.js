@@ -37,7 +37,7 @@ const RightChevronIcon = () => (
 );
 
 // --- Record Item ---
-const RecordItem = ({ item, active, onRecordClick, isExpanded, showStickyShadow }) => {
+const RecordItem = ({ item, active, onRecordClick, isExpanded, showStickyShadow, highlightCheckbox }) => {
   const { id, ref: reference, code, type, suffix, majorClass, minorClass, class: klass, entity, limit, excess, underwriter } = item;
 
   if (isExpanded) {
@@ -52,7 +52,7 @@ const RecordItem = ({ item, active, onRecordClick, isExpanded, showStickyShadow 
           tabIndex={0}
         >
           {/* Sticky Checkbox Column */}
-          <div className="sticky left-0 flex-shrink-0 w-14 flex items-center justify-center p-4 bg-white rounded-l-lg z-10 relative">
+          <div className={`sticky left-0 flex-shrink-0 w-14 flex items-center justify-center p-4 bg-white rounded-l-lg z-10 relative ${highlightCheckbox ? 'ring-2 ring-[#216270] ring-offset-0 animate-pulse' : ''}`}>
             {active && (
               <div className="absolute left-[-16px] top-1/2 -translate-y-1/2 w-1 h-11 bg-[#3C3C3C] rounded-r-lg z-30 pointer-events-none" />
             )}
@@ -147,7 +147,7 @@ const ExpandedHeader = ({ showStickyShadow }) => (
 
 // (Legacy ExpandedRecordRow removed; unified in RecordItem)
 
-const RecordGroup = ({ title, color, isPending, items, activeRecordId, onRecordClick, isExpanded, showStickyShadow }) => {
+const RecordGroup = ({ title, color, isPending, items, activeRecordId, onRecordClick, isExpanded, showStickyShadow, highlightCheckbox }) => {
   const [isOpen, setIsOpen] = React.useState(true);
   return (
     <div>
@@ -173,6 +173,7 @@ const RecordGroup = ({ title, color, isPending, items, activeRecordId, onRecordC
               onRecordClick={onRecordClick}
               isExpanded={isExpanded}
               showStickyShadow={showStickyShadow}
+              highlightCheckbox={highlightCheckbox}
             />
                     ))}
                 </div>
@@ -195,11 +196,15 @@ const Sidebar = ({ activeRecord, setActiveRecord, recordData, className = '', ex
   const totalRecords = list.reduce((sum, g) => sum + g.items.length, 0);
 
   const [isExpanded, setIsExpanded] = React.useState(false);
+  const [showDupHint, setShowDupHint] = React.useState(false);
 
   // Expand when an external trigger changes (e.g., Duplicate Binding Data)
   React.useEffect(() => {
     if (expandTrigger) {
       setIsExpanded(true);
+      setShowDupHint(true);
+      const timer = setTimeout(() => setShowDupHint(false), 3500);
+      return () => clearTimeout(timer);
     }
   }, [expandTrigger]);
   // When expanded, occupy full available width so the right content is hidden
@@ -244,7 +249,7 @@ const Sidebar = ({ activeRecord, setActiveRecord, recordData, className = '', ex
     >
       <div className={`flex h-full w-full flex-col justify-between overflow-hidden rounded-lg outline outline-[0.5px] outline-[#ADACA7] bg-transparent`}>
         {/* Header */}
-        <div className="self-stretch p-4 flex flex-col justify-start items-start gap-4 border-b border-gray-200 bg-transparent">
+          <div className="self-stretch p-4 flex flex-col justify-start items-start gap-4 border-b border-gray-200 bg-transparent">
           <div className="self-stretch flex justify-start items-center gap-4">
             <div className="px-2 py-1 bg-[#E9F0F2] rounded flex justify-center items-center">
               <span className="text-[#5C5A59] text-[11px] font-medium leading-4 tracking-[0.5px]">{totalRecords}</span>
@@ -252,6 +257,11 @@ const Sidebar = ({ activeRecord, setActiveRecord, recordData, className = '', ex
             <span className="flex-1 text-[#5C5A59] text-base font-medium leading-6 tracking-[0.15px]">Records</span>
             <button onClick={() => setIsExpanded(!isExpanded)} className="p-2 rounded-full hover:bg-gray-100"><ToggleExpandIcon /></button>
                         </div>
+            {showDupHint && (
+              <div className="w-full rounded-md bg-[#E9F0F2] text-[#3C3C3C] text-xs leading-5 px-3 py-2">
+                Select the checkboxes of the records you want to duplicate into. The highlighted row is the source record.
+              </div>
+            )}
                     </div>
 
         {/* Scrollable area */}
@@ -273,6 +283,7 @@ const Sidebar = ({ activeRecord, setActiveRecord, recordData, className = '', ex
                         onRecordClick={setActiveRecord}
                         isExpanded={isExpanded}
                         showStickyShadow={showStickyShadow}
+                        highlightCheckbox={showDupHint}
                       />
                     ))}
                     </div>

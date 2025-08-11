@@ -195,8 +195,10 @@ const Sidebar = ({ activeRecord, setActiveRecord, recordData, className = '' }) 
   const totalRecords = list.reduce((sum, g) => sum + g.items.length, 0);
 
   const [isExpanded, setIsExpanded] = React.useState(false);
-  // Responsive expanded width: never smaller than 360px, prefer ~42vw, cap at 1024px
-  const expandedWidth = 'clamp(360px, 42vw, 1024px)';
+  // Expanded width large enough to reveal all columns without horizontal clipping
+  // - Cap at ~1280px which matches total column widths plus padding
+  // - On smaller viewports, fill the viewport width with a small safety margin
+  const expandedWidth = 'min(calc(100vw - 24px), 1280px)';
   const verticalScrollRef = React.useRef(null);
   const [showTopShadow, setShowTopShadow] = React.useState(false);
   const [showBottomShadow, setShowBottomShadow] = React.useState(true);

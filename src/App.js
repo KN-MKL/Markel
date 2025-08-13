@@ -87,15 +87,15 @@ export default function App() {
             element={
               <div className="flex w-full flex-1 self-stretch overflow-hidden">
                 <div className="flex-1 flex flex-col min-h-0">
-                  {/* Intro header at very top */}
-                  <FS2IntroHeader onBack={() => navigate('/fs-v1')} />
-                  {/* Step tracker below */}
+                  {/* Step tracker at the very top */}
                   <FS2StepHeader 
                     recordId={activeRecord?.ref || 'CF9571A20MAA'}
                     step={1}
                     onGoStep1={() => navigate('/fs-v2')}
                     onGoStep2={() => navigate('/fs-v2/select-records')}
                   />
+                  {/* Review header beneath step tracker */}
+                  <FS2IntroHeader onBack={() => navigate('/fs-v1')} />
                   <div className="flex w-full flex-1 self-stretch overflow-hidden">
                     <Sidebar
                       activeRecord={activeRecordId}
@@ -116,13 +116,13 @@ export default function App() {
             element={
               <div className="flex w-full flex-1 self-stretch overflow-hidden">
                 <div className="flex-1 flex flex-col min-h-0">
-                  <FS2IntroHeader onBack={() => navigate('/fs-v1')} />
                   <FS2StepHeader 
                     recordId={activeRecord?.ref || 'CF9571A20MAA'}
                     step={2}
                     onGoStep1={() => navigate('/fs-v2')}
                     onGoStep2={() => navigate('/fs-v2/select-records')}
                   />
+                  <FS2IntroHeader onBack={() => navigate('/fs-v1')} />
                   <div className="flex w-full flex-1 self-stretch overflow-hidden">
                     <Sidebar
                       activeRecord={activeRecordId}

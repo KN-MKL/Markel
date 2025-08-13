@@ -195,7 +195,7 @@ const ExpandedHeader = ({ showStickyShadow, showCheckboxColumn = false }) => (
 
 // (Legacy ExpandedRecordRow removed; unified in RecordItem)
 
-const RecordGroup = ({ title, color, isPending, items, activeRecordId, onRecordClick, isExpanded, showStickyShadow, isDuplicating, selectedIds, toggleSelect }) => {
+const RecordGroup = ({ title, color, isPending, items, activeRecordId, onRecordClick, isExpanded, showStickyShadow, isDuplicating, selectedIds, toggleSelect, showCollapsedStatus }) => {
   const [isOpen, setIsOpen] = React.useState(true);
   return (
     <div>
@@ -361,6 +361,9 @@ const Sidebar = ({ activeRecord, setActiveRecord, recordData, className = '', ex
     </div>
   );
 
+  // Whether to show collapsed status glyphs for the current mode
+  const showCollapsedStatusGlyphs = showStatusRail || (!expanded && !isDuplicating);
+
     return (
     <aside
       className={`flex flex-col self-stretch p-4 flex-none transition-all duration-300 ease-in-out ${className}`}
@@ -414,7 +417,7 @@ const Sidebar = ({ activeRecord, setActiveRecord, recordData, className = '', ex
                                 showCollapsedStatus={false}
                               />
                             ))
-                          : list.map(group => (
+                      : list.map(group => (
                               <RecordGroup
                                 key={group.key}
                                 title={group.title}
@@ -427,7 +430,8 @@ const Sidebar = ({ activeRecord, setActiveRecord, recordData, className = '', ex
                                 showStickyShadow={showStickyShadow}
                                 isDuplicating={isDuplicating}
                                 selectedIds={selectedIds}
-                                toggleSelect={toggleSelect}
+                            toggleSelect={toggleSelect}
+                            showCollapsedStatus={showCollapsedStatusGlyphs}
                               />
                             ))}
                       </div>
@@ -436,7 +440,7 @@ const Sidebar = ({ activeRecord, setActiveRecord, recordData, className = '', ex
                 </div>
               </div>
             ) : (
-              <div className="p-4 flex flex-col gap-4">
+                <div className="p-4 flex flex-col gap-4">
                 {flattenGroups
                   ? list.flatMap(g => g.items).map(item => (
                       <RecordItem
@@ -466,6 +470,7 @@ const Sidebar = ({ activeRecord, setActiveRecord, recordData, className = '', ex
                         isDuplicating={isDuplicating}
                         selectedIds={selectedIds}
                         toggleSelect={toggleSelect}
+                        showCollapsedStatus={showCollapsedStatusGlyphs}
                       />
                     ))}
               </div>

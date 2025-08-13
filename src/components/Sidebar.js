@@ -97,7 +97,7 @@ const RecordItem = ({ item, active, onRecordClick, isExpanded, showStickyShadow,
           )}
           {/* Sticky Status Column */}
           <div className={`sticky ${showCheckboxColumn ? 'left-14' : 'left-0'} flex-shrink-0 w-20 h-full flex items-center justify-center bg-[#FEFEFD] z-20`}>
-            <div className="h-6 p-1 bg-[#ECECEC] rounded flex justify-center items-center"><NotStartedIcon /></div>
+            <div className="h-6 w-6 bg-[#ECECEC] rounded flex justify-center items-center">{getCollapsedStatusIcon(id)}</div>
           </div>
           {/* Sticky Reference Column */}
           <div className={`sticky ${showCheckboxColumn ? 'left-[8.5rem]' : 'left-[5rem]'} flex-shrink-0 w-40 h-full px-2 flex items-center truncate bg-[#FEFEFD] z-10 relative`}>
@@ -250,7 +250,7 @@ const Sidebar = ({ activeRecord, setActiveRecord, recordData, className = '', ex
   const expanded = forceExpanded || isExpanded;
   const [isDuplicating, setIsDuplicating] = React.useState(false);
   const [selectedIds, setSelectedIds] = React.useState(new Set());
-  const [toast, setToast] = React.useState({ visible: false, count: 0 });
+  const [toast, setToast] = React.useState({ visible: false, count: 0, animateOut: false });
   const [showDupHint, setShowDupHint] = React.useState(false);
   const [selectedStatusKey, setSelectedStatusKey] = React.useState('all');
 
@@ -263,7 +263,7 @@ const Sidebar = ({ activeRecord, setActiveRecord, recordData, className = '', ex
       const count = selectedIds.size;
       setIsDuplicating(false);
       if (count > 0) {
-        setToast({ visible: true, count });
+        setToast({ visible: true, count, animateOut: false });
       }
       setSelectedIds(new Set());
     } else {
@@ -320,6 +320,17 @@ const Sidebar = ({ activeRecord, setActiveRecord, recordData, className = '', ex
     sync();
     return () => body.removeEventListener('scroll', sync);
   }, [expanded]);
+
+  // Auto-dismiss toast with slide-left animation
+  React.useEffect(() => {
+    if (!toast.visible) return;
+    const t1 = setTimeout(() => setToast(prev => ({ ...prev, animateOut: true })), 2500);
+    const t2 = setTimeout(() => setToast({ visible: false, count: 0, animateOut: false }), 3000);
+    return () => {
+      clearTimeout(t1);
+      clearTimeout(t2);
+    };
+  }, [toast.visible]);
 
   const toggleSelect = (id) => {
     setSelectedIds(prev => {
@@ -504,12 +515,15 @@ const Sidebar = ({ activeRecord, setActiveRecord, recordData, className = '', ex
           </div>
         )}
         {toast.visible && (
-          <div className="fixed left-4 bottom-4 z-50">
+          <div className={`fixed left-4 bottom-4 z-50 transition-transform duration-500 ease-out ${toast.animateOut ? '-translate-x-[120%]' : 'translate-x-0'}`}>
             <div className="inline-flex items-center justify-start bg-[#322F35] text-[#FBFBFB] rounded shadow-[0_1px_3px_rgba(0,0,0,0.30)]" style={{ paddingLeft: 16 }}>
               <div className="py-3 pr-2 text-sm tracking-[0.25px]">Data successfully duplicated to {toast.count} records.</div>
               <button
                 className="w-12 h-12 inline-flex items-center justify-center"
-                onClick={() => setToast({ visible: false, count: 0 })}
+                onClick={() => {
+                  setToast(prev => ({ ...prev, animateOut: true }));
+                  setTimeout(() => setToast({ visible: false, count: 0, animateOut: false }), 300);
+                }}
                 aria-label="Close notification"
               >
                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">

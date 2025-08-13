@@ -1,21 +1,23 @@
 import React from 'react';
 import Icon from './Icon';
 
-export const FS2StepHeader = ({ recordId = 'CF9571A20MAA', step = 1 }) => {
+export const FS2StepHeader = ({ recordId = 'CF9571A20MAA', step = 1, onGoStep1, onGoStep2 }) => {
     const idParts = { prefix: recordId.slice(0,6), mid: 'A', suffix: recordId.slice(6) };
+    const isStep1 = step === 1;
     return (
         <div className="w-full bg-[#FEFEFD] border border-[#D9D9D6] rounded-t-lg px-6 py-4 flex items-center justify-between">
             <div className="flex items-center gap-4">
                 {/* Step 1 */}
-                <div className="flex items-center gap-4">
-                    <div className="w-8 h-8 rounded-full border border-[#C4C4C4] bg-[#3C3C3C] text-white flex items-center justify-center text-[14px] font-medium">1</div>
+                <button type="button" onClick={onGoStep1} className="flex items-center gap-4">
+                    <div className={`w-8 h-8 rounded-full border ${isStep1 ? 'border-[#C4C4C4] bg-[#3C3C3C] text-white' : 'border-[#ADACA7] bg-transparent text-[#3C3C3C]' } flex items-center justify-center text-[14px] font-medium`}>1</div>
                     <div className="text-[14px] font-medium tracking-[0.1px] text-[#3C3C3C]">Review and Modify Data for Duplication</div>
+                </button>
                 </div>
                 {/* Step 2 */}
-                <div className="flex items-center gap-4">
-                    <div className="w-8 h-8 rounded-full border border-[#ADACA7] flex items-center justify-center text-[14px] font-medium text-[#3C3C3C] bg-transparent">2</div>
+                <button type="button" onClick={onGoStep2} className="flex items-center gap-4">
+                    <div className={`w-8 h-8 rounded-full border ${!isStep1 ? 'border-[#C4C4C4] bg-[#3C3C3C] text-white' : 'border-[#ADACA7] bg-transparent text-[#3C3C3C]'} flex items-center justify-center text-[14px] font-medium`}>2</div>
                     <div className="text-[14px] font-medium tracking-[0.1px] text-black/85">Select Records to Duplicate Data</div>
-                </div>
+                </button>
             </div>
             {/* ID pill */}
             <div className="flex items-center gap-2 bg-[#E9F0F2] rounded px-2 py-1">

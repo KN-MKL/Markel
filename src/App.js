@@ -86,19 +86,54 @@ export default function App() {
             path="/fs-v2"
             element={
               <div className="flex w-full flex-1 self-stretch overflow-hidden">
-                <Sidebar
-                  activeRecord={activeRecordId}
-                  setActiveRecord={setActiveRecordId}
-                  recordData={recordData}
-                  expandTrigger={expandSidebarToken}
-                  disableDuplicationSelection
-                />
                 <div className="flex-1 flex flex-col min-h-0">
                   {/* Intro header at very top */}
                   <FS2IntroHeader />
                   {/* Step tracker below */}
-                  <FS2StepHeader recordId={activeRecord?.ref || 'CF9571A20MAA'} />
-                  <MainContent key={`fs-v2-${fsFormKey}`} record={activeRecord} className="pt-0" />
+                  <FS2StepHeader 
+                    recordId={activeRecord?.ref || 'CF9571A20MAA'}
+                    step={1}
+                    onGoStep1={() => navigate('/fs-v2')}
+                    onGoStep2={() => navigate('/fs-v2/select-records')}
+                  />
+                  <div className="flex w-full flex-1 self-stretch overflow-hidden">
+                    <Sidebar
+                      activeRecord={activeRecordId}
+                      setActiveRecord={setActiveRecordId}
+                      recordData={recordData}
+                      expandTrigger={expandSidebarToken}
+                      disableDuplicationSelection
+                    />
+                    <MainContent key={`fs-v2-${fsFormKey}`} record={activeRecord} className="pt-0" />
+                  </div>
+                </div>
+              </div>
+            }
+          />
+          {/* FS v2 Step 2 slug */}
+          <Route
+            path="/fs-v2/select-records"
+            element={
+              <div className="flex w-full flex-1 self-stretch overflow-hidden">
+                <div className="flex-1 flex flex-col min-h-0">
+                  <FS2IntroHeader />
+                  <FS2StepHeader 
+                    recordId={activeRecord?.ref || 'CF9571A20MAA'}
+                    step={2}
+                    onGoStep1={() => navigate('/fs-v2')}
+                    onGoStep2={() => navigate('/fs-v2/select-records')}
+                  />
+                  <div className="flex w-full flex-1 self-stretch overflow-hidden">
+                    <Sidebar
+                      activeRecord={activeRecordId}
+                      setActiveRecord={setActiveRecordId}
+                      recordData={recordData}
+                      expandTrigger={expandSidebarToken}
+                      disableDuplicationSelection
+                    />
+                    {/* Placeholder for records selection UI */}
+                    <div className="flex-1 flex items-center justify-center text-[#5C5A59]">Step 2: Records selection UI goes here.</div>
+                  </div>
                 </div>
               </div>
             }

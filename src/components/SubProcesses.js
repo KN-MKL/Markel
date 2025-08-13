@@ -157,6 +157,7 @@ const SubProcesses = ({ onOpenFrontSheet, records = [], activeRecord }) => {
   const [showBottomTableShadow, setShowBottomTableShadow] = React.useState(true);
   const [policyHeaderHeight, setPolicyHeaderHeight] = React.useState(0);
   const [policyFooterHeight, setPolicyFooterHeight] = React.useState(0);
+  const [subjectivityChecked, setSubjectivityChecked] = React.useState(false);
 
   React.useEffect(() => {
     const el = policyScrollRef.current;
@@ -315,10 +316,17 @@ const SubProcesses = ({ onOpenFrontSheet, records = [], activeRecord }) => {
                   <p className="text-[#5C5A59] text-[14px] leading-5 tracking-[0.25px]">Check the box if all pre-bind subjectivities are met or not required.</p>
                 </div>
                 <div className="rounded-lg outline outline-1 outline-[#D9D9D6]">
-                  <div className="px-3 pr-6 py-2 flex items-center gap-3">
-                    <M3Checkbox compact checked={false} onChange={() => {}} />
+                  <button
+                    type="button"
+                    onClick={() => setSubjectivityChecked(prev => !prev)}
+                    aria-pressed={subjectivityChecked}
+                    className="px-3 pr-6 py-2 flex items-center gap-3 cursor-pointer select-none w-full text-left"
+                  >
+                    <div className="pointer-events-none">
+                      <M3Checkbox compact checked={subjectivityChecked} />
+                    </div>
                     <span className="text-[#3C3C3C] text-[14px] font-medium leading-5 tracking-[0.1px]">Yes</span>
-                  </div>
+                  </button>
                 </div>
               </div>
             </div>

@@ -225,6 +225,13 @@ const SubProcesses = ({ onOpenFrontSheet, records = [], activeRecord }) => {
               <div className="text-[#686868] text-[12px] font-medium tracking-[0.5px] mb-2">Underwriter Workflow</div>
               <div className="flex flex-col gap-4 w-full">
                 <Step index={7} title="Pre-Bind Checks" active={activeStep === 'Pre-Bind Checks'} onClick={() => setActiveStep('Pre-Bind Checks')} />
+                <Step index={7} title="Ready for FON" active={activeStep === 'Ready for FON'} onClick={() => setActiveStep('Ready for FON')} />
+                <Step index={7} title="Submit Front Sheet" active={activeStep === 'Submit Front Sheet'} onClick={() => setActiveStep('Submit Front Sheet')} />
+              </div>
+              <div className="text-[#686868] text-[12px] font-medium tracking-[0.5px] mt-6 mb-2">UST Binding Review</div>
+              <div className="flex flex-col gap-4 w-full">
+                <Step index={7} title="Under UST Review" active={activeStep === 'Under UST Review'} onClick={() => setActiveStep('Under UST Review')} />
+                <Step index={7} title="Written" active={activeStep === 'Written'} onClick={() => setActiveStep('Written')} />
               </div>
             </div>
             <div className="pt-4 mt-auto">
@@ -234,7 +241,7 @@ const SubProcesses = ({ onOpenFrontSheet, records = [], activeRecord }) => {
             </div>
           </section>
 
-          {/* Right-most column */}
+          {/* Right-most column - always show Pre-Bind Checks content; other steps no-op */}
           {
           <section className="flex flex-col gap-3 h-full min-h-0 rounded-lg border border-[#E4E3DF] bg-white p-4 overflow-hidden">
             {/* Pre-bind header block */}

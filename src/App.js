@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo, useState } from 'react';
-import Header, { FS2StepHeader } from './components/Header';
+import Header, { FS2StepHeader, FS2IntroHeader } from './components/Header';
 import Sidebar from './components/Sidebar';
 import MainContent from './components/MainContent';
 import SubProcesses from './components/SubProcesses';
@@ -120,6 +120,7 @@ export default function App() {
                     onGoStep1={() => navigate('/fs-v2')}
                     onGoStep2={() => navigate('/fs-v2/select-records')}
                   />
+                  <FS2IntroHeader onBack={() => navigate('/fs-v1')} />
                   <div className="flex w-full flex-1 self-stretch overflow-hidden">
                     <Sidebar
                       activeRecord={activeRecordId}

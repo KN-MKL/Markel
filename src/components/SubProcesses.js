@@ -322,8 +322,9 @@ const SubProcesses = ({ onOpenFrontSheet, records = [], activeRecord }) => {
                   </div>
                 </div>
                 {/* Table area (scroll container) */}
-                <div ref={policyScrollRef} className="relative bg-[#F0F0F0] px-2 pb-0 pt-0 flex-1 min-h-0 overflow-auto">
-                  <div className="sticky top-0 z-10 grid grid-cols-[160px_repeat(6,minmax(72px,1fr))] min-w-[592px] items-center px-4 py-2 text-[#3C3C3C] text-[14px] font-medium tracking-[0.1px] bg-[#F0F0F0]">
+                <div className="relative flex-1 min-h-0">
+                  <div ref={policyScrollRef} className="absolute inset-0 bg-[#F0F0F0] px-2 pb-0 pt-0 overflow-auto">
+                    <div className="sticky top-0 z-10 grid grid-cols-[160px_repeat(6,minmax(72px,1fr))] min-w-[592px] items-center px-4 py-2 text-[#3C3C3C] text-[14px] font-medium tracking-[0.1px] bg-[#F0F0F0]">
                     <div>Reference</div>
                     <div className="text-center">Sanctions</div>
                     <div className="text-center">TOBA</div>
@@ -331,19 +332,20 @@ const SubProcesses = ({ onOpenFrontSheet, records = [], activeRecord }) => {
                     <div className="text-center">Pricing</div>
                     <div className="text-center">PBQA</div>
                     <div className="text-center">UW Auth.</div>
+                    </div>
+                <div className="mt-2 flex flex-col gap-2">
+                  {(records.length ? records : ['CF9571A20MAA', 'CF9571A20MAA', 'CF9571A20MAA', 'CF9571A20MAA']).map((r, i) => (
+                    <RecordRow key={i} refId={typeof r === 'string' ? r : r.ref} />
+                  ))}
+                </div>
+                    {/* In-card footer, sticky within the grey scroll area and spanning full width */}
+                    <div className="bg-white -mx-2 px-6 py-2 border-t border-[#D9D9D6] sticky bottom-0 z-10">
+                      <div className="text-[#3C3C3C] text-[12px] font-medium leading-4 tracking-[0.5px]">{`{Xn} of {Yn} incomplete statuses`}</div>
+                    </div>
                   </div>
-              <div className="mt-2 flex flex-col gap-2">
-                {(records.length ? records : ['CF9571A20MAA', 'CF9571A20MAA', 'CF9571A20MAA', 'CF9571A20MAA']).map((r, i) => (
-                  <RecordRow key={i} refId={typeof r === 'string' ? r : r.ref} />
-                ))}
-              </div>
-                  {/* In-card footer, sticky within the grey scroll area and spanning full width */}
-                  <div className="bg-white -mx-2 px-6 py-2 border-t border-[#D9D9D6] sticky bottom-0 z-10">
-                    <div className="text-[#3C3C3C] text-[12px] font-medium leading-4 tracking-[0.5px]">{`{Xn} of {Yn} incomplete statuses`}</div>
-                  </div>
-                  {/* Scroll shadows */}
-                  <div className={`pointer-events-none absolute left-0 right-0 top-0 h-4 transition-opacity duration-300 ${showTopTableShadow ? 'opacity-100' : 'opacity-0'}`} style={{ boxShadow: 'inset 0 18px 12px -12px rgba(0,0,0,0.14)' }} />
-                  <div className={`pointer-events-none absolute left-0 right-0 bottom-0 h-4 transition-opacity duration-300 ${showBottomTableShadow ? 'opacity-100' : 'opacity-0'}`} style={{ boxShadow: 'inset 0 -18px 12px -12px rgba(0,0,0,0.14)' }} />
+                  {/* Scroll shadows (outside the scroller so they don't move) */}
+                  <div className={`pointer-events-none absolute left-0 right-0 top-0 h-4 transition-opacity duration-300 z-20 ${showTopTableShadow ? 'opacity-100' : 'opacity-0'}`} style={{ boxShadow: 'inset 0 18px 12px -12px rgba(0,0,0,0.2)' }} />
+                  <div className={`pointer-events-none absolute left-0 right-0 bottom-0 h-4 transition-opacity duration-300 z-20 ${showBottomTableShadow ? 'opacity-100' : 'opacity-0'}`} style={{ boxShadow: 'inset 0 -18px 12px -12px rgba(0,0,0,0.2)' }} />
                 </div>
               </div>
             </div>

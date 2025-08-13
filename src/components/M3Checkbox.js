@@ -16,23 +16,34 @@ const M3Checkbox = ({
     uncheckedBorderColor = '#807F7B',
     checkedBgColor = '#3C3C3C',
 }) => {
+    const [isHover, setIsHover] = React.useState(false);
     const containerAlignClass = compact ? 'items-center' : 'items-start';
     const tickMarginClass = compact ? 'mt-0' : 'mt-1';
+    const effectiveBorder = checked || indeterminate
+        ? (isHover ? '#2E2E2E' : checkedBgColor)
+        : (isHover ? '#3C3C3C' : uncheckedBorderColor);
+    const effectiveBg = checked || indeterminate
+        ? (isHover ? '#2E2E2E' : checkedBgColor)
+        : (isHover ? '#F5F5F5' : '#FFFFFF');
     const boxStyle = {
         width: `${size}px`,
         height: `${size}px`,
         borderWidth: `${borderWidth}px`,
-        borderColor: checked || indeterminate ? checkedBgColor : uncheckedBorderColor,
-        backgroundColor: checked || indeterminate ? checkedBgColor : '#FFFFFF',
+        borderColor: effectiveBorder,
+        backgroundColor: effectiveBg,
         borderRadius: square ? '2px' : '0.25rem',
-        transition: 'all 200ms',
+        transition: 'all 120ms ease-out',
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center'
     };
 
     return (
-        <label className={`flex ${containerAlignClass} gap-3 cursor-pointer ${disabled ? 'opacity-50 cursor-not-allowed' : ''} ${className}`}>
+        <label 
+            className={`flex ${containerAlignClass} gap-3 cursor-pointer ${disabled ? 'opacity-50 cursor-not-allowed' : ''} ${className}`}
+            onMouseEnter={() => !disabled && setIsHover(true)}
+            onMouseLeave={() => !disabled && setIsHover(false)}
+        >
             <div className={`relative flex items-center justify-center ${tickMarginClass}`}>
                 <input
                     type="checkbox"
@@ -43,7 +54,7 @@ const M3Checkbox = ({
                 />
                 <div style={boxStyle}>
                     {checked && !indeterminate && (
-                        <svg className="w-3 h-3 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <svg className="w-3.5 h-3.5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
                         </svg>
                     )}

@@ -118,7 +118,7 @@ export default function App() {
                 <div className="flex-1 flex flex-col min-h-0">
                   <FS2StepHeader 
                     recordId={activeRecord?.ref || 'CF9571A20MAA'}
-                    step={2}
+                    step={1}
                     onGoStep1={() => navigate('/fs-v2')}
                     onGoStep2={() => navigate('/fs-v2/review-records')}
                   />

@@ -131,14 +131,16 @@ const RecordItem = ({ item, active, onRecordClick, isExpanded, showStickyShadow,
 };
 
 // --- Header (expanded) ---
-const ExpandedHeader = ({ showStickyShadow }) => (
+const ExpandedHeader = ({ showStickyShadow, showCheckboxColumn = false }) => (
   <div className="sticky top-0 z-20 flex w-full text-[14px] text-[#5C5A59] font-medium leading-5 tracking-[0.1px] bg-[#F0F0F0] py-2 border-t border-x border-[#D9D9D6] rounded-t-lg">
-    {/* Sticky empty space for checkbox */}
-    <div className="sticky left-0 flex-shrink-0 w-14 px-2 bg-[#F0F0F0] z-10"></div>
+    {/* Sticky empty space for checkbox (only when selection column is visible) */}
+    {showCheckboxColumn && (
+      <div className="sticky left-0 flex-shrink-0 w-14 bg-[#F0F0F0] z-10"></div>
+    )}
     {/* Sticky Status Header */}
-    <div className="sticky left-14 flex-shrink-0 w-20 flex items-center justify-center bg-[#F0F0F0] z-20">Status</div>
+    <div className={`sticky ${showCheckboxColumn ? 'left-14' : 'left-0'} flex-shrink-0 w-20 flex items-center justify-center bg-[#F0F0F0] z-20`}>Status</div>
     {/* Sticky Reference Header */}
-    <div className={`sticky left-[8.5rem] flex-shrink-0 w-40 px-2 bg-[#F0F0F0] z-10 relative`}>
+    <div className={`sticky ${showCheckboxColumn ? 'left-[8.5rem]' : 'left-[5rem]'} flex-shrink-0 w-40 px-2 bg-[#F0F0F0] z-10 relative`}>
       Reference
       {showStickyShadow && (
         <>
@@ -301,7 +303,7 @@ const Sidebar = ({ activeRecord, setActiveRecord, recordData, className = '', ex
             {isExpanded ? (
               <div ref={horizontalScrollRef} className="overflow-x-auto custom-scrollbar-x">
                 <div className="p-4 inline-block min-w-full">
-                  <ExpandedHeader showStickyShadow={showStickyShadow} />
+                  <ExpandedHeader showStickyShadow={showStickyShadow} showCheckboxColumn={isDuplicating} />
                   <div className="flex flex-col gap-4 mt-2">
                     {list.map(group => (
                       <RecordGroup

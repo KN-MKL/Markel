@@ -134,6 +134,8 @@ export default function App() {
                       hideExpandButton
                       flattenGroups
                       enableCollapsedStatusGlyphs
+                      showReviewFooter
+                      onFinalizeDuplication={(ids) => console.log('Finalize duplication for IDs:', ids)}
                     />
                     {/* Placeholder for records selection UI */}
                     <div className="flex-1 flex items-center justify-center text-[#5C5A59]">Step 2: Records selection UI goes here.</div>

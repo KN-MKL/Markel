@@ -234,7 +234,7 @@ const RecordGroup = ({ title, color, isPending, items, activeRecordId, onRecordC
 };
 
 // --- Sidebar ---
-const Sidebar = ({ activeRecord, setActiveRecord, recordData, className = '', expandTrigger, disableDuplicationSelection = false, forceExpanded = false, hideExpandButton = false, flattenGroups = false, showSelectionActionBar = true, showStatusRail = false, enableCollapsedStatusGlyphs = false }) => {
+const Sidebar = ({ activeRecord, setActiveRecord, recordData, className = '', expandTrigger, disableDuplicationSelection = false, forceExpanded = false, hideExpandButton = false, flattenGroups = false, showSelectionActionBar = true, showStatusRail = false, enableCollapsedStatusGlyphs = false, showReviewFooter = false, onFinalizeDuplication }) => {
   // Normalize incoming data to groups
   const groups = [
     { key: 'fon', title: 'Moved to FON', color: '#216270', isPending: false },
@@ -494,9 +494,22 @@ const Sidebar = ({ activeRecord, setActiveRecord, recordData, className = '', ex
         </div>
 
         {/* Footer */}
-        <div className="self-stretch p-4 bg-white border-t border-gray-200 flex items-center justify-start">
-          <span className="text-[#3C3C3C] text-xs font-medium leading-4 tracking-[0.5px]">{2} of {totalRecords} sub-tasks incomplete</span>
-        </div>
+        {showReviewFooter ? (
+          <div className="self-stretch p-4 bg-white border-t border-gray-200 flex items-center justify-between">
+            <span className="text-[#3C3C3C] text-xs font-medium leading-4 tracking-[0.5px]">{selectedIds.size} of {totalRecords} records selected</span>
+            <button
+              className="inline-flex items-center gap-2 rounded-lg bg-[#3C3C3C] px-4 py-2 text-sm font-medium text-white hover:bg-[#2e2e2e] active:bg-black"
+              onClick={() => (onFinalizeDuplication ? onFinalizeDuplication(Array.from(selectedIds)) : console.log('Finalize Data Duplication', Array.from(selectedIds)))}
+            >
+              <span className="inline-flex items-center justify-center w-4 h-4"><svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M6 1V11M1 6H11" stroke="white" strokeWidth="2" strokeLinecap="round"/></svg></span>
+              <span>Finalise Data Duplication</span>
+            </button>
+          </div>
+        ) : (
+          <div className="self-stretch p-4 bg-white border-t border-gray-200 flex items-center justify-start">
+            <span className="text-[#3C3C3C] text-xs font-medium leading-4 tracking-[0.5px]">{2} of {totalRecords} sub-tasks incomplete</span>
+          </div>
+        )}
         {/* Selection action bar (inside panel) */}
         {isExpanded && isDuplicating && showSelectionActionBar && (
           <div className="self-stretch px-4 pb-4">

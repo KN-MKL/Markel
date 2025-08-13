@@ -261,6 +261,7 @@ const Sidebar = ({ activeRecord, setActiveRecord, recordData, className = '', ex
 
   // Track horizontal scrolling for sticky reference shadow
   const horizontalScrollRef = React.useRef(null);
+  const headerHorizontalScrollRef = React.useRef(null);
   const [showStickyShadow, setShowStickyShadow] = React.useState(false);
 
   React.useEffect(() => {
@@ -270,6 +271,19 @@ const Sidebar = ({ activeRecord, setActiveRecord, recordData, className = '', ex
     h.addEventListener('scroll', onScroll);
     onScroll();
     return () => h.removeEventListener('scroll', onScroll);
+  }, [expanded]);
+
+  // Keep sticky header's horizontal position in sync with body scroll
+  React.useEffect(() => {
+    const body = horizontalScrollRef.current;
+    const head = headerHorizontalScrollRef.current;
+    if (!body || !head) return;
+    const sync = () => {
+      head.scrollLeft = body.scrollLeft;
+    };
+    body.addEventListener('scroll', sync);
+    sync();
+    return () => body.removeEventListener('scroll', sync);
   }, [expanded]);
 
   const toggleSelect = (id) => {
@@ -304,10 +318,18 @@ const Sidebar = ({ activeRecord, setActiveRecord, recordData, className = '', ex
         <div className="relative flex-1">
           <div ref={verticalScrollRef} className="absolute inset-0 overflow-y-auto custom-scrollbar">
             {expanded ? (
-              <div ref={horizontalScrollRef} className="overflow-x-auto custom-scrollbar-x">
-                <div className="p-4 inline-block min-w-full">
-                  <ExpandedHeader showStickyShadow={showStickyShadow} showCheckboxColumn={isDuplicating} />
-                  <div className="flex flex-col gap-4 mt-2">
+              <>
+                {/* Sticky header synced with horizontal scroll */}
+                <div className="sticky top-0 z-30 bg-[#F0F0F0]">
+                  <div ref={headerHorizontalScrollRef} className="overflow-x-hidden">
+                    <div className="p-4 inline-block min-w-full">
+                      <ExpandedHeader showStickyShadow={showStickyShadow} showCheckboxColumn={isDuplicating} />
+                    </div>
+                  </div>
+                </div>
+                <div ref={horizontalScrollRef} className="overflow-x-auto custom-scrollbar-x">
+                  <div className="p-4 inline-block min-w-full">
+                    <div className="flex flex-col gap-4 mt-2">
                     {flattenGroups
                       ? list.flatMap(g => g.items).map(item => (
                           <RecordItem
@@ -338,9 +360,10 @@ const Sidebar = ({ activeRecord, setActiveRecord, recordData, className = '', ex
                             toggleSelect={toggleSelect}
                           />
                         ))}
+                    </div>
                   </div>
                 </div>
-              </div>
+              </>
             ) : (
               <div className="p-4 flex flex-col gap-4">
                 {flattenGroups

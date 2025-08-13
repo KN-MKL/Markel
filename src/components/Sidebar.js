@@ -224,6 +224,7 @@ const RecordGroup = ({ title, color, isPending, items, activeRecordId, onRecordC
               isDuplicating={isDuplicating}
               isSelected={selectedIds?.has(item.id)}
               onToggleSelect={toggleSelect}
+              showCollapsedStatus={!isExpanded && showCollapsedStatus}
             />
                     ))}
                 </div>

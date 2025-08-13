@@ -15,6 +15,12 @@ export default function App() {
   // Key used to force-remount Front Sheet forms (for Clear all)
   const [fsFormKey, setFsFormKey] = useState(0);
 
+  // Normalize path to avoid trailing slash issues
+  const normalizedPath = location.pathname.replace(/\/+$/, '');
+  const isFSV1 = normalizedPath === '/fs-v1' || normalizedPath.startsWith('/fs-v1/');
+  const isFSV2Main = normalizedPath === '/fs-v2';
+  const isFSV2SelectRecords = normalizedPath === '/fs-v2/select-records';
+
   // Populate records to mirror Figma density (total 20)
   const generate = (startId, count, ref = 'CF9571A20MAA') => (
     Array.from({ length: count }, (_, i) => ({ id: startId + i, ref }))
@@ -47,12 +53,12 @@ export default function App() {
   }, [location.pathname, navigate]);
 
   return (
-    <div className="flex h-screen w-full flex-col items-start justify-start bg-[#F5F5F5] font-sans">
-       {/* Header shown on FS v1 and FS v2 (identical). FS v2 duplicate navigates to step 2. */}
-       {['/fs-v1','/front-sheet','/fs-v2'].some(p => location.pathname.endsWith(p)) ? (
+     <div className="flex h-screen w-full flex-col items-start justify-start bg-[#F5F5F5] font-sans">
+       {/* Header shown on FS v1 and FS v2 main page */}
+       {(isFSV1 || isFSV2Main) ? (
          <Header
            onDuplicate={() => {
-             if (location.pathname.endsWith('/fs-v2')) {
+             if (isFSV2Main) {
                navigate('/fs-v2/select-records');
              } else {
                setExpandSidebarToken(prev => prev + 1);
@@ -132,8 +138,8 @@ export default function App() {
         </Routes>
       </div>
 
-      {/* Footer visible on FS v1 and FS v2 */}
-      {['/fs-v1','/fs-v2'].some(p => location.pathname.endsWith(p)) ? (
+      {/* Footer visible on FS v1 and FS v2 main page */}
+      {(isFSV1 || isFSV2Main) ? (
         <Footer onClearAll={handleClearAll} onSaveAndExit={handleSaveAndExit} onReviewToSubmit={handleReviewToSubmit} />
       ) : null}
     </div>

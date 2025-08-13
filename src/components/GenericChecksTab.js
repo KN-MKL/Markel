@@ -131,6 +131,20 @@ export default function GenericChecksTab({ title = 'Pre-Bind Sub-Process Checks'
           </div>
         </div>
       </div>
+      {/* Footer meta row */}
+      <div className="mt-3 w-full bg-[#FEFEFD] rounded-lg outline outline-1 outline-[#D9D9D6] p-4 flex items-center gap-8">
+        <div className="flex items-start gap-2">
+          <div className="text-[#3C3C3C] text-[14px] font-medium leading-5 tracking-[0.1px]">Last updated</div>
+          <div className="flex items-center gap-1">
+            <span className="text-[#3C3C3C] text-[14px] leading-5 tracking-[0.25px]">{`{DD/MM/YYYY}`}</span>
+            <span className="text-[#3C3C3C] text-[12px] leading-4">{`{HH:MM}`}</span>
+          </div>
+        </div>
+        <div className="flex items-start gap-2">
+          <div className="text-[#3C3C3C] text-[14px] font-medium leading-5 tracking-[0.1px]">Last updated by</div>
+          <div className="text-[#3C3C3C] text-[14px] leading-5 tracking-[0.25px]">{`{First name Surname}`}</div>
+        </div>
+      </div>
     </section>
   );
 }

@@ -138,8 +138,7 @@ export default function App() {
                       onFinalizeDuplication={(ids) => console.log('Finalize duplication for IDs:', ids)}
                       showCheckboxColumnAlways
                     />
-                    {/* Placeholder for records selection UI */}
-                    <div className="flex-1 flex items-center justify-center text-[#5C5A59]">Step 2: Records selection UI goes here.</div>
+                    <MainContent key={`fs-v2-review-${fsFormKey}`} record={activeRecord} />
                   </div>
                 </div>
               </div>
@@ -173,8 +172,7 @@ export default function App() {
                       onFinalizeDuplication={(ids) => console.log('Finalize duplication for IDs (select-records):', ids)}
                       showCheckboxColumnAlways
                     />
-                    {/* Placeholder */}
-                    <div className="flex-1 flex items-center justify-center text-[#5C5A59]">Select Records UI (duplicate)</div>
+                    <MainContent key={`fs-v2-select-${fsFormKey}`} record={activeRecord} />
                   </div>
                 </div>
               </div>

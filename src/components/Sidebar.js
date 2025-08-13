@@ -280,7 +280,7 @@ const Sidebar = ({ activeRecord, setActiveRecord, recordData, className = '', ex
     return (
     <aside
       className={`flex flex-col self-stretch p-4 flex-none transition-all duration-300 ease-in-out ${className}`}
-      style={{ width: isExpanded ? expandedWidth : '269px' }}
+      style={{ width: isExpanded ? expandedWidth : '312px' }}
     >
       <div className={`flex h-full w-full flex-col justify-between overflow-hidden rounded-lg outline outline-[0.5px] outline-[#ADACA7] bg-transparent`}>
         {/* Header */}

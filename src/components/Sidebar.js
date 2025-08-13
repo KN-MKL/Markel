@@ -234,7 +234,7 @@ const RecordGroup = ({ title, color, isPending, items, activeRecordId, onRecordC
 };
 
 // --- Sidebar ---
-const Sidebar = ({ activeRecord, setActiveRecord, recordData, className = '', expandTrigger, disableDuplicationSelection = false, forceExpanded = false, hideExpandButton = false, flattenGroups = false, showSelectionActionBar = true, showStatusRail = false }) => {
+const Sidebar = ({ activeRecord, setActiveRecord, recordData, className = '', expandTrigger, disableDuplicationSelection = false, forceExpanded = false, hideExpandButton = false, flattenGroups = false, showSelectionActionBar = true, showStatusRail = false, enableCollapsedStatusGlyphs = false }) => {
   // Normalize incoming data to groups
   const groups = [
     { key: 'fon', title: 'Moved to FON', color: '#216270', isPending: false },
@@ -362,8 +362,8 @@ const Sidebar = ({ activeRecord, setActiveRecord, recordData, className = '', ex
     </div>
   );
 
-  // Whether to show collapsed status glyphs for the current mode
-  const showCollapsedStatusGlyphs = showStatusRail || (!expanded && !isDuplicating);
+  // Whether to show collapsed status glyphs for the current mode (only when explicitly enabled)
+  const showCollapsedStatusGlyphs = enableCollapsedStatusGlyphs && !expanded;
 
     return (
     <aside
@@ -512,7 +512,9 @@ const Sidebar = ({ activeRecord, setActiveRecord, recordData, className = '', ex
                 onClick={() => setToast({ visible: false, count: 0 })}
                 aria-label="Close notification"
               >
-                <span className="inline-block w-3.5 h-3.5 rounded-sm" style={{ background: '#FFAE8A' }}></span>
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M19 6.41L17.59 5L12 10.59L6.41 5L5 6.41L10.59 12L5 17.59L6.41 19L12 13.41L17.59 19L19 17.59L13.41 12L19 6.41Z" fill="#FFAE8A"/>
+                </svg>
               </button>
             </div>
           </div>

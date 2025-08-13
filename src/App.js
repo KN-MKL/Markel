@@ -88,6 +88,7 @@ export default function App() {
                   recordData={recordData}
                   expandTrigger={expandSidebarToken}
                   showSelectionActionBar={false}
+                  enableCollapsedStatusGlyphs={false}
                 />
                 <MainContent key={`fs-v1-${fsFormKey}`} record={activeRecord} />
               </div>
@@ -103,6 +104,7 @@ export default function App() {
                   setActiveRecord={setActiveRecordId}
                   recordData={recordData}
                   expandTrigger={expandSidebarToken}
+                  enableCollapsedStatusGlyphs
                 />
                 <MainContent key={`fs-v2-${fsFormKey}`} record={activeRecord} />
               </div>
@@ -132,6 +134,7 @@ export default function App() {
                       hideExpandButton
                       flattenGroups
                       showStatusRail
+                      enableCollapsedStatusGlyphs
                     />
                     {/* Placeholder for records selection UI */}
                     <div className="flex-1 flex items-center justify-center text-[#5C5A59]">Step 2: Records selection UI goes here.</div>

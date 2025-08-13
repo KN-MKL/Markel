@@ -8,10 +8,28 @@ const M3Checkbox = ({
     className = "",
     description = "",
     indeterminate = false,
-    compact = false
+    compact = false,
+    // Design-tuning props (non-breaking defaults)
+    size = 16,
+    square = false,
+    borderWidth = 2,
+    uncheckedBorderColor = '#9CA3AF', // tailwind gray-400
+    checkedBgColor = '#4B5563', // tailwind gray-600
 }) => {
     const containerAlignClass = compact ? 'items-center' : 'items-start';
     const tickMarginClass = compact ? 'mt-0' : 'mt-1';
+    const boxStyle = {
+        width: `${size}px`,
+        height: `${size}px`,
+        borderWidth: `${borderWidth}px`,
+        borderColor: checked || indeterminate ? checkedBgColor : uncheckedBorderColor,
+        backgroundColor: checked || indeterminate ? checkedBgColor : '#FFFFFF',
+        borderRadius: square ? '2px' : '0.25rem',
+        transition: 'all 200ms',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center'
+    };
 
     return (
         <label className={`flex ${containerAlignClass} gap-3 cursor-pointer ${disabled ? 'opacity-50 cursor-not-allowed' : ''} ${className}`}>
@@ -23,11 +41,7 @@ const M3Checkbox = ({
                     disabled={disabled}
                     className="sr-only"
                 />
-                <div className={`w-4 h-4 rounded border-2 transition-all duration-200 flex items-center justify-center ${
-                    checked || indeterminate
-                        ? 'border-gray-600 bg-gray-600' 
-                        : 'border-gray-400 bg-white'
-                } ${disabled ? 'border-gray-300 bg-gray-100' : ''}`}>
+                <div style={boxStyle}>
                     {checked && !indeterminate && (
                         <svg className="w-3 h-3 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />

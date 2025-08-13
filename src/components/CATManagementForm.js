@@ -39,9 +39,10 @@ const CATManagementForm = ({ className = "" }) => {
     return (
         <div className={`w-full p-4 bg-gray-100 rounded-b-lg border-t border-gray-200 flex flex-col gap-4 ${className}`}>
             <div className="p-4 bg-white rounded-lg border border-gray-200">
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <M3TextField dropdown label="Aggregated Risk Data" id="agg-risk-data" options={aggRiskDataOptions} />
-                    <M3TextField label="NAIC" id="naic" />
+                {/* Use a 4-column grid so each field has the same width as a single field in 4-up layouts */}
+                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
+                    <M3TextField dropdown label="Aggregated Risk Data" id="agg-risk-data" options={aggRiskDataOptions} containerClassName="md:col-span-1" />
+                    <M3TextField label="NAIC" id="naic" containerClassName="md:col-span-1" />
                 </div>
             </div>
             <div className="p-4 bg-white rounded-lg border border-gray-200">

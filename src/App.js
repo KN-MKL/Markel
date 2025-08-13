@@ -1,39 +1,79 @@
-import React, { useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import Header from './components/Header';
 import Sidebar from './components/Sidebar';
 import MainContent from './components/MainContent';
+import SubProcesses from './components/SubProcesses';
 import Footer from './components/Footer';
+import { Routes, Route, useLocation, useNavigate } from 'react-router-dom';
 
 export default function App() {
-    const [activeRecordId, setActiveRecordId] = useState(2);
-    const [expandSidebarToken, setExpandSidebarToken] = useState(0);
-    
-    const recordData = {
-        fon: [{ id: 1, ref: 'CF9571', code: 'A', suffix: '20MAA' }],
-        pending: [
-            { id: 2, ref: 'CF9572', code: 'B', suffix: '21MAA' },
-            { id: 3, ref: 'CF9573', code: 'C', suffix: '22MAA' },
-        ],
-        ust: [{ id: 4, ref: 'CF9574', code: 'D', suffix: '23MAA' }],
-        rejected: [{ id: 5, ref: 'CF9575', code: 'E', suffix: '24MAA' }],
-    };
+  const navigate = useNavigate();
+  const location = useLocation();
 
-    const allRecords = [].concat(...Object.values(recordData));
-    const activeRecord = allRecords.find(r => r.id === activeRecordId);
+  const [activeRecordId, setActiveRecordId] = useState(2);
+  const [expandSidebarToken, setExpandSidebarToken] = useState(0);
 
-    return (
-        <div className="flex h-screen w-full flex-col items-start justify-start bg-[#F5F5F5] font-sans">
-            <Header onDuplicate={() => setExpandSidebarToken(prev => prev + 1)} />
-            <div className="flex w-full flex-1 self-stretch overflow-hidden">
-                <Sidebar 
-                    activeRecord={activeRecordId} 
-                    setActiveRecord={setActiveRecordId} 
-                    recordData={recordData} 
-                    expandTrigger={expandSidebarToken}
-                />
-                <MainContent record={activeRecord} />
+  // Populate records to mirror Figma density (total 20)
+  const generate = (startId, count, ref = 'CF9571A20MAA') => (
+    Array.from({ length: count }, (_, i) => ({ id: startId + i, ref }))
+  );
+  const recordData = useMemo(() => ({
+    fon: generate(1, 12),
+    pending: generate(101, 4),
+    ust: generate(201, 2),
+    rejected: generate(301, 2),
+  }), []);
+
+  const allRecords = useMemo(() => [].concat(...Object.values(recordData)), [recordData]);
+  const activeRecord = useMemo(() => allRecords.find(r => r.id === activeRecordId), [allRecords, activeRecordId]);
+
+  // Helper navigation actions
+  const goToSubProcesses = () => navigate('/sub-processes');
+  const goToFrontSheet = () => navigate('/front-sheet');
+
+  // Default route redirect
+  useEffect(() => {
+    if (location.pathname === '/' || location.pathname === '') {
+      navigate('/sub-processes', { replace: true });
+    }
+  }, [location.pathname, navigate]);
+
+  return (
+    <div className="flex h-screen w-full flex-col items-start justify-start bg-[#F5F5F5] font-sans">
+      {/* Header only on front-sheet page */}
+      {location.pathname.endsWith('/front-sheet') ? (
+        <Header
+          onDuplicate={() => setExpandSidebarToken(prev => prev + 1)}
+          onClose={goToSubProcesses}
+        />
+      ) : null}
+
+      <Routes>
+        <Route
+          path="/sub-processes"
+          element={
+            <div className="flex w-full flex-1 self-stretch min-h-0">
+              <SubProcesses onOpenFrontSheet={goToFrontSheet} records={recordData.fon} activeRecord={activeRecord} />
             </div>
-            <Footer />
-        </div>
-    );
-} 
+          }
+        />
+        <Route
+          path="/front-sheet"
+          element={
+            <div className="flex w-full flex-1 self-stretch overflow-hidden">
+              <Sidebar
+                activeRecord={activeRecordId}
+                setActiveRecord={setActiveRecordId}
+                recordData={recordData}
+                expandTrigger={expandSidebarToken}
+              />
+              <MainContent record={activeRecord} />
+            </div>
+          }
+        />
+      </Routes>
+
+      {location.pathname.endsWith('/front-sheet') ? <Footer /> : null}
+    </div>
+  );
+}

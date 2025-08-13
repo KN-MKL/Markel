@@ -1,4 +1,5 @@
 import React from 'react';
+import M3Checkbox from './M3Checkbox';
 
 // --- Local SVG Icons ---
 const ToggleExpandIcon = () => (
@@ -37,51 +38,61 @@ const RightChevronIcon = () => (
 );
 
 // --- Record Item ---
-const RecordItem = ({ item, active, onRecordClick, isExpanded, showStickyShadow, isDuplicating }) => {
+const RecordItem = ({ item, active, onRecordClick, isExpanded, showStickyShadow, isDuplicating, isSelected, onToggleSelect }) => {
   const { id, ref: reference, code, type, suffix, majorClass, minorClass, class: klass, entity, limit, excess, underwriter } = item;
 
   if (isExpanded) {
+    // When in selection mode (duplication flow reused), show checkbox column for all rows
+    const showCheckboxColumn = isDuplicating;
     return (
       <div className="relative">
         <div
           onClick={() => onRecordClick(id)}
-          className={`w-full bg-white rounded-lg flex items-stretch cursor-pointer transition-all duration-200 text-sm text-[#3C3C3C] ${
+          className={`w-full h-[52px] bg-[#FEFEFD] rounded-lg overflow-hidden flex items-stretch cursor-pointer transition-all duration-200 text-sm text-[#3C3C3C] ${
             active ? 'border border-[#807F7B] shadow-[0px_2px_16px_rgba(0,0,0,0.05)]' : 'border border-[#D9D9D6]'
           }`}
           role="button"
           tabIndex={0}
         >
-          {/* Sticky Checkbox Column */}
-          <div className={`sticky left-0 flex-shrink-0 w-14 flex items-center justify-center p-4 bg-white rounded-l-lg z-10 relative`}>
-            {active && (
-              <div className="absolute left-[-16px] top-1/2 -translate-y-1/2 w-1 h-11 bg-[#3C3C3C] rounded-r-lg z-30 pointer-events-none" />
-            )}
-            <input type="checkbox" className="w-4 h-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500" />
-          </div>
+          {/* Sticky Checkbox Column (only when duplicating and not the active row) */}
+          {showCheckboxColumn && (
+            <div className={`sticky left-0 flex-shrink-0 w-14 flex items-center justify-center bg-white rounded-l-lg z-10 relative`}>
+              {active && (
+                <div className="absolute left-[-16px] top-1/2 -translate-y-1/2 w-1 h-11 bg-[#3C3C3C] rounded-r-lg z-30 pointer-events-none" />
+              )}
+              <div onClick={(e) => e.stopPropagation()} className="pl-1">
+                <M3Checkbox compact checked={!!isSelected} onChange={() => onToggleSelect(item.id)} size={18} square borderWidth={2} uncheckedBorderColor="#807F7B" checkedBgColor="#807F7B" />
+              </div>
+            </div>
+          )}
+          {/* Active indicator when no checkbox column is present */}
+          {!showCheckboxColumn && active && (
+            <div className="absolute left-[-16px] top-1/2 -translate-y-1/2 w-1 h-11 bg-[#3C3C3C] rounded-r-lg z-30 pointer-events-none" />
+          )}
           {/* Sticky Status Column */}
-          <div className="sticky left-14 flex-shrink-0 w-20 flex items-center justify-center bg-white z-20">
+          <div className={`sticky ${showCheckboxColumn ? 'left-14' : 'left-0'} flex-shrink-0 w-20 h-full flex items-center justify-center bg-[#FEFEFD] z-20`}>
             <div className="h-6 p-1 bg-[#ECECEC] rounded flex justify-center items-center"><NotStartedIcon /></div>
           </div>
           {/* Sticky Reference Column */}
-          <div className={`sticky left-[8.5rem] flex-shrink-0 w-40 py-3 px-2 flex items-center truncate bg-white z-10 relative`}>
+          <div className={`sticky ${showCheckboxColumn ? 'left-[8.5rem]' : 'left-[5rem]'} flex-shrink-0 w-40 h-full px-2 flex items-center truncate bg-[#FEFEFD] z-10 relative`}>
             <span>{reference || `${code || ''}${type || ''} ${suffix || ''}`}</span>
             {showStickyShadow && (
               <>
                 {/* Illusion: fixed left padding pane to keep visual spacing when content scrolls */}
-                <div className="absolute left-[-100vw] right-full bg-white pointer-events-none" style={{ top: '-12px', bottom: '-12px' }} />
+                <div className="absolute left-[-100vw] right-full bg-[#FEFEFD] pointer-events-none" style={{ top: '-12px', bottom: '-12px' }} />
                 {/* Right-edge gradient only */}
                 <div className="absolute right-0 pointer-events-none" style={{ top: '-12px', bottom: '-12px', width: '12px', background: 'linear-gradient(to right, rgba(0,0,0,0.14), rgba(0,0,0,0))' }} />
               </>
             )}
           </div>
           {/* Scrollable Columns (Categories should scroll) */}
-          <div className="flex-shrink-0 w-40 py-3 px-2 flex items-center truncate"><span>{majorClass || '-'}</span></div>
-          <div className="flex-shrink-0 w-40 py-3 px-2 flex items-center truncate"><span>{minorClass || '-'}</span></div>
-          <div className="flex-shrink-0 w-32 py-3 px-2 flex items-center truncate"><span>{klass || '-'}</span></div>
-          <div className="flex-shrink-0 w-32 py-3 px-2 flex items-center truncate"><span>{entity || '-'}</span></div>
-          <div className="flex-shrink-0 w-32 py-3 px-2 flex items-center truncate"><span>{limit || '-'}</span></div>
-          <div className="flex-shrink-0 w-32 py-3 px-2 flex items-center truncate"><span>{excess || '-'}</span></div>
-          <div className="flex-shrink-0 w-32 py-3 px-2 flex items-center truncate"><span>{underwriter || '-'}</span></div>
+          <div className="flex-shrink-0 w-40 h-full px-2 flex items-center truncate"><span>{majorClass || '-'}</span></div>
+          <div className="flex-shrink-0 w-40 h-full px-2 flex items-center truncate"><span>{minorClass || '-'}</span></div>
+          <div className="flex-shrink-0 w-32 h-full px-2 flex items-center truncate"><span>{klass || '-'}</span></div>
+          <div className="flex-shrink-0 w-32 h-full px-2 flex items-center truncate"><span>{entity || '-'}</span></div>
+          <div className="flex-shrink-0 w-32 h-full px-2 flex items-center truncate"><span>{limit || '-'}</span></div>
+          <div className="flex-shrink-0 w-32 h-full px-2 flex items-center truncate"><span>{excess || '-'}</span></div>
+          <div className="flex-shrink-0 w-32 h-full px-2 flex items-center truncate"><span>{underwriter || '-'}</span></div>
         </div>
       </div>
     );
@@ -90,20 +101,20 @@ const RecordItem = ({ item, active, onRecordClick, isExpanded, showStickyShadow,
   // Collapsed
   return (
     <div
-      onClick={() => onRecordClick(id)}
-      className={`relative w-full bg-white rounded-lg flex items-center cursor-pointer transition-all duration-200 ${
+      onClick={() => { if (!isDuplicating) onRecordClick(id); }}
+      className={`relative w-full bg-white rounded-lg flex items-center cursor-pointer transition-all duration-200 h-12 ${
         active ? 'border border-[#807F7B] shadow-[0px_2px_16px_rgba(0,0,0,0.05)]' : 'border border-[#D9D9D6]'
       }`}
       role="button"
       tabIndex={0}
     >
-      {active && <div className="absolute left-[-16px] top-[6px] w-1 h-11 bg-[#3C3C3C] rounded-r-lg" />}
+      {active && <div className="absolute left-[-16px] top-1/2 -translate-y-1/2 w-1 h-10 bg-[#3C3C3C] rounded-r-lg" />}
       {isDuplicating && (
-        <div className="w-10 pl-4 py-[14px] flex flex-col justify-center items-start">
-          <input type="checkbox" className="w-4 h-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500" />
+        <div className="w-10 pl-4 h-full flex flex-col justify-center items-start" onClick={(e) => e.stopPropagation()}>
+          <M3Checkbox compact checked={!!isSelected} onChange={() => onToggleSelect(id)} size={18} square borderWidth={2} uncheckedBorderColor="#807F7B" checkedBgColor="#807F7B" />
         </div>
       )}
-      <div className={`flex-1 self-stretch ${isDuplicating ? 'px-2' : 'pl-4 pr-4'} py-2 flex flex-col justify-center items-start`}>
+      <div className={`flex-1 self-stretch ${isDuplicating ? 'px-2' : 'pl-4 pr-4'} flex flex-col justify-center items-start`}>
         <div className="flex justify-start items-center text-[#3C3C3C] text-sm font-normal leading-5 tracking-[0.25px]">
           <span>{reference || code}</span>
           {type && <div className="px-1 py-0.5 mx-1 border-b border-[#807F7B]"><span>{type}</span></div>}
@@ -121,17 +132,17 @@ const RecordItem = ({ item, active, onRecordClick, isExpanded, showStickyShadow,
 
 // --- Header (expanded) ---
 const ExpandedHeader = ({ showStickyShadow }) => (
-  <div className="sticky top-0 z-20 flex w-full text-xs text-[#5C5A59] font-medium tracking-[0.5px] bg-[#F4F2EB] py-2">
+  <div className="sticky top-0 z-20 flex w-full text-[14px] text-[#5C5A59] font-medium leading-5 tracking-[0.1px] bg-[#F0F0F0] py-2 border-t border-x border-[#D9D9D6] rounded-t-lg">
     {/* Sticky empty space for checkbox */}
-    <div className="sticky left-0 flex-shrink-0 w-14 p-2 bg-[#F4F2EB] z-10"></div>
+    <div className="sticky left-0 flex-shrink-0 w-14 px-2 bg-[#F0F0F0] z-10"></div>
     {/* Sticky Status Header */}
-    <div className="sticky left-14 flex-shrink-0 w-20 flex items-center justify-center bg-[#F4F2EB] z-20">Status</div>
+    <div className="sticky left-14 flex-shrink-0 w-20 flex items-center justify-center bg-[#F0F0F0] z-20">Status</div>
     {/* Sticky Reference Header */}
-    <div className={`sticky left-[8.5rem] flex-shrink-0 w-40 px-2 bg-[#F4F2EB] z-10 relative`}>
+    <div className={`sticky left-[8.5rem] flex-shrink-0 w-40 px-2 bg-[#F0F0F0] z-10 relative`}>
       Reference
       {showStickyShadow && (
         <>
-          <div className="absolute left-[-100vw] right-full bg-[#F4F2EB] pointer-events-none" style={{ top: '-8px', bottom: '-8px' }} />
+          <div className="absolute left-[-100vw] right-full bg-[#F0F0F0] pointer-events-none" style={{ top: '-8px', bottom: '-8px' }} />
           <div className="absolute right-0 pointer-events-none" style={{ top: '-8px', bottom: '-8px', width: '12px', background: 'linear-gradient(to right, rgba(0,0,0,0.14), rgba(0,0,0,0))' }} />
         </>
       )}
@@ -149,24 +160,24 @@ const ExpandedHeader = ({ showStickyShadow }) => (
 
 // (Legacy ExpandedRecordRow removed; unified in RecordItem)
 
-const RecordGroup = ({ title, color, isPending, items, activeRecordId, onRecordClick, isExpanded, showStickyShadow, isDuplicating }) => {
+const RecordGroup = ({ title, color, isPending, items, activeRecordId, onRecordClick, isExpanded, showStickyShadow, isDuplicating, selectedIds, toggleSelect }) => {
   const [isOpen, setIsOpen] = React.useState(true);
   return (
     <div>
-      <div className="sticky top-[36px] z-10 bg-[#F4F2EB] py-2">
+      <div className="py-2">
         <div className="flex items-center w-full overflow-hidden">
-          <div className="sticky left-0 flex items-center gap-2 pl-4 bg-[#F4F2EB] z-10 flex-shrink-0">
+          <div className="sticky left-0 flex items-center gap-2 pl-4 bg-transparent z-10 flex-shrink-0">
             <div className={`w-2 h-2 rounded-full ${isPending ? 'border border-[#FF7133]' : ''}`} style={{ backgroundColor: color }} />
             <span className="text-[#5C5A59] text-sm font-medium leading-5 tracking-[0.1px]">{title}</span>
                 </div>
           <div className="flex-1 min-w-0 border-b border-dashed border-[#ADACA7] mx-2"></div>
-          <button onClick={() => setIsOpen(!isOpen)} className="sticky right-0 p-1 bg-[#F4F2EB] z-10 pr-4">
+          <button onClick={() => setIsOpen(!isOpen)} className="sticky right-0 p-1 bg-transparent z-10 pr-4">
             {isOpen ? <ChevronUpIcon /> : <ChevronDownIcon />}
                 </button>
         </div>
             </div>
             {isOpen && (
-        <div className="flex flex-col gap-2 mt-2">
+        <div className="flex flex-col gap-2 mt-3 pt-1">
           {items.map((item) => (
             <RecordItem
               key={item.id}
@@ -176,6 +187,8 @@ const RecordGroup = ({ title, color, isPending, items, activeRecordId, onRecordC
               isExpanded={isExpanded}
               showStickyShadow={showStickyShadow}
               isDuplicating={isDuplicating}
+              isSelected={selectedIds?.has(item.id)}
+              onToggleSelect={toggleSelect}
             />
                     ))}
                 </div>
@@ -199,14 +212,26 @@ const Sidebar = ({ activeRecord, setActiveRecord, recordData, className = '', ex
 
   const [isExpanded, setIsExpanded] = React.useState(false);
   const [isDuplicating, setIsDuplicating] = React.useState(false);
+  const [selectedIds, setSelectedIds] = React.useState(new Set());
+  const [toast, setToast] = React.useState({ visible: false, count: 0 });
   const [showDupHint, setShowDupHint] = React.useState(false);
 
-  // Expand when an external trigger changes (e.g., Duplicate Binding Data)
+  // Handle external trigger (Duplicate Binding Data button)
+  // First click -> enter duplication mode. Next click -> complete duplication and show toast.
   React.useEffect(() => {
-    if (expandTrigger) {
-      // Enter duplication mode instead of expanding immediately
+    if (!expandTrigger) return;
+    if (isDuplicating) {
+      const count = selectedIds.size;
+      setIsDuplicating(false);
+      if (count > 0) {
+        setToast({ visible: true, count });
+      }
+      setSelectedIds(new Set());
+    } else {
       setIsDuplicating(true);
+      setSelectedIds(new Set());
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [expandTrigger]);
   // When expanded, occupy full available width so the right content is hidden
   const expandedWidth = '100%';
@@ -242,6 +267,14 @@ const Sidebar = ({ activeRecord, setActiveRecord, recordData, className = '', ex
     onScroll();
     return () => h.removeEventListener('scroll', onScroll);
   }, [isExpanded]);
+
+  const toggleSelect = (id) => {
+    setSelectedIds(prev => {
+      const next = new Set(prev);
+      if (next.has(id)) next.delete(id); else next.add(id);
+      return next;
+    });
+  };
 
     return (
     <aside
@@ -281,6 +314,8 @@ const Sidebar = ({ activeRecord, setActiveRecord, recordData, className = '', ex
                         isExpanded={isExpanded}
                         showStickyShadow={showStickyShadow}
                         isDuplicating={isDuplicating}
+                        selectedIds={selectedIds}
+                        toggleSelect={toggleSelect}
                       />
                     ))}
                     </div>
@@ -300,6 +335,8 @@ const Sidebar = ({ activeRecord, setActiveRecord, recordData, className = '', ex
                     isExpanded={false}
                     showStickyShadow={false}
                     isDuplicating={isDuplicating}
+                    selectedIds={selectedIds}
+                    toggleSelect={toggleSelect}
                   />
                 ))}
               </div>
@@ -311,15 +348,40 @@ const Sidebar = ({ activeRecord, setActiveRecord, recordData, className = '', ex
         </div>
 
         {/* Footer */}
-        <div className="self-stretch p-4 bg-white border-t border-gray-200 flex items-center justify-between">
+        <div className="self-stretch p-4 bg-white border-t border-gray-200 flex items-center justify-start">
           <span className="text-[#3C3C3C] text-xs font-medium leading-4 tracking-[0.5px]">{2} of {totalRecords} sub-tasks incomplete</span>
-          {isDuplicating && (
-            <div className="flex items-center gap-2">
-              <button onClick={() => setIsDuplicating(false)} className="text-xs px-3 py-1 rounded border border-[#D9D9D6]">Cancel</button>
-              <button className="text-xs px-3 py-1 rounded bg-[#216270] text-white">Duplicate</button>
-            </div>
-          )}
         </div>
+        {/* Selection action bar (inside panel, bordered and rounded per design) */}
+        {isExpanded && isDuplicating && (
+          <div className="self-stretch px-4 pb-4">
+            <div className="flex items-center justify-between rounded-b-lg border-x border-b border-[#D9D9D6] bg-white px-4 py-3">
+              <div className="text-[#3C3C3C] text-[12px] font-medium leading-4 tracking-[0.5px]">
+                {selectedIds.size} of {totalRecords} Records selected to move to FON
+              </div>
+              <button
+                className="inline-flex items-center gap-2 rounded-lg bg-[#3C3C3C] px-4 py-2 text-sm font-medium text-white hover:bg-[#2e2e2e] active:bg-black"
+                onClick={() => console.log('Move to FON clicked', Array.from(selectedIds))}
+              >
+                <span className="inline-flex items-center justify-center w-4 h-4"><svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M6 1V11M1 6H11" stroke="white" strokeWidth="2" strokeLinecap="round"/></svg></span>
+                <span>Move to FON</span>
+              </button>
+            </div>
+          </div>
+        )}
+        {toast.visible && (
+          <div className="fixed left-4 bottom-4 z-50">
+            <div className="inline-flex items-center justify-start bg-[#322F35] text-[#FBFBFB] rounded shadow-[0_1px_3px_rgba(0,0,0,0.30)]" style={{ paddingLeft: 16 }}>
+              <div className="py-3 pr-2 text-sm tracking-[0.25px]">Data successfully duplicated to {toast.count} records.</div>
+              <button
+                className="w-12 h-12 inline-flex items-center justify-center"
+                onClick={() => setToast({ visible: false, count: 0 })}
+                aria-label="Close notification"
+              >
+                <span className="inline-block w-3.5 h-3.5 rounded-sm" style={{ background: '#FFAE8A' }}></span>
+              </button>
+            </div>
+          </div>
+        )}
             </div>
         </aside>
     );

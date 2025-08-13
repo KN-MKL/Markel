@@ -137,8 +137,8 @@ export default function App() {
                       showReviewFooter
                       onFinalizeDuplication={(ids) => console.log('Finalize duplication for IDs:', ids)}
                       showCheckboxColumnAlways
+                      panelOverride={<MainContent key={`fs-v2-review-${fsFormKey}`} record={activeRecord} />}
                     />
-                    <MainContent key={`fs-v2-review-${fsFormKey}`} record={activeRecord} />
                   </div>
                 </div>
               </div>
@@ -171,8 +171,8 @@ export default function App() {
                       showReviewFooter
                       onFinalizeDuplication={(ids) => console.log('Finalize duplication for IDs (select-records):', ids)}
                       showCheckboxColumnAlways
+                      panelOverride={<MainContent key={`fs-v2-select-${fsFormKey}`} record={activeRecord} />}
                     />
-                    <MainContent key={`fs-v2-select-${fsFormKey}`} record={activeRecord} />
                   </div>
                 </div>
               </div>

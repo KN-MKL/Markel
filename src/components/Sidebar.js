@@ -240,7 +240,7 @@ const RecordGroup = ({ title, color, isPending, items, activeRecordId, onRecordC
 };
 
 // --- Sidebar ---
-const Sidebar = ({ activeRecord, setActiveRecord, recordData, className = '', expandTrigger, disableDuplicationSelection = false, forceExpanded = false, hideExpandButton = false, flattenGroups = false, showSelectionActionBar = true, showStatusRail = false, enableCollapsedStatusGlyphs = false, showReviewFooter = false, onFinalizeDuplication, showCheckboxColumnAlways = false }) => {
+const Sidebar = ({ activeRecord, setActiveRecord, recordData, className = '', expandTrigger, disableDuplicationSelection = false, forceExpanded = false, hideExpandButton = false, flattenGroups = false, showSelectionActionBar = true, showStatusRail = false, enableCollapsedStatusGlyphs = false, showReviewFooter = false, onFinalizeDuplication, showCheckboxColumnAlways = false, panelOverride = null }) => {
   // Normalize incoming data to groups
   const groups = [
     { key: 'fon', title: 'Moved to FON', color: '#216270', isPending: false },
@@ -407,9 +407,10 @@ const Sidebar = ({ activeRecord, setActiveRecord, recordData, className = '', ex
           <div ref={verticalScrollRef} className="absolute inset-0 overflow-y-auto custom-scrollbar">
             {expanded ? (
               <div className="flex w-full">
-                {showStatusRail && <StatusRail />}
+                {showStatusRail && !panelOverride && <StatusRail />}
                 <div className="flex-1 min-w-0">
                   {/* Sticky header synced with horizontal scroll */}
+                  {!panelOverride && (
                   <div className="sticky top-0 z-30 bg-[#F0F0F0]">
                     <div ref={headerHorizontalScrollRef} className="overflow-x-hidden">
                       <div className="p-4 inline-block min-w-full">
@@ -428,8 +429,12 @@ const Sidebar = ({ activeRecord, setActiveRecord, recordData, className = '', ex
                       </div>
                     </div>
                   </div>
+                  )}
                   <div ref={horizontalScrollRef} className="overflow-x-auto custom-scrollbar-x">
                     <div className="p-4 inline-block min-w-full">
+                      {panelOverride ? (
+                        <div className="mt-2">{panelOverride}</div>
+                      ) : (
                       <div className="flex flex-col gap-4 mt-2">
                         {flattenGroups
                           ? displayItems.map(item => (
@@ -465,6 +470,7 @@ const Sidebar = ({ activeRecord, setActiveRecord, recordData, className = '', ex
                               />
                             ))}
                       </div>
+                      )}
                     </div>
                   </div>
                 </div>

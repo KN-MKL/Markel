@@ -12,7 +12,6 @@ export const FS2StepHeader = ({ recordId = 'CF9571A20MAA', step = 1, onGoStep1, 
                     <div className={`w-8 h-8 rounded-full border ${isStep1 ? 'border-[#C4C4C4] bg-[#3C3C3C] text-white' : 'border-[#ADACA7] bg-transparent text-[#3C3C3C]' } flex items-center justify-center text-[14px] font-medium`}>1</div>
                     <div className="text-[14px] font-medium tracking-[0.1px] text-[#3C3C3C]">Review and Modify Data for Duplication</div>
                 </button>
-                </div>
                 {/* Step 2 */}
                 <button type="button" onClick={onGoStep2} className="flex items-center gap-4">
                     <div className={`w-8 h-8 rounded-full border ${!isStep1 ? 'border-[#C4C4C4] bg-[#3C3C3C] text-white' : 'border-[#ADACA7] bg-transparent text-[#3C3C3C]'} flex items-center justify-center text-[14px] font-medium`}>2</div>

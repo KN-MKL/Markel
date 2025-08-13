@@ -234,7 +234,7 @@ const RecordGroup = ({ title, color, isPending, items, activeRecordId, onRecordC
 };
 
 // --- Sidebar ---
-const Sidebar = ({ activeRecord, setActiveRecord, recordData, className = '', expandTrigger, disableDuplicationSelection = false, forceExpanded = false, hideExpandButton = false, flattenGroups = false, showSelectionActionBar = true, showStatusRail = false, enableCollapsedStatusGlyphs = false, showReviewFooter = false, onFinalizeDuplication }) => {
+const Sidebar = ({ activeRecord, setActiveRecord, recordData, className = '', expandTrigger, disableDuplicationSelection = false, forceExpanded = false, hideExpandButton = false, flattenGroups = false, showSelectionActionBar = true, showStatusRail = false, enableCollapsedStatusGlyphs = false, showReviewFooter = false, onFinalizeDuplication, showCheckboxColumnAlways = false }) => {
   // Normalize incoming data to groups
   const groups = [
     { key: 'fon', title: 'Moved to FON', color: '#216270', isPending: false },
@@ -407,7 +407,7 @@ const Sidebar = ({ activeRecord, setActiveRecord, recordData, className = '', ex
                   <div className="sticky top-0 z-30 bg-[#F0F0F0]">
                     <div ref={headerHorizontalScrollRef} className="overflow-x-hidden">
                       <div className="p-4 inline-block min-w-full">
-                        <ExpandedHeader showStickyShadow={showStickyShadow} showCheckboxColumn={isDuplicating} />
+                        <ExpandedHeader showStickyShadow={showStickyShadow} showCheckboxColumn={isDuplicating || showCheckboxColumnAlways} />
                       </div>
                     </div>
                   </div>
@@ -427,7 +427,7 @@ const Sidebar = ({ activeRecord, setActiveRecord, recordData, className = '', ex
                                 isSelected={selectedIds?.has(item.id)}
                                 onToggleSelect={toggleSelect}
                                 showCollapsedStatus={false}
-                                forceCheckboxColumn
+                                forceCheckboxColumn={showCheckboxColumnAlways}
                               />
                             ))
                       : list.map(group => (
@@ -467,7 +467,7 @@ const Sidebar = ({ activeRecord, setActiveRecord, recordData, className = '', ex
                         isSelected={selectedIds?.has(item.id)}
                         onToggleSelect={toggleSelect}
                         showCollapsedStatus
-                        forceCheckboxColumn
+                        forceCheckboxColumn={showCheckboxColumnAlways}
                       />
                     ))
                   : list.map(group => (

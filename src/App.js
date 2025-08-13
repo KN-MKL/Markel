@@ -136,9 +136,45 @@ export default function App() {
                       enableCollapsedStatusGlyphs
                       showReviewFooter
                       onFinalizeDuplication={(ids) => console.log('Finalize duplication for IDs:', ids)}
+                      showCheckboxColumnAlways
                     />
                     {/* Placeholder for records selection UI */}
                     <div className="flex-1 flex items-center justify-center text-[#5C5A59]">Step 2: Records selection UI goes here.</div>
+                  </div>
+                </div>
+              </div>
+            }
+          />
+          {/* FS v2 Select Records (duplicate of review-records) */}
+          <Route
+            path="/fs-v2/select-records"
+            element={
+              <div className="flex w-full flex-1 self-stretch overflow-hidden">
+                <div className="flex-1 flex flex-col min-h-0">
+                  <FS2StepHeader 
+                    recordId={activeRecord?.ref || 'CF9571A20MAA'}
+                    step={2}
+                    onGoStep1={() => navigate('/fs-v2')}
+                    onGoStep2={() => navigate('/fs-v2/select-records')}
+                  />
+                  <FS2IntroHeader onBack={() => navigate('/fs-v2')} />
+                  <div className="flex w-full flex-1 self-stretch overflow-hidden">
+                    <Sidebar
+                      activeRecord={activeRecordId}
+                      setActiveRecord={setActiveRecordId}
+                      recordData={recordData}
+                      expandTrigger={expandSidebarToken}
+                      disableDuplicationSelection
+                      forceExpanded
+                      hideExpandButton
+                      flattenGroups
+                      enableCollapsedStatusGlyphs
+                      showReviewFooter
+                      onFinalizeDuplication={(ids) => console.log('Finalize duplication for IDs (select-records):', ids)}
+                      showCheckboxColumnAlways
+                    />
+                    {/* Placeholder */}
+                    <div className="flex-1 flex items-center justify-center text-[#5C5A59]">Select Records UI (duplicate)</div>
                   </div>
                 </div>
               </div>

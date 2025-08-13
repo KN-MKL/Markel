@@ -164,11 +164,17 @@ const RecordItem = ({ item, active, onRecordClick, isExpanded, showStickyShadow,
 };
 
 // --- Header (expanded) ---
-const ExpandedHeader = ({ showStickyShadow, showCheckboxColumn = false }) => (
+const ExpandedHeader = ({ showStickyShadow, showCheckboxColumn = false, selectAllEnabled = false, selectAllChecked = false, onToggleSelectAll }) => (
   <div className="sticky top-0 z-20 flex w-full text-[14px] text-[#5C5A59] font-medium leading-5 tracking-[0.1px] bg-[#F0F0F0] py-2 rounded-t-lg">
-    {/* Sticky empty space for checkbox (only when selection column is visible) */}
+    {/* Sticky checkbox header (imaginary space or actual select-all) */}
     {showCheckboxColumn && (
-      <div className="sticky left-0 flex-shrink-0 w-14 bg-[#F0F0F0] z-10"></div>
+      <div className="sticky left-0 flex-shrink-0 w-14 bg-[#F0F0F0] z-10 flex items-center justify-center">
+        {selectAllEnabled ? (
+          <div className="pl-1">
+            <M3Checkbox compact checked={!!selectAllChecked} indeterminate={!selectAllChecked && typeof selectAllChecked !== 'undefined'} onChange={onToggleSelectAll} size={18} square borderWidth={2} uncheckedBorderColor="#807F7B" />
+          </div>
+        ) : null}
+      </div>
     )}
     {/* Sticky Status Header */}
     <div className={`sticky ${showCheckboxColumn ? 'left-14' : 'left-0'} flex-shrink-0 w-20 flex items-center justify-center bg-[#F0F0F0] z-20`}>Status</div>
@@ -407,7 +413,18 @@ const Sidebar = ({ activeRecord, setActiveRecord, recordData, className = '', ex
                   <div className="sticky top-0 z-30 bg-[#F0F0F0]">
                     <div ref={headerHorizontalScrollRef} className="overflow-x-hidden">
                       <div className="p-4 inline-block min-w-full">
-                        <ExpandedHeader showStickyShadow={showStickyShadow} showCheckboxColumn={isDuplicating || showCheckboxColumnAlways} />
+                        <ExpandedHeader
+                          showStickyShadow={showStickyShadow}
+                          showCheckboxColumn={isDuplicating || showCheckboxColumnAlways}
+                          selectAllEnabled={showCheckboxColumnAlways}
+                          selectAllChecked={selectedIds.size === (flattenGroups ? displayItems.length : totalRecords) && selectedIds.size > 0}
+                          onToggleSelectAll={() => {
+                            const items = flattenGroups ? displayItems : list.flatMap(g => g.items);
+                            const allIds = new Set(items.map(i => i.id));
+                            const allSelected = selectedIds.size === allIds.size;
+                            setSelectedIds(allSelected ? new Set() : allIds);
+                          }}
+                        />
                       </div>
                     </div>
                   </div>

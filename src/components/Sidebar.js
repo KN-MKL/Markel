@@ -38,7 +38,36 @@ const RightChevronIcon = () => (
 );
 
 // --- Record Item ---
-const RecordItem = ({ item, active, onRecordClick, isExpanded, showStickyShadow, isDuplicating, isSelected, onToggleSelect }) => {
+// Simple status glyphs for collapsed rows (deterministic by id)
+const EllipsisIcon = () => (
+  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <circle cx="6.5" cy="12" r="1.5" fill="#3C3C3C"/>
+    <circle cx="12" cy="12" r="1.5" fill="#3C3C3C"/>
+    <circle cx="17.5" cy="12" r="1.5" fill="#3C3C3C"/>
+  </svg>
+);
+const PlayIcon = () => (
+  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <rect x="6" y="7" width="2" height="10" rx="1" fill="#3C3C3C"/>
+    <path d="M10 7L18 12L10 17V7Z" fill="#3C3C3C"/>
+  </svg>
+);
+const MinusIcon = () => (
+  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <circle cx="12" cy="12" r="8.5" stroke="#3C3C3C"/>
+    <rect x="8" y="11" width="8" height="2" rx="1" fill="#3C3C3C"/>
+  </svg>
+);
+
+const getCollapsedStatusIcon = (id) => {
+  const n = Number(id) || 0;
+  const idx = n % 3;
+  if (idx === 0) return <EllipsisIcon />;
+  if (idx === 1) return <PlayIcon />;
+  return <MinusIcon />;
+};
+
+const RecordItem = ({ item, active, onRecordClick, isExpanded, showStickyShadow, isDuplicating, isSelected, onToggleSelect, showCollapsedStatus }) => {
   const { id, ref: reference, code, type, suffix, majorClass, minorClass, class: klass, entity, limit, excess, underwriter } = item;
 
   if (isExpanded) {
@@ -112,6 +141,13 @@ const RecordItem = ({ item, active, onRecordClick, isExpanded, showStickyShadow,
       {isDuplicating && (
         <div className="w-10 pl-4 h-full flex flex-col justify-center items-start" onClick={(e) => e.stopPropagation()}>
           <M3Checkbox compact checked={!!isSelected} onChange={() => onToggleSelect(id)} size={18} square borderWidth={2} uncheckedBorderColor="#807F7B" />
+        </div>
+      )}
+      {showCollapsedStatus && (
+        <div className={`w-10 ${isDuplicating ? 'pl-2' : 'pl-4'} h-full flex items-center justify-start`} onClick={(e) => e.stopPropagation()}>
+          <div className="h-6 w-6 bg-[#ECECEC] rounded flex items-center justify-center">
+            {getCollapsedStatusIcon(id)}
+          </div>
         </div>
       )}
       <div className={`flex-1 self-stretch ${isDuplicating ? 'px-2' : 'pl-4 pr-4'} flex flex-col justify-center items-start`}>
@@ -378,6 +414,7 @@ const Sidebar = ({ activeRecord, setActiveRecord, recordData, className = '', ex
                                 isDuplicating={isDuplicating}
                                 isSelected={selectedIds?.has(item.id)}
                                 onToggleSelect={toggleSelect}
+                                showCollapsedStatus={false}
                               />
                             ))
                           : list.map(group => (
@@ -415,6 +452,7 @@ const Sidebar = ({ activeRecord, setActiveRecord, recordData, className = '', ex
                         isDuplicating={isDuplicating}
                         isSelected={selectedIds?.has(item.id)}
                         onToggleSelect={toggleSelect}
+                        showCollapsedStatus
                       />
                     ))
                   : list.map(group => (

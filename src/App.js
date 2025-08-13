@@ -127,6 +127,9 @@ export default function App() {
                       recordData={recordData}
                       expandTrigger={expandSidebarToken}
                       disableDuplicationSelection
+                      forceExpanded
+                      hideExpandButton
+                      flattenGroups
                     />
                     {/* Placeholder for records selection UI */}
                     <div className="flex-1 flex items-center justify-center text-[#5C5A59]">Step 2: Records selection UI goes here.</div>

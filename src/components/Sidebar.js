@@ -200,7 +200,7 @@ const RecordGroup = ({ title, color, isPending, items, activeRecordId, onRecordC
 };
 
 // --- Sidebar ---
-const Sidebar = ({ activeRecord, setActiveRecord, recordData, className = '', expandTrigger, disableDuplicationSelection = false }) => {
+const Sidebar = ({ activeRecord, setActiveRecord, recordData, className = '', expandTrigger, disableDuplicationSelection = false, forceExpanded = false, hideExpandButton = false, flattenGroups = false }) => {
   // Normalize incoming data to groups
   const groups = [
     { key: 'fon', title: 'Moved to FON', color: '#216270', isPending: false },
@@ -213,6 +213,7 @@ const Sidebar = ({ activeRecord, setActiveRecord, recordData, className = '', ex
   const totalRecords = list.reduce((sum, g) => sum + g.items.length, 0);
 
   const [isExpanded, setIsExpanded] = React.useState(false);
+  const expanded = forceExpanded || isExpanded;
   const [isDuplicating, setIsDuplicating] = React.useState(false);
   const [selectedIds, setSelectedIds] = React.useState(new Set());
   const [toast, setToast] = React.useState({ visible: false, count: 0 });
@@ -256,7 +257,7 @@ const Sidebar = ({ activeRecord, setActiveRecord, recordData, className = '', ex
     v.addEventListener('scroll', handleVerticalScroll);
     handleVerticalScroll();
     return () => v.removeEventListener('scroll', handleVerticalScroll);
-  }, [isExpanded]);
+  }, [expanded]);
 
   // Track horizontal scrolling for sticky reference shadow
   const horizontalScrollRef = React.useRef(null);
@@ -269,7 +270,7 @@ const Sidebar = ({ activeRecord, setActiveRecord, recordData, className = '', ex
     h.addEventListener('scroll', onScroll);
     onScroll();
     return () => h.removeEventListener('scroll', onScroll);
-  }, [isExpanded]);
+  }, [expanded]);
 
   const toggleSelect = (id) => {
     setSelectedIds(prev => {
@@ -282,7 +283,7 @@ const Sidebar = ({ activeRecord, setActiveRecord, recordData, className = '', ex
     return (
     <aside
       className={`flex flex-col self-stretch p-4 flex-none transition-all duration-300 ease-in-out ${className}`}
-      style={{ width: isExpanded ? expandedWidth : '312px' }}
+      style={{ width: expanded ? expandedWidth : '312px' }}
     >
       <div className={`flex h-full w-full flex-col justify-between overflow-hidden rounded-lg outline outline-[0.5px] outline-[#ADACA7] bg-transparent`}>
         {/* Header */}
@@ -292,7 +293,9 @@ const Sidebar = ({ activeRecord, setActiveRecord, recordData, className = '', ex
               <span className="text-[#5C5A59] text-[11px] font-medium leading-4 tracking-[0.5px]">{totalRecords}</span>
             </div>
             <span className="flex-1 text-[#5C5A59] text-base font-medium leading-6 tracking-[0.15px]">Records</span>
-            <button onClick={() => setIsExpanded(!isExpanded)} className="p-2 rounded-full hover:bg-gray-100"><ToggleExpandIcon /></button>
+            {!hideExpandButton && (
+              <button onClick={() => setIsExpanded(!isExpanded)} className="p-2 rounded-full hover:bg-gray-100"><ToggleExpandIcon /></button>
+            )}
                         </div>
             {/* Tooltip removed per request */}
                     </div>
@@ -300,12 +303,61 @@ const Sidebar = ({ activeRecord, setActiveRecord, recordData, className = '', ex
         {/* Scrollable area */}
         <div className="relative flex-1">
           <div ref={verticalScrollRef} className="absolute inset-0 overflow-y-auto custom-scrollbar">
-            {isExpanded ? (
+            {expanded ? (
               <div ref={horizontalScrollRef} className="overflow-x-auto custom-scrollbar-x">
                 <div className="p-4 inline-block min-w-full">
                   <ExpandedHeader showStickyShadow={showStickyShadow} showCheckboxColumn={isDuplicating} />
                   <div className="flex flex-col gap-4 mt-2">
-                    {list.map(group => (
+                    {flattenGroups
+                      ? list.flatMap(g => g.items).map(item => (
+                          <RecordItem
+                            key={item.id}
+                            item={item}
+                            active={String(item.id) === String(activeRecord)}
+                            onRecordClick={setActiveRecord}
+                            isExpanded={true}
+                            showStickyShadow={showStickyShadow}
+                            isDuplicating={isDuplicating}
+                            isSelected={selectedIds?.has(item.id)}
+                            onToggleSelect={toggleSelect}
+                          />
+                        ))
+                      : list.map(group => (
+                          <RecordGroup
+                            key={group.key}
+                            title={group.title}
+                            color={group.color}
+                            isPending={group.isPending}
+                            items={group.items}
+                            activeRecordId={activeRecord}
+                            onRecordClick={setActiveRecord}
+                            isExpanded={expanded}
+                            showStickyShadow={showStickyShadow}
+                            isDuplicating={isDuplicating}
+                            selectedIds={selectedIds}
+                            toggleSelect={toggleSelect}
+                          />
+                        ))}
+                  </div>
+                </div>
+              </div>
+            ) : (
+              <div className="p-4 flex flex-col gap-4">
+                {flattenGroups
+                  ? list.flatMap(g => g.items).map(item => (
+                      <RecordItem
+                        key={item.id}
+                        item={item}
+                        active={String(item.id) === String(activeRecord)}
+                        onRecordClick={setActiveRecord}
+                        isExpanded={false}
+                        showStickyShadow={false}
+                        isDuplicating={isDuplicating}
+                        isSelected={selectedIds?.has(item.id)}
+                        onToggleSelect={toggleSelect}
+                      />
+                    ))
+                  : list.map(group => (
                       <RecordGroup
                         key={group.key}
                         title={group.title}
@@ -314,34 +366,13 @@ const Sidebar = ({ activeRecord, setActiveRecord, recordData, className = '', ex
                         items={group.items}
                         activeRecordId={activeRecord}
                         onRecordClick={setActiveRecord}
-                        isExpanded={isExpanded}
-                        showStickyShadow={showStickyShadow}
+                        isExpanded={false}
+                        showStickyShadow={false}
                         isDuplicating={isDuplicating}
                         selectedIds={selectedIds}
                         toggleSelect={toggleSelect}
                       />
                     ))}
-                    </div>
-                </div>
-              </div>
-            ) : (
-              <div className="p-4 flex flex-col gap-4">
-                {list.map(group => (
-                  <RecordGroup
-                    key={group.key}
-                    title={group.title}
-                    color={group.color}
-                    isPending={group.isPending}
-                    items={group.items}
-                    activeRecordId={activeRecord}
-                    onRecordClick={setActiveRecord}
-                    isExpanded={false}
-                    showStickyShadow={false}
-                    isDuplicating={isDuplicating}
-                    selectedIds={selectedIds}
-                    toggleSelect={toggleSelect}
-                  />
-                ))}
               </div>
             )}
           </div>

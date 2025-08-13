@@ -88,7 +88,7 @@ export default function App() {
               <div className="flex w-full flex-1 self-stretch overflow-hidden">
                 <div className="flex-1 flex flex-col min-h-0">
                   {/* Intro header at very top */}
-                  <FS2IntroHeader />
+                  <FS2IntroHeader onBack={() => navigate('/fs-v1')} />
                   {/* Step tracker below */}
                   <FS2StepHeader 
                     recordId={activeRecord?.ref || 'CF9571A20MAA'}
@@ -116,7 +116,7 @@ export default function App() {
             element={
               <div className="flex w-full flex-1 self-stretch overflow-hidden">
                 <div className="flex-1 flex flex-col min-h-0">
-                  <FS2IntroHeader />
+                  <FS2IntroHeader onBack={() => navigate('/fs-v1')} />
                   <FS2StepHeader 
                     recordId={activeRecord?.ref || 'CF9571A20MAA'}
                     step={2}

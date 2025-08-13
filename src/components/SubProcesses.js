@@ -2,6 +2,7 @@ import React from 'react';
 import M3Checkbox from './M3Checkbox';
 import Icon from './Icon';
 import DiaryChip from './DiaryChip';
+import GenericChecksTab from './GenericChecksTab';
 
 // --- Sub Tasks helper UI ---
 // Renders status tokens/icons matching the provided SVG set
@@ -278,7 +279,7 @@ const SubProcesses = ({ onOpenFrontSheet, records = [], activeRecord }) => {
             </div>
           </section>
 
-          {/* Right-most column - always show Pre-Bind Checks content; other steps no-op */}
+          {/* Right-most column - switch content per active step using the cloned component */}
           {
           <section className="flex flex-col gap-3 h-full min-h-0 rounded-lg border border-[#E4E3DF] bg-white p-4 overflow-y-auto">
             {/* Pre-bind header block */}
@@ -393,6 +394,19 @@ const SubProcesses = ({ onOpenFrontSheet, records = [], activeRecord }) => {
             </div>
           </section>
           }
+          {/* Render cloned content for other tabs below current section to replace in next step */}
+          {activeStep === 'Ready for FON' && (
+            <GenericChecksTab title="Ready for FON" records={records} />
+          )}
+          {activeStep === 'Submit Front Sheet' && (
+            <GenericChecksTab title="Submit Front Sheet" records={records} />
+          )}
+          {activeStep === 'Under UST Review' && (
+            <GenericChecksTab title="Under UST Review" records={records} />
+          )}
+          {activeStep === 'Written' && (
+            <GenericChecksTab title="Written" records={records} />
+          )}
         </div>
       </div>
     </div>

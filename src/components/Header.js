@@ -31,12 +31,19 @@ export const FS2StepHeader = ({ recordId = 'CF9571A20MAA', step = 1, onGoStep1, 
     );
 };
 
-export const FS2IntroHeader = () => (
+export const FS2IntroHeader = ({ onBack }) => (
     <div className="w-full bg-white border-x border-t border-[#D9D9D6] px-4 py-4">
         <div className="flex items-start gap-4">
-            <div className="w-12 h-12 rounded-full flex items-center justify-center">
-                <div className="w-6 h-6 bg-[#666666] rounded" />
-            </div>
+            <button type="button" onClick={onBack} aria-label="Back" className="w-12 h-12 rounded-full flex items-center justify-center hover:bg-gray-50">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <g clipPath="url(#clip0_back)">
+                        <path d="M20 11H7.83L13.42 5.41L12 4L4 12L12 20L13.41 18.59L7.83 13H20V11Z" fill="#666666"/>
+                    </g>
+                    <defs>
+                        <clipPath id="clip0_back"><rect width="24" height="24" fill="white"/></clipPath>
+                    </defs>
+                </svg>
+            </button>
             <div className="flex-1 flex flex-col gap-2 py-2">
                 <div className="text-[22px] leading-7 font-medium text-[#3C3C3C]">Review and Modify Data for Duplication</div>
                 <div className="text-[16px] leading-6 tracking-[0.5px] text-[#5C5A59]">

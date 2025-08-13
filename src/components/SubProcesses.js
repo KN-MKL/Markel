@@ -158,7 +158,7 @@ const SubProcesses = ({ onOpenFrontSheet, records = [], activeRecord }) => {
   const toDoCount = 7; // placeholder counts
   const totalCount = 10;
   return (
-    <div className="w-full flex-1 min-h-0 overflow-hidden flex flex-col">
+    <div className="w-full h-full flex-1 min-h-0 overflow-hidden flex flex-col">
       {/* Custom header as per design */}
       <div className="w-full border border-[#D9D9D6] border-b-0 bg-white px-6 py-6 flex items-center justify-between">
         <div className="flex items-center gap-4">
@@ -189,9 +189,9 @@ const SubProcesses = ({ onOpenFrontSheet, records = [], activeRecord }) => {
         </button>
       </div>
 
-        <div className="grid grid-cols-[auto_1fr] gap-6 flex-1 min-h-0 p-4 overflow-hidden">
+        <div className="grid grid-cols-[auto_1fr] gap-6 flex-1 min-h-0 p-4 overflow-hidden h-full">
         {/* Left: Sub Tasks */}
-        <aside className="flex flex-col">
+        <aside className="flex flex-col h-full min-h-0">
           <div className="flex items-center justify-between px-4 pt-2 pb-3">
             <h2 className="text-[#5C5A59] text-[20px] font-medium leading-6 tracking-[0.15px]">Sub Tasks</h2>
             <button className="rounded-md p-2" aria-label="Tasks menu">
@@ -237,7 +237,7 @@ const SubProcesses = ({ onOpenFrontSheet, records = [], activeRecord }) => {
                 <Step index={7} title="Written" active={activeStep === 'Written'} onClick={() => setActiveStep('Written')} />
               </div>
             </div>
-            <div className="pt-4">
+            <div className="pt-4 mt-auto">
               <button onClick={onOpenFrontSheet} className="rounded border border-[#D9D9D6] px-4 py-2 text-sm text-[#3C3C3C] hover:bg-gray-50 w-full">
                 Open Front Sheet
               </button>
@@ -252,7 +252,7 @@ const SubProcesses = ({ onOpenFrontSheet, records = [], activeRecord }) => {
           ) : activeStep === 'Written' ? (
             <WrittenTab records={records} />
           ) : (
-          <section className="flex flex-col gap-3 h-full min-h-0 rounded-lg border border-[#E4E3DF] bg-white p-4 overflow-auto">
+          <section className="flex flex-col gap-3 h-full min-h-0 rounded-lg border border-[#E4E3DF] bg-white p-4 overflow-hidden">
             {/* Pre-bind header block */}
             <div className="flex items-center justify-between">
               <div className="flex-1">
@@ -297,7 +297,7 @@ const SubProcesses = ({ onOpenFrontSheet, records = [], activeRecord }) => {
             </div>
 
             {/* Policy Record Checks container (fills remaining height) */}
-            <div className="mt-4 flex-1 min-h-0">
+            <div className="mt-4 flex-1 min-h-[500px]">
               <div className="h-full flex flex-col rounded-lg overflow-hidden outline outline-1 outline-[#D9D9D6]">
                 {/* Header */}
                 <div className="w-full bg-[#FEFEFD] px-4 py-3 rounded-t-lg flex items-center justify-between">

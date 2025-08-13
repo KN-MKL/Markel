@@ -40,39 +40,38 @@ export default function App() {
 
   return (
     <div className="flex h-screen w-full flex-col items-start justify-start bg-[#F5F5F5] font-sans">
-      {/* Header only on front-sheet page */}
-      {location.pathname.endsWith('/front-sheet') ? (
-        <Header
-          onDuplicate={() => setExpandSidebarToken(prev => prev + 1)}
-          onClose={goToSubProcesses}
-        />
-      ) : null}
+      {/* Header shown on both routes to mirror first fold */}
+      <Header
+        onDuplicate={() => setExpandSidebarToken(prev => prev + 1)}
+        onClose={goToSubProcesses}
+      />
 
-      <Routes>
-        <Route
-          path="/sub-processes"
-          element={
-            <div className="flex w-full flex-1 self-stretch min-h-0">
+      <div className="flex w-full flex-1 self-stretch min-h-0">
+        <Routes>
+          <Route
+            path="/sub-processes"
+            element={
               <SubProcesses onOpenFrontSheet={goToFrontSheet} records={recordData.fon} activeRecord={activeRecord} />
-            </div>
-          }
-        />
-        <Route
-          path="/front-sheet"
-          element={
-            <div className="flex w-full flex-1 self-stretch overflow-hidden">
-              <Sidebar
-                activeRecord={activeRecordId}
-                setActiveRecord={setActiveRecordId}
-                recordData={recordData}
-                expandTrigger={expandSidebarToken}
-              />
-              <MainContent record={activeRecord} />
-            </div>
-          }
-        />
-      </Routes>
+            }
+          />
+          <Route
+            path="/front-sheet"
+            element={
+              <div className="flex w-full flex-1 self-stretch overflow-hidden">
+                <Sidebar
+                  activeRecord={activeRecordId}
+                  setActiveRecord={setActiveRecordId}
+                  recordData={recordData}
+                  expandTrigger={expandSidebarToken}
+                />
+                <MainContent record={activeRecord} />
+              </div>
+            }
+          />
+        </Routes>
+      </div>
 
+      {/* Footer visible only on front sheet to preserve layout parity when needed */}
       {location.pathname.endsWith('/front-sheet') ? <Footer /> : null}
     </div>
   );

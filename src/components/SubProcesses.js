@@ -280,7 +280,7 @@ const SubProcesses = ({ onOpenFrontSheet, records = [], activeRecord }) => {
           </section>
 
           {/* Right-most column - switch content per active step using the cloned component */}
-          {
+          {activeStep === 'Pre-Bind Checks' ? (
           <section className="flex flex-col gap-3 h-full min-h-0 rounded-lg border border-[#E4E3DF] bg-white p-4 overflow-y-auto">
             {/* Pre-bind header block */}
             <div className="flex items-center justify-between">
@@ -393,19 +393,8 @@ const SubProcesses = ({ onOpenFrontSheet, records = [], activeRecord }) => {
               </div>
             </div>
           </section>
-          }
-          {/* Render cloned content for other tabs below current section to replace in next step */}
-          {activeStep === 'Ready for FON' && (
-            <GenericChecksTab title="Ready for FON" records={records} />
-          )}
-          {activeStep === 'Submit Front Sheet' && (
-            <GenericChecksTab title="Submit Front Sheet" records={records} />
-          )}
-          {activeStep === 'Under UST Review' && (
-            <GenericChecksTab title="Under UST Review" records={records} />
-          )}
-          {activeStep === 'Written' && (
-            <GenericChecksTab title="Written" records={records} />
+          ) : (
+            <GenericChecksTab title={activeStep} records={records} />
           )}
         </div>
       </div>

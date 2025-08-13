@@ -200,7 +200,7 @@ const RecordGroup = ({ title, color, isPending, items, activeRecordId, onRecordC
 };
 
 // --- Sidebar ---
-const Sidebar = ({ activeRecord, setActiveRecord, recordData, className = '', expandTrigger, disableDuplicationSelection = false, forceExpanded = false, hideExpandButton = false, flattenGroups = false }) => {
+const Sidebar = ({ activeRecord, setActiveRecord, recordData, className = '', expandTrigger, disableDuplicationSelection = false, forceExpanded = false, hideExpandButton = false, flattenGroups = false, showSelectionActionBar = true }) => {
   // Normalize incoming data to groups
   const groups = [
     { key: 'fon', title: 'Moved to FON', color: '#216270', isPending: false },
@@ -385,8 +385,8 @@ const Sidebar = ({ activeRecord, setActiveRecord, recordData, className = '', ex
         <div className="self-stretch p-4 bg-white border-t border-gray-200 flex items-center justify-start">
           <span className="text-[#3C3C3C] text-xs font-medium leading-4 tracking-[0.5px]">{2} of {totalRecords} sub-tasks incomplete</span>
         </div>
-        {/* Selection action bar (inside panel, bordered and rounded per design) */}
-        {isExpanded && isDuplicating && (
+        {/* Selection action bar (inside panel) */}
+        {isExpanded && isDuplicating && showSelectionActionBar && (
           <div className="self-stretch px-4 pb-4">
             <div className="flex items-center justify-between rounded-b-lg border-x border-b border-[#D9D9D6] bg-white px-4 py-3">
               <div className="text-[#3C3C3C] text-[12px] font-medium leading-4 tracking-[0.5px]">

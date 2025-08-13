@@ -87,6 +87,7 @@ export default function App() {
                   setActiveRecord={setActiveRecordId}
                   recordData={recordData}
                   expandTrigger={expandSidebarToken}
+                  showSelectionActionBar={false}
                 />
                 <MainContent key={`fs-v1-${fsFormKey}`} record={activeRecord} />
               </div>

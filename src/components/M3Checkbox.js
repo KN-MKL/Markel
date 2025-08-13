@@ -19,11 +19,13 @@ const M3Checkbox = ({
     const [isHover, setIsHover] = React.useState(false);
     const containerAlignClass = compact ? 'items-center' : 'items-start';
     const tickMarginClass = compact ? 'mt-0' : 'mt-1';
+    // Default checked is solid near-black (#1C1C1C) as per preference; hover darkens slightly
+    const checkedDefault = '#1C1C1C';
     const effectiveBorder = checked || indeterminate
-        ? (isHover ? '#2E2E2E' : checkedBgColor)
+        ? (isHover ? '#151515' : checkedDefault)
         : (isHover ? '#3C3C3C' : uncheckedBorderColor);
     const effectiveBg = checked || indeterminate
-        ? (isHover ? '#2E2E2E' : checkedBgColor)
+        ? (isHover ? '#151515' : checkedDefault)
         : (isHover ? '#F5F5F5' : '#FFFFFF');
     const boxStyle = {
         width: `${size}px`,

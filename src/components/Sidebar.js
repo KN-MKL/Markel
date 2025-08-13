@@ -61,7 +61,7 @@ const RecordItem = ({ item, active, onRecordClick, isExpanded, showStickyShadow,
                 <div className="absolute left-[-16px] top-1/2 -translate-y-1/2 w-1 h-11 bg-[#3C3C3C] rounded-r-lg z-30 pointer-events-none" />
               )}
               <div onClick={(e) => e.stopPropagation()} className="pl-1">
-                <M3Checkbox compact checked={!!isSelected} onChange={() => onToggleSelect(item.id)} size={18} square borderWidth={2} uncheckedBorderColor="#807F7B" checkedBgColor="#807F7B" />
+                <M3Checkbox compact checked={!!isSelected} onChange={() => onToggleSelect(item.id)} size={18} square borderWidth={2} uncheckedBorderColor="#807F7B" />
               </div>
             </div>
           )}
@@ -111,7 +111,7 @@ const RecordItem = ({ item, active, onRecordClick, isExpanded, showStickyShadow,
       {active && <div className="absolute left-[-16px] top-1/2 -translate-y-1/2 w-1 h-10 bg-[#3C3C3C] rounded-r-lg" />}
       {isDuplicating && (
         <div className="w-10 pl-4 h-full flex flex-col justify-center items-start" onClick={(e) => e.stopPropagation()}>
-          <M3Checkbox compact checked={!!isSelected} onChange={() => onToggleSelect(id)} size={18} square borderWidth={2} uncheckedBorderColor="#807F7B" checkedBgColor="#807F7B" />
+          <M3Checkbox compact checked={!!isSelected} onChange={() => onToggleSelect(id)} size={18} square borderWidth={2} uncheckedBorderColor="#807F7B" />
         </div>
       )}
       <div className={`flex-1 self-stretch ${isDuplicating ? 'px-2' : 'pl-4 pr-4'} flex flex-col justify-center items-start`}>

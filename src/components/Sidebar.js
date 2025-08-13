@@ -132,31 +132,31 @@ const RecordItem = ({ item, active, onRecordClick, isExpanded, showStickyShadow,
 
 // --- Header (expanded) ---
 const ExpandedHeader = ({ showStickyShadow, showCheckboxColumn = false }) => (
-  <div className="sticky top-0 z-20 flex w-full text-[14px] text-[#5C5A59] font-medium leading-5 tracking-[0.1px] bg-[#FEFEFD] py-2 rounded-t-lg">
+  <div className="sticky top-0 z-20 flex w-full text-[14px] text-[#5C5A59] font-medium leading-5 tracking-[0.1px] bg-[#F0F0F0] py-2 rounded-t-lg">
     {/* Sticky empty space for checkbox (only when selection column is visible) */}
     {showCheckboxColumn && (
       <div className="sticky left-0 flex-shrink-0 w-14 bg-[#F0F0F0] z-10"></div>
     )}
     {/* Sticky Status Header */}
-    <div className={`sticky ${showCheckboxColumn ? 'left-14' : 'left-0'} flex-shrink-0 w-20 flex items-center justify-center bg-[#FEFEFD] z-20`}>Status</div>
+    <div className={`sticky ${showCheckboxColumn ? 'left-14' : 'left-0'} flex-shrink-0 w-20 flex items-center justify-center bg-[#F0F0F0] z-20`}>Status</div>
     {/* Sticky Reference Header */}
-    <div className={`sticky ${showCheckboxColumn ? 'left-[8.5rem]' : 'left-[5rem]'} flex-shrink-0 w-40 px-2 bg-[#FEFEFD] z-10 relative`}>
+    <div className={`sticky ${showCheckboxColumn ? 'left-[8.5rem]' : 'left-[5rem]'} flex-shrink-0 w-40 px-2 bg-[#F0F0F0] z-10 relative`}>
       Reference
       {showStickyShadow && (
         <>
-          <div className="absolute left-[-100vw] right-full bg-[#FEFEFD] pointer-events-none" style={{ top: '-8px', bottom: '-8px' }} />
+          <div className="absolute left-[-100vw] right-full bg-[#F0F0F0] pointer-events-none" style={{ top: '-8px', bottom: '-8px' }} />
           <div className="absolute right-0 pointer-events-none" style={{ top: '-8px', bottom: '-8px', width: '12px', background: 'linear-gradient(to right, rgba(0,0,0,0.06), rgba(0,0,0,0))' }} />
         </>
       )}
     </div>
     {/* Scrollable Headers */}
-    <div className="flex-shrink-0 w-40 px-2 bg-[#FEFEFD]">Major Class</div>
-    <div className="flex-shrink-0 w-40 px-2 bg-[#FEFEFD]">Minor Class</div>
-    <div className="flex-shrink-0 w-32 px-2 bg-[#FEFEFD]">Class</div>
-    <div className="flex-shrink-0 w-32 px-2 bg-[#FEFEFD]">Entity</div>
-    <div className="flex-shrink-0 w-32 px-2 bg-[#FEFEFD]">Limit</div>
-    <div className="flex-shrink-0 w-32 px-2 bg-[#FEFEFD]">Excess</div>
-    <div className="flex-shrink-0 w-32 px-2 bg-[#FEFEFD]">Underwriter</div>
+    <div className="flex-shrink-0 w-40 px-2 bg-[#F0F0F0]">Major Class</div>
+    <div className="flex-shrink-0 w-40 px-2 bg-[#F0F0F0]">Minor Class</div>
+    <div className="flex-shrink-0 w-32 px-2 bg-[#F0F0F0]">Class</div>
+    <div className="flex-shrink-0 w-32 px-2 bg-[#F0F0F0]">Entity</div>
+    <div className="flex-shrink-0 w-32 px-2 bg-[#F0F0F0]">Limit</div>
+    <div className="flex-shrink-0 w-32 px-2 bg-[#F0F0F0]">Excess</div>
+    <div className="flex-shrink-0 w-32 px-2 bg-[#F0F0F0]">Underwriter</div>
   </div>
 );
 

@@ -40,11 +40,13 @@ export default function App() {
 
   return (
     <div className="flex h-screen w-full flex-col items-start justify-start bg-[#F5F5F5] font-sans">
-      {/* Header shown on both routes to mirror first fold */}
-      <Header
-        onDuplicate={() => setExpandSidebarToken(prev => prev + 1)}
-        onClose={goToSubProcesses}
-      />
+      {/* Header hidden on Sub Processes; visible on Front Sheet only */}
+      {location.pathname.endsWith('/front-sheet') ? (
+        <Header
+          onDuplicate={() => setExpandSidebarToken(prev => prev + 1)}
+          onClose={goToSubProcesses}
+        />
+      ) : null}
 
       <div className="flex w-full flex-1 self-stretch min-h-0">
         <Routes>

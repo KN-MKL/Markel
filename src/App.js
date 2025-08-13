@@ -19,7 +19,6 @@ export default function App() {
   const normalizedPath = location.pathname.replace(/\/+$/, '');
   const isFSV1 = normalizedPath === '/fs-v1' || normalizedPath.startsWith('/fs-v1/');
   const isFSV2Main = normalizedPath === '/fs-v2';
-  const isFSV2SelectRecords = normalizedPath === '/fs-v2/select-records';
 
   // Populate records to mirror Figma density (total 20)
   const generate = (startId, count, ref = 'CF9571A20MAA') => (
@@ -59,7 +58,7 @@ export default function App() {
          <Header
            onDuplicate={() => {
              if (isFSV2Main) {
-               navigate('/fs-v2/select-records');
+               navigate('/fs-v2/review-records');
              } else {
                setExpandSidebarToken(prev => prev + 1);
              }
@@ -108,9 +107,9 @@ export default function App() {
               </div>
             }
           />
-          {/* FS v2 Step 2 slug */}
+          {/* FS v2 Step 2 slug (review records) */}
           <Route
-            path="/fs-v2/select-records"
+            path="/fs-v2/review-records"
             element={
               <div className="flex w-full flex-1 self-stretch overflow-hidden">
                 <div className="flex-1 flex flex-col min-h-0">
@@ -118,9 +117,9 @@ export default function App() {
                     recordId={activeRecord?.ref || 'CF9571A20MAA'}
                     step={2}
                     onGoStep1={() => navigate('/fs-v2')}
-                    onGoStep2={() => navigate('/fs-v2/select-records')}
+                    onGoStep2={() => navigate('/fs-v2/review-records')}
                   />
-                  <FS2IntroHeader onBack={() => navigate('/fs-v1')} />
+                  <FS2IntroHeader onBack={() => navigate('/fs-v2')} />
                   <div className="flex w-full flex-1 self-stretch overflow-hidden">
                     <Sidebar
                       activeRecord={activeRecordId}

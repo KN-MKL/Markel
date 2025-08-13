@@ -122,7 +122,7 @@ export default function App() {
                     onGoStep1={() => navigate('/fs-v2')}
                     onGoStep2={() => navigate('/fs-v2/review-records')}
                   />
-                  <FS2IntroHeader onBack={() => navigate('/fs-v2')} />
+                  <FS2IntroHeader onBack={() => navigate('/fs-v2')} title="Select Records for Data Duplication" subtitle="Select the records to apply the duplicated data. Confirm your choices once selected." />
                   <div className="flex w-full flex-1 self-stretch overflow-hidden">
                     <Sidebar
                       activeRecord={activeRecordId}
@@ -157,7 +157,7 @@ export default function App() {
                     onGoStep1={() => navigate('/fs-v2')}
                     onGoStep2={() => navigate('/fs-v2/select-records')}
                   />
-                  <FS2IntroHeader onBack={() => navigate('/fs-v2')} />
+                  <FS2IntroHeader onBack={() => navigate('/fs-v2')} title="Select Records for Data Duplication" subtitle="Select the records to apply the duplicated data. Confirm your choices once selected." />
                   <div className="flex w-full flex-1 self-stretch overflow-hidden">
                     <Sidebar
                       activeRecord={activeRecordId}

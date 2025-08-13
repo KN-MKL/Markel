@@ -9,12 +9,12 @@ const M3Checkbox = ({
     description = "",
     indeterminate = false,
     compact = false,
-    // Design-tuning props (non-breaking defaults)
-    size = 16,
-    square = false,
+    // Writebacks style is the new app-wide default
+    size = 18,
+    square = true,
     borderWidth = 2,
-    uncheckedBorderColor = '#9CA3AF', // tailwind gray-400
-    checkedBgColor = '#4B5563', // tailwind gray-600
+    uncheckedBorderColor = '#807F7B',
+    checkedBgColor = '#3C3C3C',
 }) => {
     const containerAlignClass = compact ? 'items-center' : 'items-start';
     const tickMarginClass = compact ? 'mt-0' : 'mt-1';

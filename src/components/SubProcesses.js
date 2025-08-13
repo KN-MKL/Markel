@@ -320,8 +320,8 @@ const SubProcesses = ({ onOpenFrontSheet, records = [], activeRecord }) => {
                   <RecordRow key={i} refId={typeof r === 'string' ? r : r.ref} />
                 ))}
               </div>
-                  {/* In-card footer, sticky within the grey scroll area */}
-                  <div className="bg-white px-4 py-2 border-t border-[#D9D9D6] w-full sticky bottom-0">
+                  {/* In-card footer, sticky within the grey scroll area and spanning full width */}
+                  <div className="bg-white -mx-2 px-6 py-2 border-t border-[#D9D9D6] sticky bottom-0 z-10">
                     <div className="text-[#3C3C3C] text-[12px] font-medium leading-4 tracking-[0.5px]">{`{Xn} of {Yn} incomplete statuses`}</div>
                   </div>
                 </div>

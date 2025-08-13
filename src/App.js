@@ -41,8 +41,8 @@ export default function App() {
 
   return (
     <div className="flex h-screen w-full flex-col items-start justify-start bg-[#F5F5F5] font-sans">
-      {/* Header hidden on Sub Processes; visible on Front Sheet only */}
-      {location.pathname.endsWith('/front-sheet') ? (
+      {/* Header shown on FS routes */}
+      {['/fs-v1','/fs-v2','/front-sheet'].some(p => location.pathname.endsWith(p)) ? (
         <Header
           onDuplicate={() => setExpandSidebarToken(prev => prev + 1)}
           onClose={goToSubProcesses}

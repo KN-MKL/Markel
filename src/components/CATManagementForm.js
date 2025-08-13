@@ -1,35 +1,19 @@
 import React, { useState } from 'react';
 import M3TextField from './M3TextField';
+import M3Checkbox from './M3Checkbox';
 
-// WritebackCheckbox component from commit 40ab18c
+// Standardized writeback checkbox using the new M3Checkbox style
 const WritebackCheckbox = ({ label, id }) => { 
     const [checked, setChecked] = useState(false); 
     return (
-        <div 
-            className="flex-1 min-w-[120px] p-4 bg-white rounded-lg border border-gray-200 flex items-center justify-between cursor-pointer hover:bg-gray-50 transition-colors"
+        <button 
+            type="button"
+            className="flex-1 min-w-[120px] p-4 bg-white rounded-lg border border-gray-200 flex items-center justify-between hover:bg-gray-50 transition-colors text-left"
             onClick={() => setChecked(!checked)}
         >
-            <label htmlFor={id} className="text-sm text-gray-700 truncate flex-1 min-w-0 cursor-pointer">{label}</label>
-            <div className="flex-shrink-0 ml-2">
-                {checked ? (
-                    <div data-state="Enabled" data-type="Selected" style={{width: '100%', height: '100%', justifyContent: 'center', alignItems: 'center', display: 'inline-flex'}}>
-                        <div style={{padding: 11, borderRadius: 100, justifyContent: 'center', alignItems: 'center', display: 'flex'}}>
-                            <div style={{width: 18, height: 18, borderRadius: 2, background: '#3C3C3C', position: 'relative'}}>
-                                <svg width="12" height="9" viewBox="0 0 12 9" fill="none" xmlns="http://www.w3.org/2000/svg" style={{position: 'absolute', left: 3, top: 4.5}}>
-                                    <path d="M1 4.5L4.33333 8L11 1" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                                </svg>
-                            </div>
-                        </div>
-                    </div>
-                ) : (
-                    <div data-state="Enabled" data-type="Unselected" style={{width: '100%', height: '100%', justifyContent: 'center', alignItems: 'center', display: 'inline-flex'}}>
-                        <div style={{padding: 11, borderRadius: 100, justifyContent: 'center', alignItems: 'center', display: 'flex'}}>
-                            <div style={{width: 18, height: 18, borderRadius: 2, border: '2px #807F7B solid'}} />
-                        </div>
-                    </div>
-                )}
-            </div>
-        </div>
+            <span className="text-sm text-gray-700 truncate min-w-0">{label}</span>
+            <M3Checkbox checked={checked} onChange={() => setChecked(!checked)} compact />
+        </button>
     ); 
 };
 

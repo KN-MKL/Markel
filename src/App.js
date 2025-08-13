@@ -133,7 +133,6 @@ export default function App() {
                       forceExpanded
                       hideExpandButton
                       flattenGroups
-                      showStatusRail
                       enableCollapsedStatusGlyphs
                     />
                     {/* Placeholder for records selection UI */}

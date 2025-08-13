@@ -200,7 +200,7 @@ const RecordGroup = ({ title, color, isPending, items, activeRecordId, onRecordC
 };
 
 // --- Sidebar ---
-const Sidebar = ({ activeRecord, setActiveRecord, recordData, className = '', expandTrigger, disableDuplicationSelection = false, forceExpanded = false, hideExpandButton = false, flattenGroups = false, showSelectionActionBar = true }) => {
+const Sidebar = ({ activeRecord, setActiveRecord, recordData, className = '', expandTrigger, disableDuplicationSelection = false, forceExpanded = false, hideExpandButton = false, flattenGroups = false, showSelectionActionBar = true, showStatusRail = false }) => {
   // Normalize incoming data to groups
   const groups = [
     { key: 'fon', title: 'Moved to FON', color: '#216270', isPending: false },
@@ -218,6 +218,7 @@ const Sidebar = ({ activeRecord, setActiveRecord, recordData, className = '', ex
   const [selectedIds, setSelectedIds] = React.useState(new Set());
   const [toast, setToast] = React.useState({ visible: false, count: 0 });
   const [showDupHint, setShowDupHint] = React.useState(false);
+  const [selectedStatusKey, setSelectedStatusKey] = React.useState('all');
 
   // Handle external trigger (Duplicate Binding Data button)
   // First click -> enter duplication mode. Next click -> complete duplication and show toast.
@@ -294,6 +295,39 @@ const Sidebar = ({ activeRecord, setActiveRecord, recordData, className = '', ex
     });
   };
 
+  const flattenedItems = React.useMemo(() => list.flatMap(g => g.items), [list]);
+  const displayItems = React.useMemo(() => (
+    flattenGroups
+      ? (selectedStatusKey === 'all'
+          ? flattenedItems
+          : (list.find(g => g.key === selectedStatusKey)?.items || []))
+      : null
+  ), [flattenGroups, flattenedItems, list, selectedStatusKey]);
+
+  const StatusRail = () => (
+    <div className="flex-shrink-0 w-40 p-4 pr-2">
+      <div className="flex flex-col gap-2">
+        <button
+          onClick={() => setSelectedStatusKey('all')}
+          className={`text-sm text-left rounded px-3 py-2 ${selectedStatusKey === 'all' ? 'bg-[#E9F0F2] text-[#216270]' : 'hover:bg-gray-100 text-[#3C3C3C]'}`}
+        >
+          All ({flattenedItems.length})
+        </button>
+        {list.map(g => (
+          <button
+            key={g.key}
+            onClick={() => setSelectedStatusKey(g.key)}
+            className={`text-sm text-left rounded px-3 py-2 flex items-center gap-2 ${selectedStatusKey === g.key ? 'bg-[#E9F0F2] text-[#216270]' : 'hover:bg-gray-100 text-[#3C3C3C]'}`}
+          >
+            <span className={`inline-block w-2 h-2 rounded-full ${g.isPending ? 'border border-[#FF7133]' : ''}`} style={{ backgroundColor: g.color }} />
+            <span className="flex-1 truncate">{g.title}</span>
+            <span className="text-xs text-[#5C5A59]">{g.items.length}</span>
+          </button>
+        ))}
+      </div>
+    </div>
+  );
+
     return (
     <aside
       className={`flex flex-col self-stretch p-4 flex-none transition-all duration-300 ease-in-out ${className}`}
@@ -318,52 +352,55 @@ const Sidebar = ({ activeRecord, setActiveRecord, recordData, className = '', ex
         <div className="relative flex-1">
           <div ref={verticalScrollRef} className="absolute inset-0 overflow-y-auto custom-scrollbar">
             {expanded ? (
-              <>
-                {/* Sticky header synced with horizontal scroll */}
-                <div className="sticky top-0 z-30 bg-[#F0F0F0]">
-                  <div ref={headerHorizontalScrollRef} className="overflow-x-hidden">
+              <div className="flex w-full">
+                {showStatusRail && <StatusRail />}
+                <div className="flex-1 min-w-0">
+                  {/* Sticky header synced with horizontal scroll */}
+                  <div className="sticky top-0 z-30 bg-[#F0F0F0]">
+                    <div ref={headerHorizontalScrollRef} className="overflow-x-hidden">
+                      <div className="p-4 inline-block min-w-full">
+                        <ExpandedHeader showStickyShadow={showStickyShadow} showCheckboxColumn={isDuplicating} />
+                      </div>
+                    </div>
+                  </div>
+                  <div ref={horizontalScrollRef} className="overflow-x-auto custom-scrollbar-x">
                     <div className="p-4 inline-block min-w-full">
-                      <ExpandedHeader showStickyShadow={showStickyShadow} showCheckboxColumn={isDuplicating} />
+                      <div className="flex flex-col gap-4 mt-2">
+                        {flattenGroups
+                          ? displayItems.map(item => (
+                              <RecordItem
+                                key={item.id}
+                                item={item}
+                                active={String(item.id) === String(activeRecord)}
+                                onRecordClick={setActiveRecord}
+                                isExpanded={true}
+                                showStickyShadow={showStickyShadow}
+                                isDuplicating={isDuplicating}
+                                isSelected={selectedIds?.has(item.id)}
+                                onToggleSelect={toggleSelect}
+                              />
+                            ))
+                          : list.map(group => (
+                              <RecordGroup
+                                key={group.key}
+                                title={group.title}
+                                color={group.color}
+                                isPending={group.isPending}
+                                items={group.items}
+                                activeRecordId={activeRecord}
+                                onRecordClick={setActiveRecord}
+                                isExpanded={expanded}
+                                showStickyShadow={showStickyShadow}
+                                isDuplicating={isDuplicating}
+                                selectedIds={selectedIds}
+                                toggleSelect={toggleSelect}
+                              />
+                            ))}
+                      </div>
                     </div>
                   </div>
                 </div>
-                <div ref={horizontalScrollRef} className="overflow-x-auto custom-scrollbar-x">
-                  <div className="p-4 inline-block min-w-full">
-                    <div className="flex flex-col gap-4 mt-2">
-                    {flattenGroups
-                      ? list.flatMap(g => g.items).map(item => (
-                          <RecordItem
-                            key={item.id}
-                            item={item}
-                            active={String(item.id) === String(activeRecord)}
-                            onRecordClick={setActiveRecord}
-                            isExpanded={true}
-                            showStickyShadow={showStickyShadow}
-                            isDuplicating={isDuplicating}
-                            isSelected={selectedIds?.has(item.id)}
-                            onToggleSelect={toggleSelect}
-                          />
-                        ))
-                      : list.map(group => (
-                          <RecordGroup
-                            key={group.key}
-                            title={group.title}
-                            color={group.color}
-                            isPending={group.isPending}
-                            items={group.items}
-                            activeRecordId={activeRecord}
-                            onRecordClick={setActiveRecord}
-                            isExpanded={expanded}
-                            showStickyShadow={showStickyShadow}
-                            isDuplicating={isDuplicating}
-                            selectedIds={selectedIds}
-                            toggleSelect={toggleSelect}
-                          />
-                        ))}
-                    </div>
-                  </div>
-                </div>
-              </>
+              </div>
             ) : (
               <div className="p-4 flex flex-col gap-4">
                 {flattenGroups

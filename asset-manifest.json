@@ -1,13 +1,13 @@
 {
   "files": {
-    "main.css": "/Markel/static/css/main.f8de9004.css",
-    "main.js": "/Markel/static/js/main.b8e5f3b1.js",
+    "main.css": "/Markel/static/css/main.2a5db645.css",
+    "main.js": "/Markel/static/js/main.fd1d3e55.js",
     "index.html": "/Markel/index.html",
-    "main.f8de9004.css.map": "/Markel/static/css/main.f8de9004.css.map",
-    "main.b8e5f3b1.js.map": "/Markel/static/js/main.b8e5f3b1.js.map"
+    "main.2a5db645.css.map": "/Markel/static/css/main.2a5db645.css.map",
+    "main.fd1d3e55.js.map": "/Markel/static/js/main.fd1d3e55.js.map"
   },
   "entrypoints": [
-    "static/css/main.f8de9004.css",
-    "static/js/main.b8e5f3b1.js"
+    "static/css/main.2a5db645.css",
+    "static/js/main.fd1d3e55.js"
   ]
 }

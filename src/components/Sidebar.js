@@ -86,17 +86,14 @@ const RecordItem = ({ item, active, onRecordClick, isExpanded, showStickyShadow,
           {/* Sticky Checkbox Column (only when duplicating and not the active row) */}
           {showCheckboxColumn && (
             <div className={`sticky left-0 flex-shrink-0 w-14 flex items-center justify-center bg-white rounded-l-lg z-10 relative`}>
-              {active && (
-                <div className="absolute left-0 top-1/2 -translate-y-1/2 w-1 h-11 bg-[#3C3C3C] rounded-r-lg z-30 pointer-events-none" />
-              )}
               <div onClick={(e) => e.stopPropagation()} className="pl-1">
                 <M3Checkbox compact checked={!!isSelected} onChange={() => onToggleSelect(item.id)} size={18} square borderWidth={2} uncheckedBorderColor="#807F7B" />
               </div>
             </div>
           )}
-          {/* Active indicator when no checkbox column is present */}
-          {!showCheckboxColumn && active && (
-            <div className="absolute left-0 -ml-4 top-1/2 -translate-y-1/2 w-1 h-11 bg-[#3C3C3C] rounded-r-lg z-30 pointer-events-none" />
+          {/* Active indicator rail aligned to sidebar edge */}
+          {active && (
+            <div className="absolute left-[-16px] top-1/2 -translate-y-1/2 w-1 h-11 bg-[#3C3C3C] rounded-r-lg z-30 pointer-events-none" />
           )}
           {/* Sticky Status Column */}
           <div className={`sticky ${showCheckboxColumn ? 'left-14' : 'left-0'} flex-shrink-0 w-20 h-full flex items-center justify-center bg-[#FEFEFD] z-20`}>

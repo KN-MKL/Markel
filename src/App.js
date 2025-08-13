@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo, useState } from 'react';
-import Header, { FS2StepHeader } from './components/Header';
+import Header, { FS2StepHeader, FS2IntroHeader } from './components/Header';
 import Sidebar from './components/Sidebar';
 import MainContent from './components/MainContent';
 import SubProcesses from './components/SubProcesses';
@@ -48,8 +48,8 @@ export default function App() {
 
   return (
     <div className="flex h-screen w-full flex-col items-start justify-start bg-[#F5F5F5] font-sans">
-      {/* Header shown on FS routes */}
-      {['/fs-v1','/fs-v2','/front-sheet'].some(p => location.pathname.endsWith(p)) ? (
+       {/* Header shown on FS v1 only; FS v2 uses its own intro + step headers */}
+       {['/fs-v1','/front-sheet'].some(p => location.pathname.endsWith(p)) ? (
         <Header
           onDuplicate={() => setExpandSidebarToken(prev => prev + 1)}
           onClose={goToSubProcesses}
@@ -94,6 +94,9 @@ export default function App() {
                   disableDuplicationSelection
                 />
                 <div className="flex-1 flex flex-col min-h-0">
+                  {/* Intro header at very top */}
+                  <FS2IntroHeader />
+                  {/* Step tracker below */}
                   <FS2StepHeader recordId={activeRecord?.ref || 'CF9571A20MAA'} />
                   <MainContent key={`fs-v2-${fsFormKey}`} record={activeRecord} className="pt-0" />
                 </div>

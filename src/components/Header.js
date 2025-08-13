@@ -30,6 +30,22 @@ export const FS2StepHeader = ({ recordId = 'CF9571A20MAA', step = 1 }) => {
     );
 };
 
+export const FS2IntroHeader = () => (
+    <div className="w-full bg-white border-x border-t border-[#D9D9D6] px-4 py-4">
+        <div className="flex items-start gap-4">
+            <div className="w-12 h-12 rounded-full flex items-center justify-center">
+                <div className="w-6 h-6 bg-[#666666] rounded" />
+            </div>
+            <div className="flex-1 flex flex-col gap-2 py-2">
+                <div className="text-[22px] leading-7 font-medium text-[#3C3C3C]">Review and Modify Data for Duplication</div>
+                <div className="text-[16px] leading-6 tracking-[0.5px] text-[#5C5A59]">
+                    Remove any fields you don’t want duplicated before proceeding. To remove a data field, hover over it and click the 'X'.
+                </div>
+            </div>
+        </div>
+    </div>
+);
+
 const Header = ({ className = "", onDuplicate, onClose }) => (
     <header className={`flex w-full items-center justify-between gap-6 self-stretch border-b border-solid border-[#D9D9D6] bg-white p-6 ${className}`}>
         <div className="flex flex-1 items-start gap-4">

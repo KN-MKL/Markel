@@ -4,7 +4,7 @@ import Sidebar from './components/Sidebar';
 import MainContent from './components/MainContent';
 import SubProcesses from './components/SubProcesses';
 import Footer from './components/Footer';
-import { Routes, Route, useLocation, useNavigate } from 'react-router-dom';
+import { Routes, Route, useLocation, useNavigate, Navigate } from 'react-router-dom';
 
 export default function App() {
   const navigate = useNavigate();
@@ -29,7 +29,8 @@ export default function App() {
 
   // Helper navigation actions
   const goToSubProcesses = () => navigate('/sub-processes');
-  const goToFrontSheet = () => navigate('/front-sheet');
+  // Default FS navigation points to v1
+  const goToFrontSheet = () => navigate('/fs-v1');
 
   // Default route redirect
   useEffect(() => {
@@ -56,8 +57,26 @@ export default function App() {
               <SubProcesses onOpenFrontSheet={goToFrontSheet} records={recordData.fon} activeRecord={activeRecord} />
             }
           />
+          {/* Backward compatibility: redirect old slug to FS v1 */}
+          <Route path="/front-sheet" element={<Navigate to="/fs-v1" replace />} />
+          {/* FS v1 (client-requested flow) */}
           <Route
-            path="/front-sheet"
+            path="/fs-v1"
+            element={
+              <div className="flex w-full flex-1 self-stretch overflow-hidden">
+                <Sidebar
+                  activeRecord={activeRecordId}
+                  setActiveRecord={setActiveRecordId}
+                  recordData={recordData}
+                  expandTrigger={expandSidebarToken}
+                />
+                <MainContent record={activeRecord} />
+              </div>
+            }
+          />
+          {/* FS v2 (recommended duplication flow - copy of v1 for now) */}
+          <Route
+            path="/fs-v2"
             element={
               <div className="flex w-full flex-1 self-stretch overflow-hidden">
                 <Sidebar
@@ -73,8 +92,8 @@ export default function App() {
         </Routes>
       </div>
 
-      {/* Footer visible only on front sheet to preserve layout parity when needed */}
-      {location.pathname.endsWith('/front-sheet') ? <Footer /> : null}
+      {/* Footer visible on FS v1 and FS v2 */}
+      {['/fs-v1','/fs-v2'].some(p => location.pathname.endsWith(p)) ? <Footer /> : null}
     </div>
   );
 }

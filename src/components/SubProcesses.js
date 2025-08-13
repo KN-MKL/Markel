@@ -215,7 +215,7 @@ const SubProcesses = ({ onOpenFrontSheet, records = [], activeRecord }) => {
         </aside>
 
         {/* Right: Main columns */}
-        <div className="grid grid-cols-[auto_1fr] gap-4 h-full">
+        <div className="grid grid-cols-[auto_1fr] gap-4 h-full min-h-0">
           {/* Middle column */}
           <section className="flex flex-col h-full min-h-0 rounded-lg border border-[#E4E3DF] bg-white p-4 w-full justify-self-start">
             <h3 className="text-[#3C3C3C] text-[16px] font-medium leading-6 tracking-[0.15px] mb-2">Bind Risk</h3>
@@ -243,7 +243,7 @@ const SubProcesses = ({ onOpenFrontSheet, records = [], activeRecord }) => {
 
           {/* Right-most column - always show Pre-Bind Checks content; other steps no-op */}
           {
-          <section className="flex flex-col gap-3 h-full min-h-0 rounded-lg border border-[#E4E3DF] bg-white p-4 overflow-hidden">
+          <section className="flex flex-col gap-3 h-full min-h-0 rounded-lg border border-[#E4E3DF] bg-white p-4 overflow-y-auto">
             {/* Pre-bind header block */}
             <div className="flex items-center justify-between">
               <div className="flex-1">
@@ -304,8 +304,8 @@ const SubProcesses = ({ onOpenFrontSheet, records = [], activeRecord }) => {
                     </button>
                   </div>
                 </div>
-                {/* Table area */}
-                <div className="bg-[#F0F0F0] px-2 pb-2 pt-0 flex-1 min-h-0 overflow-auto">
+                {/* Table area (scroll container) */}
+                <div className="bg-[#F0F0F0] px-2 pb-0 pt-0 flex-1 min-h-0 overflow-auto">
                   <div className="sticky top-0 z-10 grid grid-cols-[160px_repeat(6,minmax(72px,1fr))] min-w-[592px] items-center px-4 py-2 text-[#3C3C3C] text-[14px] font-medium tracking-[0.1px] bg-[#F0F0F0]">
                     <div>Reference</div>
                     <div className="text-center">Sanctions</div>
@@ -320,10 +320,10 @@ const SubProcesses = ({ onOpenFrontSheet, records = [], activeRecord }) => {
                   <RecordRow key={i} refId={typeof r === 'string' ? r : r.ref} />
                 ))}
               </div>
-                </div>
-                {/* Footer inside container */}
-                <div className="bg-white px-4 py-2 border-t border-[#D9D9D6] w-full flex-shrink-0 sticky bottom-0">
-                  <div className="text-[#3C3C3C] text-[12px] font-medium leading-4 tracking-[0.5px]">{`{Xn} of {Yn} incomplete statuses`}</div>
+                  {/* In-card footer, sticky within the grey scroll area */}
+                  <div className="bg-white px-4 py-2 border-t border-[#D9D9D6] w-full sticky bottom-0">
+                    <div className="text-[#3C3C3C] text-[12px] font-medium leading-4 tracking-[0.5px]">{`{Xn} of {Yn} incomplete statuses`}</div>
+                  </div>
                 </div>
               </div>
             </div>

@@ -67,12 +67,12 @@ const getCollapsedStatusIcon = (id) => {
   return <MinusIcon />;
 };
 
-const RecordItem = ({ item, active, onRecordClick, isExpanded, showStickyShadow, isDuplicating, isSelected, onToggleSelect, showCollapsedStatus }) => {
+const RecordItem = ({ item, active, onRecordClick, isExpanded, showStickyShadow, isDuplicating, isSelected, onToggleSelect, showCollapsedStatus, forceCheckboxColumn = false }) => {
   const { id, ref: reference, code, type, suffix, majorClass, minorClass, class: klass, entity, limit, excess, underwriter } = item;
 
   if (isExpanded) {
     // When in selection mode (duplication flow reused), show checkbox column for all rows
-    const showCheckboxColumn = isDuplicating;
+    const showCheckboxColumn = isDuplicating || forceCheckboxColumn;
     return (
       <div className="relative">
         <div
@@ -427,6 +427,7 @@ const Sidebar = ({ activeRecord, setActiveRecord, recordData, className = '', ex
                                 isSelected={selectedIds?.has(item.id)}
                                 onToggleSelect={toggleSelect}
                                 showCollapsedStatus={false}
+                                forceCheckboxColumn
                               />
                             ))
                       : list.map(group => (
@@ -466,6 +467,7 @@ const Sidebar = ({ activeRecord, setActiveRecord, recordData, className = '', ex
                         isSelected={selectedIds?.has(item.id)}
                         onToggleSelect={toggleSelect}
                         showCollapsedStatus
+                        forceCheckboxColumn
                       />
                     ))
                   : list.map(group => (

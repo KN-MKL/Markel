@@ -154,6 +154,23 @@ const SubProcesses = ({ onOpenFrontSheet, records = [], activeRecord }) => {
   const [activeStep, setActiveStep] = React.useState('Pre-Bind Checks');
   const toDoCount = 7; // placeholder counts
   const totalCount = 10;
+  // Shadows for the Policy Record Checks grey scroll container
+  const policyScrollRef = React.useRef(null);
+  const [showTopTableShadow, setShowTopTableShadow] = React.useState(false);
+  const [showBottomTableShadow, setShowBottomTableShadow] = React.useState(true);
+
+  React.useEffect(() => {
+    const el = policyScrollRef.current;
+    if (!el) return;
+    const onScroll = () => {
+      const { scrollTop, scrollHeight, clientHeight } = el;
+      setShowTopTableShadow(scrollTop > 4);
+      setShowBottomTableShadow(scrollTop + clientHeight < scrollHeight - 4);
+    };
+    el.addEventListener('scroll', onScroll);
+    onScroll();
+    return () => el.removeEventListener('scroll', onScroll);
+  }, []);
   return (
     <div className="w-full h-full flex-1 min-h-0 overflow-hidden flex flex-col">
       {/* Custom header as per design */}
@@ -305,7 +322,7 @@ const SubProcesses = ({ onOpenFrontSheet, records = [], activeRecord }) => {
                   </div>
                 </div>
                 {/* Table area (scroll container) */}
-                <div className="bg-[#F0F0F0] px-2 pb-0 pt-0 flex-1 min-h-0 overflow-auto">
+                <div ref={policyScrollRef} className="relative bg-[#F0F0F0] px-2 pb-0 pt-0 flex-1 min-h-0 overflow-auto">
                   <div className="sticky top-0 z-10 grid grid-cols-[160px_repeat(6,minmax(72px,1fr))] min-w-[592px] items-center px-4 py-2 text-[#3C3C3C] text-[14px] font-medium tracking-[0.1px] bg-[#F0F0F0]">
                     <div>Reference</div>
                     <div className="text-center">Sanctions</div>
@@ -324,6 +341,9 @@ const SubProcesses = ({ onOpenFrontSheet, records = [], activeRecord }) => {
                   <div className="bg-white -mx-2 px-6 py-2 border-t border-[#D9D9D6] sticky bottom-0 z-10">
                     <div className="text-[#3C3C3C] text-[12px] font-medium leading-4 tracking-[0.5px]">{`{Xn} of {Yn} incomplete statuses`}</div>
                   </div>
+                  {/* Scroll shadows */}
+                  <div className={`pointer-events-none absolute left-0 right-0 top-0 h-4 transition-opacity duration-300 ${showTopTableShadow ? 'opacity-100' : 'opacity-0'}`} style={{ boxShadow: 'inset 0 18px 12px -12px rgba(0,0,0,0.14)' }} />
+                  <div className={`pointer-events-none absolute left-0 right-0 bottom-0 h-4 transition-opacity duration-300 ${showBottomTableShadow ? 'opacity-100' : 'opacity-0'}`} style={{ boxShadow: 'inset 0 -18px 12px -12px rgba(0,0,0,0.14)' }} />
                 </div>
               </div>
             </div>

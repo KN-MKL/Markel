@@ -12,6 +12,8 @@ export default function App() {
 
   const [activeRecordId, setActiveRecordId] = useState(2);
   const [expandSidebarToken, setExpandSidebarToken] = useState(0);
+  // Key used to force-remount Front Sheet forms (for Clear all)
+  const [fsFormKey, setFsFormKey] = useState(0);
 
   // Populate records to mirror Figma density (total 20)
   const generate = (startId, count, ref = 'CF9571A20MAA') => (
@@ -31,6 +33,11 @@ export default function App() {
   const goToSubProcesses = () => navigate('/sub-processes');
   // Default FS navigation points to v1
   const goToFrontSheet = () => navigate('/fs-v1');
+
+  // Footer actions for Front Sheet routes
+  const handleClearAll = () => setFsFormKey((k) => k + 1);
+  const handleSaveAndExit = () => navigate('/sub-processes');
+  const handleReviewToSubmit = () => console.log('Review to Submit clicked');
 
   // Default route redirect
   useEffect(() => {
@@ -70,7 +77,7 @@ export default function App() {
                   recordData={recordData}
                   expandTrigger={expandSidebarToken}
                 />
-                <MainContent record={activeRecord} />
+                <MainContent key={`fs-v1-${fsFormKey}`} record={activeRecord} />
               </div>
             }
           />
@@ -85,7 +92,7 @@ export default function App() {
                   recordData={recordData}
                   expandTrigger={expandSidebarToken}
                 />
-                <MainContent record={activeRecord} />
+                <MainContent key={`fs-v2-${fsFormKey}`} record={activeRecord} />
               </div>
             }
           />
@@ -93,7 +100,9 @@ export default function App() {
       </div>
 
       {/* Footer visible on FS v1 and FS v2 */}
-      {['/fs-v1','/fs-v2'].some(p => location.pathname.endsWith(p)) ? <Footer /> : null}
+      {['/fs-v1','/fs-v2'].some(p => location.pathname.endsWith(p)) ? (
+        <Footer onClearAll={handleClearAll} onSaveAndExit={handleSaveAndExit} onReviewToSubmit={handleReviewToSubmit} />
+      ) : null}
     </div>
   );
 }

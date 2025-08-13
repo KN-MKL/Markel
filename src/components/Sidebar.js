@@ -198,7 +198,7 @@ const RecordGroup = ({ title, color, isPending, items, activeRecordId, onRecordC
 };
 
 // --- Sidebar ---
-const Sidebar = ({ activeRecord, setActiveRecord, recordData, className = '', expandTrigger }) => {
+const Sidebar = ({ activeRecord, setActiveRecord, recordData, className = '', expandTrigger, disableDuplicationSelection = false }) => {
   // Normalize incoming data to groups
   const groups = [
     { key: 'fon', title: 'Moved to FON', color: '#216270', isPending: false },
@@ -220,6 +220,7 @@ const Sidebar = ({ activeRecord, setActiveRecord, recordData, className = '', ex
   // First click -> enter duplication mode. Next click -> complete duplication and show toast.
   React.useEffect(() => {
     if (!expandTrigger) return;
+    if (disableDuplicationSelection) return; // FS v2: do not reveal selection checkboxes
     if (isDuplicating) {
       const count = selectedIds.size;
       setIsDuplicating(false);

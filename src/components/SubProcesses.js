@@ -77,13 +77,8 @@ const AbPill = () => (
 );
 
 const TaskRow = ({ title, diary, stage, isFirst, isLast }) => {
-  const borderClasses = isFirst
-    ? 'rounded-t-lg border border-[#D9D9D6] border-b-0'
-    : isLast
-    ? 'rounded-b-lg border border-[#D9D9D6]'
-    : 'border-x border-t border-[#D9D9D6]';
   return (
-    <div className={`h-[52px] bg-white overflow-hidden ${borderClasses} grid grid-cols-[48px_1fr_auto] items-center w-full`}>
+    <div className={`h-[52px] bg-white grid grid-cols-[48px_1fr_auto] items-center w-full`}>
       <div className="pl-4">
         <StatusToken stage={stage} />
       </div>
@@ -237,7 +232,7 @@ const SubProcesses = ({ onOpenFrontSheet, records = [], activeRecord }) => {
             </button>
           </div>
             <div className="flex-1 overflow-y-auto pl-0 pr-2">
-            <div className="flex flex-col rounded-xl border border-[#D9D9D6] bg-white overflow-hidden">
+            <div className="flex flex-col rounded-xl border border-[#D9D9D6] bg-white overflow-hidden divide-y divide-[#D9D9D6]">
               {[
                 { title: 'Bind Risk', diary: 'Finance', stage: 'accepted' },
                 { title: 'Minimum Data Checks', diary: 'Energy', stage: 'in-progress' },

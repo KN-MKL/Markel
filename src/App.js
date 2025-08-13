@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo, useState } from 'react';
-import Header from './components/Header';
+import Header, { FS2StepHeader } from './components/Header';
 import Sidebar from './components/Sidebar';
 import MainContent from './components/MainContent';
 import SubProcesses from './components/SubProcesses';
@@ -91,8 +91,12 @@ export default function App() {
                   setActiveRecord={setActiveRecordId}
                   recordData={recordData}
                   expandTrigger={expandSidebarToken}
+                  disableDuplicationSelection
                 />
-                <MainContent key={`fs-v2-${fsFormKey}`} record={activeRecord} />
+                <div className="flex-1 flex flex-col min-h-0">
+                  <FS2StepHeader recordId={activeRecord?.ref || 'CF9571A20MAA'} />
+                  <MainContent key={`fs-v2-${fsFormKey}`} record={activeRecord} className="pt-0" />
+                </div>
               </div>
             }
           />

@@ -114,13 +114,13 @@ export default function App() {
           <Route
             path="/fs-v2/review-records"
             element={
-              <div className="flex w-full flex-1 self-stretch overflow-hidden">
+              <div className="flex w-full flex-1 self-stretch overflow-hidden bg-white">
                 <div className="flex-1 flex flex-col min-h-0">
                   <FS2StepHeader 
                     recordId={activeRecord?.ref || 'CF9571A20MAA'}
                     step={1}
-                    onGoStep1={() => navigate('/fs-v2')}
-                    onGoStep2={() => navigate('/fs-v2/review-records')}
+                    onGoStep1={() => navigate('/fs-v2/review-records')}
+                    onGoStep2={() => navigate('/fs-v2/select-records')}
                   />
                   <FS2IntroHeader onBack={() => navigate('/fs-v2')} />
                   <div className="flex w-full flex-1 self-stretch overflow-hidden">
@@ -135,9 +135,13 @@ export default function App() {
                       flattenGroups
                       enableCollapsedStatusGlyphs
                       showReviewFooter
-                      onFinalizeDuplication={(ids) => console.log('Finalize duplication for IDs:', ids)}
+                      onFinalizeDuplication={(ids) => navigate('/fs-v2/select-records')}
                       showCheckboxColumnAlways
-                      panelOverride={<MainContent key={`fs-v2-review-${fsFormKey}`} record={activeRecord} />}
+                      hideHeaders
+                      customBackground="bg-[#F5F5F5]"
+                      customPadding="p-4"
+                      hideSelectionCount
+                      panelOverride={<MainContent key={`fs-v2-review-${fsFormKey}`} record={activeRecord} hideTitle />}
                     />
                   </div>
                 </div>
@@ -148,19 +152,19 @@ export default function App() {
           <Route
             path="/fs-v2/select-records"
             element={
-              <div className="flex w-full flex-1 self-stretch overflow-hidden">
+              <div className="flex w-full flex-1 self-stretch overflow-hidden bg-white">
                 <div className="flex-1 flex flex-col min-h-0">
                   <FS2StepHeader 
                     recordId={activeRecord?.ref || 'CF9571A20MAA'}
                     step={2}
-                    onGoStep1={() => navigate('/fs-v2')}
+                    onGoStep1={() => navigate('/fs-v2/review-records')}
                     onGoStep2={() => navigate('/fs-v2/select-records')}
                   />
-                  <FS2IntroHeader onBack={() => navigate('/fs-v2')} title="Select Records for Data Duplication" subtitle="Select the records to apply the duplicated data. Confirm your choices once selected." />
+                  <FS2IntroHeader onBack={() => navigate('/fs-v2/review-records')} title="Select Records for Data Duplication" subtitle="Select the records to apply the duplicated data. Confirm your choices once selected." />
                   <div className="flex w-full flex-1 self-stretch overflow-hidden">
                     <Sidebar
-                      activeRecord={activeRecordId}
-                      setActiveRecord={setActiveRecordId}
+                      activeRecord={null}
+                      setActiveRecord={() => {}}
                       recordData={recordData}
                       expandTrigger={expandSidebarToken}
                       disableDuplicationSelection
@@ -171,7 +175,6 @@ export default function App() {
                       showReviewFooter
                       onFinalizeDuplication={(ids) => console.log('Finalize duplication for IDs (select-records):', ids)}
                       showCheckboxColumnAlways
-                      panelOverride={<MainContent key={`fs-v2-select-${fsFormKey}`} record={activeRecord} />}
                     />
                   </div>
                 </div>

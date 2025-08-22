@@ -240,7 +240,7 @@ const RecordGroup = ({ title, color, isPending, items, activeRecordId, onRecordC
 };
 
 // --- Sidebar ---
-const Sidebar = ({ activeRecord, setActiveRecord, recordData, className = '', expandTrigger, disableDuplicationSelection = false, forceExpanded = false, hideExpandButton = false, flattenGroups = false, showSelectionActionBar = true, showStatusRail = false, enableCollapsedStatusGlyphs = false, showReviewFooter = false, onFinalizeDuplication, showCheckboxColumnAlways = false, panelOverride = null }) => {
+const Sidebar = ({ activeRecord, setActiveRecord, recordData, className = '', expandTrigger, disableDuplicationSelection = false, forceExpanded = false, hideExpandButton = false, flattenGroups = false, showSelectionActionBar = true, showStatusRail = false, enableCollapsedStatusGlyphs = false, showReviewFooter = false, onFinalizeDuplication, showCheckboxColumnAlways = false, panelOverride = null, hideHeaders = false, customBackground = null, customPadding = null, hideSelectionCount = false }) => {
   // Normalize incoming data to groups
   const groups = [
     { key: 'fon', title: 'Moved to FON', color: '#216270', isPending: false },
@@ -384,11 +384,12 @@ const Sidebar = ({ activeRecord, setActiveRecord, recordData, className = '', ex
 
     return (
     <aside
-      className={`flex flex-col self-stretch p-4 flex-none transition-all duration-300 ease-in-out ${className}`}
+      className={`flex flex-col self-stretch ${customPadding || 'p-4'} flex-none transition-all duration-300 ease-in-out ${className}`}
       style={{ width: expanded ? expandedWidth : '312px' }}
     >
-      <div className={`flex h-full w-full flex-col justify-between overflow-hidden rounded-lg outline outline-[0.5px] outline-[#ADACA7] bg-transparent`}>
+      <div className={`flex h-full w-full flex-col justify-between overflow-hidden rounded-lg outline outline-[0.5px] outline-[#ADACA7] ${customBackground || 'bg-transparent'}`}>
         {/* Header */}
+        {!hideHeaders && (
           <div className="self-stretch p-4 flex flex-col justify-start items-start gap-4 border-b border-gray-200 bg-transparent">
           <div className="self-stretch flex justify-start items-center gap-4">
             <div className="px-2 py-1 bg-[#E9F0F2] rounded flex justify-center items-center">
@@ -396,11 +397,12 @@ const Sidebar = ({ activeRecord, setActiveRecord, recordData, className = '', ex
             </div>
             <span className="flex-1 text-[#5C5A59] text-base font-medium leading-6 tracking-[0.15px]">Records</span>
             {!hideExpandButton && (
-              <button onClick={() => setIsExpanded(!isExpanded)} className="p-2 rounded-full hover:bg-gray-100"><ToggleExpandIcon /></button>
+            <button onClick={() => setIsExpanded(!isExpanded)} className="p-2 rounded-full hover:bg-gray-100"><ToggleExpandIcon /></button>
             )}
                         </div>
             {/* Tooltip removed per request */}
                     </div>
+        )}
 
         {/* Scrollable area */}
         <div className="relative flex-1">
@@ -430,12 +432,12 @@ const Sidebar = ({ activeRecord, setActiveRecord, recordData, className = '', ex
                     </div>
                   </div>
                   )}
-                  <div ref={horizontalScrollRef} className="overflow-x-auto custom-scrollbar-x">
-                    <div className="p-4 inline-block min-w-full">
+              <div ref={horizontalScrollRef} className="overflow-x-auto custom-scrollbar-x">
+                <div className="p-4 inline-block min-w-full">
                       {panelOverride ? (
                         <div className="mt-2">{panelOverride}</div>
                       ) : (
-                      <div className="flex flex-col gap-4 mt-2">
+                  <div className="flex flex-col gap-4 mt-2">
                         {flattenGroups
                           ? displayItems.map(item => (
                               <RecordItem
@@ -453,30 +455,30 @@ const Sidebar = ({ activeRecord, setActiveRecord, recordData, className = '', ex
                               />
                             ))
                       : list.map(group => (
-                              <RecordGroup
-                                key={group.key}
-                                title={group.title}
-                                color={group.color}
-                                isPending={group.isPending}
-                                items={group.items}
-                                activeRecordId={activeRecord}
-                                onRecordClick={setActiveRecord}
+                      <RecordGroup
+                        key={group.key}
+                        title={group.title}
+                        color={group.color}
+                        isPending={group.isPending}
+                        items={group.items}
+                        activeRecordId={activeRecord}
+                        onRecordClick={setActiveRecord}
                                 isExpanded={expanded}
-                                showStickyShadow={showStickyShadow}
-                                isDuplicating={isDuplicating}
-                                selectedIds={selectedIds}
-                            toggleSelect={toggleSelect}
+                        showStickyShadow={showStickyShadow}
+                        isDuplicating={isDuplicating}
+                        selectedIds={selectedIds}
+                        toggleSelect={toggleSelect}
                             showCollapsedStatus={showCollapsedStatusGlyphs}
-                              />
-                            ))}
+                      />
+                    ))}
                       </div>
                       )}
                     </div>
-                  </div>
+                    </div>
                 </div>
               </div>
             ) : (
-                <div className="p-4 flex flex-col gap-4">
+              <div className="p-4 flex flex-col gap-4">
                 {flattenGroups
                   ? list.flatMap(g => g.items).map(item => (
                       <RecordItem
@@ -494,22 +496,22 @@ const Sidebar = ({ activeRecord, setActiveRecord, recordData, className = '', ex
                       />
                     ))
                   : list.map(group => (
-                      <RecordGroup
-                        key={group.key}
-                        title={group.title}
-                        color={group.color}
-                        isPending={group.isPending}
-                        items={group.items}
-                        activeRecordId={activeRecord}
-                        onRecordClick={setActiveRecord}
-                        isExpanded={false}
-                        showStickyShadow={false}
-                        isDuplicating={isDuplicating}
-                        selectedIds={selectedIds}
-                        toggleSelect={toggleSelect}
+                  <RecordGroup
+                    key={group.key}
+                    title={group.title}
+                    color={group.color}
+                    isPending={group.isPending}
+                    items={group.items}
+                    activeRecordId={activeRecord}
+                    onRecordClick={setActiveRecord}
+                    isExpanded={false}
+                    showStickyShadow={false}
+                    isDuplicating={isDuplicating}
+                    selectedIds={selectedIds}
+                    toggleSelect={toggleSelect}
                         showCollapsedStatus={showCollapsedStatusGlyphs}
-                      />
-                    ))}
+                  />
+                ))}
               </div>
             )}
           </div>
@@ -520,20 +522,19 @@ const Sidebar = ({ activeRecord, setActiveRecord, recordData, className = '', ex
 
         {/* Footer */}
         {showReviewFooter ? (
-          <div className="self-stretch p-4 bg-white border-t border-gray-200 flex items-center justify-between">
-            <span className="text-[#3C3C3C] text-xs font-medium leading-4 tracking-[0.5px]">{selectedIds.size} of {totalRecords} records selected</span>
+          <div className="self-stretch p-4 bg-white border-t border-gray-200 flex items-center justify-end">
+            {!hideSelectionCount && <span className="text-[#3C3C3C] text-xs font-medium leading-4 tracking-[0.5px]">{selectedIds.size} of {totalRecords} records selected</span>}
             <button
               className="inline-flex items-center gap-2 rounded-lg bg-[#3C3C3C] px-4 py-2 text-sm font-medium text-white hover:bg-[#2e2e2e] active:bg-black"
-              onClick={() => (onFinalizeDuplication ? onFinalizeDuplication(Array.from(selectedIds)) : console.log('Finalize Data Duplication', Array.from(selectedIds)))}
+              onClick={() => (onFinalizeDuplication ? onFinalizeDuplication(Array.from(selectedIds)) : console.log('Proceed to Select Records', Array.from(selectedIds)))}
             >
-              <span className="inline-flex items-center justify-center w-4 h-4"><svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M6 1V11M1 6H11" stroke="white" strokeWidth="2" strokeLinecap="round"/></svg></span>
-              <span>Finalise Data Duplication</span>
+              <span>Proceed to Select Records</span>
             </button>
           </div>
         ) : (
-          <div className="self-stretch p-4 bg-white border-t border-gray-200 flex items-center justify-start">
-            <span className="text-[#3C3C3C] text-xs font-medium leading-4 tracking-[0.5px]">{2} of {totalRecords} sub-tasks incomplete</span>
-          </div>
+        <div className="self-stretch p-4 bg-white border-t border-gray-200 flex items-center justify-start">
+          <span className="text-[#3C3C3C] text-xs font-medium leading-4 tracking-[0.5px]">{2} of {totalRecords} sub-tasks incomplete</span>
+        </div>
         )}
         {/* Selection action bar (inside panel) */}
         {isExpanded && isDuplicating && showSelectionActionBar && (
@@ -546,7 +547,6 @@ const Sidebar = ({ activeRecord, setActiveRecord, recordData, className = '', ex
                 className="inline-flex items-center gap-2 rounded-lg bg-[#3C3C3C] px-4 py-2 text-sm font-medium text-white hover:bg-[#2e2e2e] active:bg-black"
                 onClick={() => console.log('Move to FON clicked', Array.from(selectedIds))}
               >
-                <span className="inline-flex items-center justify-center w-4 h-4"><svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M6 1V11M1 6H11" stroke="white" strokeWidth="2" strokeLinecap="round"/></svg></span>
                 <span>Move to FON</span>
               </button>
             </div>

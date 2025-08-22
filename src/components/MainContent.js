@@ -9,7 +9,7 @@ import SubmissionDataForm from './SubmissionDataForm';
 import PricingDataForm from './PricingDataForm';
 import OMRAForm from './OMRAForm';
 
-const MainContent = ({ record, className = "" }) => {
+const MainContent = ({ record, className = "", hideTitle = false }) => {
     if (!record) {
         return <div className={`flex-1 p-4 ${className}`}>Please select a record.</div>;
     }
@@ -17,7 +17,7 @@ const MainContent = ({ record, className = "" }) => {
     return (
         <main className={`flex-1 self-stretch overflow-y-auto p-4 pr-2 ${className}`}>
             <div className="flex flex-col gap-4">
-                <h2 className="px-2 text-xl text-[#3C3C3C]">Binding Details for {record.ref}</h2>
+                {!hideTitle && <h2 className="px-2 text-xl text-[#3C3C3C]">Binding Details for {record.ref}</h2>}
                 
                 <Accordion title="Bind Data">
                     <MandatoryBindDataForm />
